@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../globals.css'
 import GlassNavbar from '@/components/GlassNavbar'
+import FloatingWhatsApp from '@/components/FloatingWhatsApp'
+import CookieBanner from '@/components/CookieBanner'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,11 +20,26 @@ export const metadata: Metadata = {
   description: 'Circuits et voyages sur mesure. Laissez-vous inspirer par nos destinations d\'exception.',
 }
 
-export default function FrontendLayout({
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+
+export default async function FrontendLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const payload = await getPayload({ config: configPromise })
+  
+  let brandIdentity = null
+  try {
+    const settings = await payload.findGlobal({ slug: 'site-settings' }) as any
+    if (settings?.brandIdentity) {
+      brandIdentity = settings.brandIdentity
+    }
+  } catch (err) {
+    console.error('Error fetching site settings in layout', err)
+  }
+
   return (
     <html lang="fr" className={`${inter.variable} lenis lenis-smooth`}>
       <head>
@@ -32,11 +49,14 @@ export default function FrontendLayout({
         />
       </head>
       <body className="bg-[#0B132B] text-white antialiased relative">
-        <GlassNavbar />
+        <GlassNavbar brandIdentity={brandIdentity} />
         <main className="relative flex min-h-screen flex-col">
           {children}
         </main>
+        <FloatingWhatsApp />
+        <CookieBanner />
       </body>
     </html>
   )
 }
+

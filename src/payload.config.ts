@@ -10,11 +10,13 @@ import { Tours } from './collections/Tours'
 import { Destinations } from './collections/Destinations'
 import { Testimonials } from './collections/Testimonials'
 import { Inquiries } from './collections/Inquiries'
+import { Articles } from './collections/Articles'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { Orders } from './collections/Orders'
 import { SiteSettings } from './globals/SiteSettings'
 import { PaymentSettings } from './globals/PaymentSettings'
+import { HeroGallery } from './globals/HeroGallery'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,8 +38,8 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Destinations, Tours, Testimonials, Inquiries, Media, Orders],
-  globals: [SiteSettings, PaymentSettings],
+  collections: [Users, Destinations, Tours, Testimonials, Inquiries, Articles, Media, Orders],
+  globals: [SiteSettings, PaymentSettings, HeroGallery],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'ca_cree_voyage_super_secret_key_2026_xyz',
   typescript: {

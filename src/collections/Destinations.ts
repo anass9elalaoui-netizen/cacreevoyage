@@ -4,6 +4,7 @@ export const Destinations: CollectionConfig = {
   slug: 'destinations',
   admin: {
     useAsTitle: 'title',
+    defaultColumns: ['title', 'scope', 'isFeatured', 'updatedAt'],
   },
   access: {
     read: () => true,
@@ -38,6 +39,13 @@ export const Destinations: CollectionConfig = {
             return value
           },
         ],
+      },
+    },
+    {
+      name: 'tagline',
+      type: 'text',
+      admin: {
+        description: 'Une ligne poétique, ex: "Là où le désert rencontre l\'éternité"',
       },
     },
     {
@@ -78,8 +86,69 @@ export const Destinations: CollectionConfig = {
       relationTo: 'media',
       required: false,
       admin: {
-        description: 'Bannière cinématique pour la page destination (vidéo ou image).',
+        description: 'Bannière cinématique pour la page destination (image).',
       },
+    },
+    {
+      name: 'heroVideo',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      admin: {
+        description: 'Vidéo cinématique en arrière-plan de la page destination.',
+      },
+    },
+    {
+      name: 'gallery',
+      type: 'array',
+      admin: { description: 'Galerie photo de la destination' },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+        },
+      ],
+    },
+    {
+      name: 'highlights',
+      type: 'array',
+      admin: {
+        description: '3-5 points forts pour la carte de destination',
+      },
+      fields: [
+        {
+          name: 'highlight',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      name: 'bestTimeToVisit',
+      type: 'text',
+      admin: {
+        description: 'Meilleure période pour visiter (ex: "Mars - Octobre")',
+      },
+    },
+    {
+      name: 'isFeatured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { position: 'sidebar' },
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       SEO — Per-destination search engine optimization
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'seo',
+      type: 'group',
+      admin: { description: 'Optimisation pour les moteurs de recherche' },
+      fields: [
+        { name: 'metaTitle', type: 'text' },
+        { name: 'metaDescription', type: 'textarea' },
+        { name: 'ogImage', type: 'upload', relationTo: 'media' },
+      ],
     },
   ],
 }

@@ -18,8 +18,26 @@ interface FormData {
 function CheckoutForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
+
   const tourId = searchParams.get('tour') || ''
   const tourTitle = searchParams.get('title') || 'Voyage Sur Mesure'
+  const tourDuration = searchParams.get('duration') || ''
+  const departureDateParam = searchParams.get('departure') || ''
+  const returnDateParam = searchParams.get('return') || ''
+
+  // Determine if this is a fixed-date group tour
+  const hasFixedDates = Boolean(departureDateParam && returnDateParam)
+
+  // Format dates for display
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return ''
+    try {
+      const d = new Date(dateStr)
+      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    } catch {
+      return dateStr
+    }
+  }
 
   const [currentStep, setCurrentStep] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -28,7 +46,7 @@ function CheckoutForm() {
     clientPhone: '',
     clientEmail: '',
     passengers: 1,
-    travelDate: '',
+    travelDate: departureDateParam, // Pre-fill with departure date for fixed tours
     specialRequests: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -49,12 +67,20 @@ function CheckoutForm() {
     setIsSubmitting(true)
     setError(null)
     try {
+      // Convert tourId to number for the relationship field
+      const numericTourId = parseInt(tourId, 10)
+
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tourId,
-          ...formData,
+          tourId: isNaN(numericTourId) ? tourId : numericTourId,
+          clientName: formData.clientName,
+          clientPhone: formData.clientPhone,
+          clientEmail: formData.clientEmail || undefined,
+          passengers: formData.passengers,
+          travelDate: hasFixedDates ? departureDateParam : (formData.travelDate || undefined),
+          specialRequests: formData.specialRequests || undefined,
           status: 'pending_virement',
         }),
       })
@@ -111,10 +137,35 @@ function CheckoutForm() {
           <span className="uppercase tracking-widest text-brand-blue font-semibold text-xs mb-2 block">
             Réservation
           </span>
-          <h1 className="text-2xl md:text-3xl font-serif text-white">
+          <h1 className="text-2xl md:text-3xl font-serif text-white mb-2">
             {tourTitle}
           </h1>
+          {tourDuration && (
+            <span className="text-white/40 text-sm font-light">{tourDuration}</span>
+          )}
         </div>
+
+        {/* Fixed Dates Display — Group Tours */}
+        {hasFixedDates && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="mb-8 p-5 rounded-2xl bg-brand-blue/10 border border-brand-blue/20 text-center"
+          >
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span className="uppercase tracking-[0.15em] text-brand-blue font-semibold text-xs">
+                Dates confirmées
+              </span>
+            </div>
+            <p className="text-white font-serif text-lg">
+              {formatDate(departureDateParam)} — {formatDate(returnDateParam)}
+            </p>
+          </motion.div>
+        )}
 
         <AnimatePresence mode="wait">
           <div key="wizard" className="relative">
@@ -196,7 +247,9 @@ function CheckoutForm() {
                     Détails du voyage
                   </h2>
                   <p className="text-white/50 text-sm font-light mb-6">
-                    Combien de voyageurs et quand ?
+                    {hasFixedDates
+                      ? 'Combien de voyageurs participent ?'
+                      : 'Combien de voyageurs et quand ?'}
                   </p>
                   <div className="space-y-5">
                     <div>
@@ -233,19 +286,23 @@ function CheckoutForm() {
                         </button>
                       </div>
                     </div>
-                    <div>
-                      <label className="text-white/50 text-xs uppercase tracking-widest mb-2 block">
-                        Date de voyage souhaitée
-                      </label>
-                      <input
-                        type="date"
-                        value={formData.travelDate}
-                        onChange={(e) =>
-                          setField('travelDate', e.target.value)
-                        }
-                        className="w-full text-lg text-white bg-transparent border-b border-white/30 placeholder-white/50 focus:border-brand-blue outline-none py-3 transition-colors"
-                      />
-                    </div>
+
+                    {/* Conditional Date Logic: Show picker ONLY for Sur Mesure */}
+                    {!hasFixedDates && (
+                      <div>
+                        <label className="text-white/50 text-xs uppercase tracking-widest mb-2 block">
+                          Date de voyage souhaitée
+                        </label>
+                        <input
+                          type="date"
+                          value={formData.travelDate}
+                          onChange={(e) =>
+                            setField('travelDate', e.target.value)
+                          }
+                          className="w-full text-lg text-white bg-transparent border-b border-white/30 placeholder-white/50 focus:border-brand-blue outline-none py-3 transition-colors"
+                        />
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               )}

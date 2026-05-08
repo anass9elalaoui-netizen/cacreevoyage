@@ -4,6 +4,7 @@ export const Tours: CollectionConfig = {
   slug: 'tours',
   admin: {
     useAsTitle: 'title',
+    defaultColumns: ['title', 'scope', 'isFeatured', 'tourStatus', 'updatedAt'],
   },
   access: {
     read: () => true,
@@ -38,9 +39,34 @@ export const Tours: CollectionConfig = {
       },
     },
     {
+      name: 'shortDescription',
+      type: 'textarea',
+      admin: {
+        description: '2-3 phrases pour les cartes et previews',
+      },
+    },
+    {
       name: 'duration',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'departureDate',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        description: 'Date de départ confirmée (laisser vide pour les voyages sur mesure)',
+        date: { pickerAppearance: 'dayOnly', displayFormat: 'dd/MM/yyyy' },
+      },
+    },
+    {
+      name: 'returnDate',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        description: 'Date de retour confirmée',
+        date: { pickerAppearance: 'dayOnly', displayFormat: 'dd/MM/yyyy' },
+      },
     },
     {
       name: 'seasons',
@@ -115,7 +141,7 @@ export const Tours: CollectionConfig = {
       name: 'thumbnail',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
       admin: {
         description: 'Image de couverture pour le carrousel (affichée avant le survol vidéo).',
       },
@@ -136,9 +162,136 @@ export const Tours: CollectionConfig = {
         },
       ],
     },
+
+    /* ──────────────────────────────────────────────────────────
+       PRICING — Commercial fields for booking / display
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'pricing',
+      type: 'group',
+      admin: { description: 'Informations tarifaires du circuit' },
+      fields: [
+        {
+          name: 'basePrice',
+          type: 'number',
+          admin: { description: 'Prix par personne en EUR' },
+        },
+        {
+          name: 'currency',
+          type: 'select',
+          options: ['EUR', 'MAD', 'USD'],
+          defaultValue: 'EUR',
+        },
+        {
+          name: 'priceIncludes',
+          type: 'array',
+          fields: [{ name: 'item', type: 'text' }],
+          admin: { description: 'Ce qui est inclus dans le prix' },
+        },
+        {
+          name: 'priceExcludes',
+          type: 'array',
+          fields: [{ name: 'item', type: 'text' }],
+          admin: { description: 'Ce qui n\'est pas inclus' },
+        },
+        {
+          name: 'depositPercentage',
+          type: 'number',
+          defaultValue: 30,
+          admin: { description: 'Pourcentage d\'acompte pour confirmer la réservation' },
+        },
+      ],
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       LOGISTICS — Operational details
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'logistics',
+      type: 'group',
+      admin: { description: 'Détails logistiques du circuit' },
+      fields: [
+        { name: 'durationDays', type: 'number', admin: { description: 'Nombre de jours' } },
+        { name: 'durationNights', type: 'number', admin: { description: 'Nombre de nuits' } },
+        { name: 'minGroupSize', type: 'number', defaultValue: 1 },
+        { name: 'maxGroupSize', type: 'number', defaultValue: 12 },
+        {
+          name: 'difficulty',
+          type: 'select',
+          options: ['Facile', 'Modéré', 'Exigeant', 'Difficile'],
+        },
+        { name: 'departureCity', type: 'text', defaultValue: 'Casablanca' },
+        {
+          name: 'languages',
+          type: 'select',
+          hasMany: true,
+          options: ['Français', 'English', 'العربية', 'Español'],
+        },
+      ],
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       AVAILABILITY — Departure dates & spot tracking
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'departureDates',
+      type: 'array',
+      admin: { description: 'Dates de départ planifiées avec disponibilité' },
+      fields: [
+        { name: 'date', type: 'date', required: true },
+        { name: 'spotsLeft', type: 'number' },
+        {
+          name: 'status',
+          type: 'select',
+          options: ['Available', 'Limited', 'Full', 'On Request'],
+          defaultValue: 'Available',
+        },
+      ],
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       SEO — Per-tour search engine optimization
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'seo',
+      type: 'group',
+      admin: { description: 'Optimisation pour les moteurs de recherche' },
+      fields: [
+        { name: 'metaTitle', type: 'text' },
+        { name: 'metaDescription', type: 'textarea', admin: { description: '150-160 caractères max' } },
+        { name: 'ogImage', type: 'upload', relationTo: 'media' },
+        { name: 'keywords', type: 'text' },
+      ],
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       FEATURED & COMMERCIAL FLAGS
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'isFeatured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'featuredOrder',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+        condition: (data) => data.isFeatured,
+        description: 'Ordre d\'affichage dans la section Featured',
+      },
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       LEGACY: Old itinerary blocks (kept for backward compat)
+    ─────────────────────────────────────────────────────────── */
     {
       name: 'itineraryBlocks',
       type: 'array',
+      admin: {
+        description: '(Legacy) Anciens blocs d\'itinéraire avec contenu riche. Préférer "Story Days" ci-dessous.',
+      },
       fields: [
         {
           name: 'dayTitle',
@@ -152,6 +305,68 @@ export const Tours: CollectionConfig = {
         {
           name: 'dayContent',
           type: 'richText',
+        },
+      ],
+    },
+
+    /* ──────────────────────────────────────────────────────────
+       NEW: Travel Story Timeline — Vertical 9:16 Format
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'storyDays',
+      type: 'array',
+      label: 'Story Days (Timeline 9:16)',
+      admin: {
+        description: 'Itinéraire jour par jour au format Travel Story vertical. Chaque jour est une carte plein écran 9:16.',
+      },
+      fields: [
+        {
+          name: 'dayNumber',
+          type: 'number',
+          required: true,
+          admin: {
+            description: 'Numéro du jour (ex: 1, 2, 3…)',
+          },
+        },
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'Titre du jour (ex: "Arrivée aux Dunes")',
+          },
+        },
+        {
+          name: 'location',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'Lieu principal (ex: "Errachidia -> Merzouga")',
+          },
+        },
+        {
+          name: 'activities',
+          type: 'array',
+          required: true,
+          admin: {
+            description: 'Liste des activités du jour',
+          },
+          fields: [
+            {
+              name: 'activity',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'media',
+          type: 'upload',
+          relationTo: 'media',
+          required: false,
+          admin: {
+            description: 'Média vertical 9:16 (vidéo ou image) pour ce jour.',
+          },
         },
       ],
     },

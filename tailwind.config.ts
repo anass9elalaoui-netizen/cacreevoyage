@@ -12,6 +12,13 @@ const config: Config = {
         brand: {
           blue: '#38A3A5',
           dark: '#0B132B',
+          deeper: '#050814',
+          gold: '#C9A84C',
+          silver: '#A0ABC0',
+          white: '#FFFFFF',
+          glass: 'rgba(255, 255, 255, 0.05)',
+          'glass-md': 'rgba(255, 255, 255, 0.08)',
+          'glass-dark': 'rgba(11, 19, 43, 0.85)',
         },
         cloud: '#F4F7FB',
         glass: {
