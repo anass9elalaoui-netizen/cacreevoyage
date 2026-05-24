@@ -113,13 +113,25 @@ export default function HeroGallery({ panels = [] }: HeroGalleryProps) {
           </div>
         ))}
 
-        {/* Swipe Dots Indicator */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 pointer-events-none">
+        {/* Luxury Dash Pagination */}
+        <div className="absolute bottom-28 left-0 right-0 z-40 flex justify-center gap-2">
           {panels.map((_, index) => (
-            <div
+            <button
               key={index}
-              className={`h-1 rounded-full transition-all duration-300 ${
-                index === activeIndex ? 'w-6 bg-white' : 'w-2 bg-white/40'
+              type="button"
+              onClick={() => {
+                setActiveIndex(index)
+                const container = mobileRef.current
+                if (container) {
+                  container.scrollTo({
+                    left: index * container.offsetWidth,
+                    behavior: 'smooth',
+                  })
+                }
+              }}
+              aria-label={`Slide ${index + 1}`}
+              className={`h-[2px] rounded-full transition-all duration-500 ease-out ${
+                index === activeIndex ? 'w-8 bg-white' : 'w-4 bg-white/30'
               }`}
             />
           ))}
