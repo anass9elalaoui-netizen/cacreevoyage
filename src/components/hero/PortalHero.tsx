@@ -61,25 +61,37 @@ export default function PortalHero({
   /* ── refs ─────────────────────────────────────────────────── */
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const bitmapsRef = useRef<(ImageBitmap | null)[]>([])
-  const currentFrameRef = useRef(0)
-  const lastDrawnFrame = useRef<number>(-1)
-  const rafRef = useRef<number>(0)
+  const imagesRef = useRef<HTMLImageElement[]>([])
+  const currentFrameRef = useRef(1)
 
   /* ── state ───────────────────────────────────────────────── */
-  const [isPreloaded, setIsPreloaded] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
 
-  /* ── universal viewport detection ────────────────────────── */
+  /* ── Phase 1: Clean State & SSR Safety ────────────────────── */
   useEffect(() => {
-    setIsMounted(true)
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+    setMounted(true)
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    setIsMobile(mediaQuery.matches)
+
+    const handleResize = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches)
     }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleResize)
+    } else {
+      mediaQuery.addListener(handleResize)
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleResize)
+      } else {
+        mediaQuery.removeListener(handleResize)
+      }
+    }
   }, [])
 
   /* ── scroll tracking ─────────────────────────────────────── */
@@ -88,7 +100,7 @@ export default function PortalHero({
     offset: ['start start', 'end end'],
   })
 
-  // Snappy trackpad physics — high stiffness eliminates lag, low mass for instant response
+  // Snappy trackpad physics
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 25,
@@ -98,8 +110,6 @@ export default function PortalHero({
 
   const frameIndex = useTransform(smoothProgress, [0, 1], [1, frameCount])
 
-  /* ── scroll indicator ────────────────────────────────────── */
-
   // Scroll indicator (fades by 0.05)
   const scrollIndicatorOpacity = useTransform(
     smoothProgress,
@@ -107,179 +117,108 @@ export default function PortalHero({
     [1, 0],
   )
 
-  /* ── Phase 1: Concurrent ImageBitmap loader (GPU-ready) ──── */
   const frameUrl = useCallback(
     (n: number) => `${assetBaseUrl}/ezgif-frame-${String(n).padStart(3, '0')}.jpg`,
     [assetBaseUrl],
   )
 
+  /* ── Phase 3: Bulletproof Desktop Preloading ──────────────── */
   useEffect(() => {
-    if (!isMounted) return
-    if (isMobile) {
-      // Phase 4: Garbage Collection for mobile viewports
-      const bitmaps = bitmapsRef.current
-      if (bitmaps && bitmaps.length > 0) {
-        bitmaps.forEach(bmp => {
-          if (bmp) bmp.close()
-        })
-        bitmapsRef.current = []
-      }
-      setIsPreloaded(false)
-      return
-    }
+    if (!mounted || isMobile) return
 
-    const frameStep = 1 // Desktop has the RAM to render all frames smoothly
-
-    const bitmaps: (ImageBitmap | null)[] = new Array(frameCount).fill(null)
-    bitmapsRef.current = bitmaps
-
+    let loadedCount = 0
     let cancelled = false
+    const imgArray: HTMLImageElement[] = []
 
-    const loadBatchLocal = async (startIdx: number, endIdx: number) => {
-      const promises: Promise<void>[] = []
-      for (let i = startIdx; i <= endIdx; i += frameStep) {
-        promises.push(
-          fetch(frameUrl(i))
-            .then(res => res.blob())
-            .then(blob => createImageBitmap(blob))
-            .then(bitmap => { 
-              if (!cancelled) bitmaps[i - 1] = bitmap 
-            })
-            .catch(() => {})
-        )
+    for (let i = 1; i <= frameCount; i++) {
+      const img = new Image()
+      img.src = frameUrl(i)
+      img.onload = () => {
+        if (cancelled) return
+        loadedCount++
+        if (loadedCount === frameCount) {
+          imagesRef.current = imgArray
+          setImagesLoaded(true)
+        }
       }
-      return Promise.all(promises)
+      imgArray.push(img)
     }
-
-    const preloadFirst = async () => {
-      await loadBatchLocal(1, Math.min(PRELOAD_BATCH * frameStep, frameCount))
-      if (!cancelled) setIsPreloaded(true)
-    }
-
-    const loadRemaining = async () => {
-      for (let batchStart = (PRELOAD_BATCH * frameStep) + 1; batchStart <= frameCount; batchStart += CONCURRENT_BATCH * frameStep) {
-        if (cancelled) break
-        const batchEnd = Math.min(batchStart + (CONCURRENT_BATCH * frameStep) - 1, frameCount)
-        await loadBatchLocal(batchStart, batchEnd)
-      }
-    }
-
-    preloadFirst().then(() => {
-      if (!cancelled) loadRemaining()
-    })
 
     return () => {
       cancelled = true
-      // Garbage Collection: clean up bitmaps to free GPU and RAM memory
-      bitmaps.forEach(bmp => {
-        if (bmp) bmp.close()
-      })
-      bitmapsRef.current = []
+      imagesRef.current = []
+      setImagesLoaded(false)
     }
-  }, [frameCount, frameUrl, isMobile, isMounted])
+  }, [mounted, isMobile, frameCount, frameUrl])
 
-  /* ── Phase 2: Canvas drawing — draw cache + alpha:false ───── */
+  /* ── Phase 4: Safe Canvas Rendering ───────────────────────── */
   const drawFrame = useCallback((index: number) => {
-    if (index === lastDrawnFrame.current) return // KILL REDUNDANT DRAWS
-
     const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D | null
+    if (!canvas || !imagesLoaded || isMobile) return
+
+    const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
 
-    const bitmaps = bitmapsRef.current
-    if (!bitmaps || bitmaps.length === 0) return
+    const images = imagesRef.current
+    if (!images || images.length === 0) return
 
-    // Interpolate & fallback to nearest available frame due to mobile decimation
-    let activeBitmap: ImageBitmap | null = null
-    const targetIdx = index - 1
-    
-    let searchDist = 0
-    while (searchDist < bitmaps.length) {
-      if (targetIdx - searchDist >= 0 && bitmaps[targetIdx - searchDist]) {
-        activeBitmap = bitmaps[targetIdx - searchDist]
-        break
-      }
-      if (targetIdx + searchDist < bitmaps.length && bitmaps[targetIdx + searchDist]) {
-        activeBitmap = bitmaps[targetIdx + searchDist]
-        break
-      }
-      searchDist++
-    }
+    // Bound the index
+    const targetIdx = Math.max(0, Math.min(index - 1, images.length - 1))
+    const img = images[targetIdx]
+    if (!img) return
 
-    if (!activeBitmap) return
+    // Scale canvas to match DPR
+    const dpr = window.devicePixelRatio || 1
+    const logicalWidth = window.innerWidth
+    const logicalHeight = window.innerHeight
 
-    // Logical dimensions for drawing
-    const cw = window.innerWidth
-    const ch = window.innerHeight
-    const iw = activeBitmap.width
-    const ih = activeBitmap.height
+    canvas.width = logicalWidth * dpr
+    canvas.height = logicalHeight * dpr
+    canvas.style.width = '100%'
+    canvas.style.height = '100%'
 
-    // object-fit: cover math
+    ctx.scale(dpr, dpr)
+
+    // Draw logic (object-fit: cover)
+    const cw = logicalWidth
+    const ch = logicalHeight
+    const iw = img.width
+    const ih = img.height
+
     const scale = Math.max(cw / iw, ch / ih)
     const sw = cw / scale
     const sh = ch / scale
     const sx = (iw - sw) / 2
     const sy = (ih - sh) / 2
 
-    // The context is scaled by DPR, so we draw into logical coords
-    ctx.drawImage(activeBitmap, sx, sy, sw, sh, 0, 0, cw, ch)
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch)
+  }, [imagesLoaded, isMobile])
 
-    lastDrawnFrame.current = index // UPDATE CACHE
-  }, [])
-
-  /* ── resize handler ──────────────────────────────────────── */
-  useEffect(() => {
-    const resize = () => {
-      const canvas = canvasRef.current
-      if (!canvas) return
-      
-      const dpr = window.devicePixelRatio || 1
-      const logicalWidth = window.innerWidth
-      const logicalHeight = window.innerHeight
-      
-      // Physical dimensions for retina sharpness
-      canvas.width = logicalWidth * dpr
-      canvas.height = logicalHeight * dpr
-      
-      // CSS dimensions stay 100%
-      canvas.style.width = '100%'
-      canvas.style.height = '100%'
-      
-      const ctx = canvas.getContext('2d', { alpha: false })
-      if (ctx) {
-        ctx.scale(dpr, dpr)
-      }
-      
-      lastDrawnFrame.current = -1 // Force redraw after resize
-      drawFrame(currentFrameRef.current)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-    return () => window.removeEventListener('resize', resize)
-  }, [drawFrame])
-
-  /* ── scroll → frame render loop ──────────────────────────── */
+  // Scrub through images
   useMotionValueEvent(frameIndex, 'change', (latest) => {
+    if (!imagesLoaded || isMobile) return
     const idx = Math.round(latest)
     if (idx !== currentFrameRef.current) {
       currentFrameRef.current = idx
-      cancelAnimationFrame(rafRef.current)
-      rafRef.current = requestAnimationFrame(() => drawFrame(idx))
+      requestAnimationFrame(() => drawFrame(idx))
     }
   })
 
-  /* ── draw first frame once preloaded ─────────────────────── */
+  // Initial draw and window resize handling
   useEffect(() => {
-    if (isPreloaded) {
-      drawFrame(0)
+    if (imagesLoaded && !isMobile) {
+      drawFrame(currentFrameRef.current)
+      
+      const handleResize = () => drawFrame(currentFrameRef.current)
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
     }
-  }, [isPreloaded, drawFrame])
+  }, [imagesLoaded, isMobile, drawFrame])
 
   /* ══════════════════════════════════════════════════════════
      RENDER
      ══════════════════════════════════════════════════════════ */
-  if (!isMounted) return <div className="w-full h-[100vh] bg-[#0B132B]"></div>
+  if (!mounted) return <div className="w-full h-[100vh] bg-[#0B132B]"></div>
 
   return (
     <div
@@ -289,16 +228,16 @@ export default function PortalHero({
     >
       {/* ── Sticky viewport ──────────────────────────────────── */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-clip bg-black">
-        {!isMounted || !isMobile ? (
+        {!isMobile ? (
           /* Desktop Canvas */
           <canvas
             ref={canvasRef}
             className={`absolute inset-0 w-full h-full will-change-transform transform-gpu transition-opacity duration-1000 ${
-              isPreloaded ? 'opacity-100' : 'opacity-0'
+              imagesLoaded ? 'opacity-100' : 'opacity-0'
             }`}
           />
         ) : (
-          /* Mobile Parallax Fallback (Bypasses Canvas RAM limits) */
+          /* Phase 2: The Mobile Guarantee (Zero Crash Policy) */
           <motion.div
             style={{ y: useTransform(smoothProgress, [0, 1], [0, 120]) }}
             className="absolute inset-0 w-full h-[115%] -top-[5%]"
