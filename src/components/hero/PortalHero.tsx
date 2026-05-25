@@ -68,6 +68,19 @@ export default function PortalHero({
 
   /* ── state ───────────────────────────────────────────────── */
   const [isPreloaded, setIsPreloaded] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  /* ── universal viewport detection ────────────────────────── */
+  useEffect(() => {
+    setIsMounted(true)
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   /* ── scroll tracking ─────────────────────────────────────── */
   const { scrollYProgress } = useScroll({
@@ -101,8 +114,21 @@ export default function PortalHero({
   )
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768
-    const frameStep = isMobile ? 3 : 1
+    if (!isMounted) return
+    if (isMobile) {
+      // Phase 4: Garbage Collection for mobile viewports
+      const bitmaps = bitmapsRef.current
+      if (bitmaps && bitmaps.length > 0) {
+        bitmaps.forEach(bmp => {
+          if (bmp) bmp.close()
+        })
+        bitmapsRef.current = []
+      }
+      setIsPreloaded(false)
+      return
+    }
+
+    const frameStep = 1 // Desktop has the RAM to render all frames smoothly
 
     const bitmaps: (ImageBitmap | null)[] = new Array(frameCount).fill(null)
     bitmapsRef.current = bitmaps
@@ -150,7 +176,7 @@ export default function PortalHero({
       })
       bitmapsRef.current = []
     }
-  }, [frameCount, frameUrl])
+  }, [frameCount, frameUrl, isMobile, isMounted])
 
   /* ── Phase 2: Canvas drawing — draw cache + alpha:false ───── */
   const drawFrame = useCallback((index: number) => {
@@ -260,14 +286,28 @@ export default function PortalHero({
       style={{ touchAction: 'pan-y' }}
     >
       {/* ── Sticky viewport ──────────────────────────────────── */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-clip">
-        {/* Canvas */}
-        <canvas
-          ref={canvasRef}
-          className={`absolute inset-0 w-full h-full will-change-transform transform-gpu transition-opacity duration-1000 ${
-            isPreloaded ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+      <div className="sticky top-0 left-0 w-full h-screen overflow-clip bg-black">
+        {!isMounted || !isMobile ? (
+          /* Desktop Canvas */
+          <canvas
+            ref={canvasRef}
+            className={`absolute inset-0 w-full h-full will-change-transform transform-gpu transition-opacity duration-1000 ${
+              isPreloaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ) : (
+          /* Mobile Parallax Fallback (Bypasses Canvas RAM limits) */
+          <motion.div
+            style={{ y: useTransform(smoothProgress, [0, 1], [0, 120]) }}
+            className="absolute inset-0 w-full h-[115%] -top-[5%]"
+          >
+            <img 
+              src={`${assetBaseUrl}/ezgif-frame-001.jpg`} 
+              alt="Moroccan door" 
+              className="w-full h-full object-cover" 
+            />
+          </motion.div>
+        )}
 
         {/* Dark luxury text scrim — ensures legibility over bright video */}
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/40 to-transparent pointer-events-none" suppressHydrationWarning />
