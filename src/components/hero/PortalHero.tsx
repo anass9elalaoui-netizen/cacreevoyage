@@ -7,11 +7,12 @@ import {
   useSpring,
   useTransform,
   useMotionValueEvent,
+  MotionValue,
 } from 'framer-motion'
 
-/* ──────────────────────────────────────────────────────────────
+/* ══════════════════════════════════════════════════════════════
    TYPES
-   ────────────────────────────────────────────────────────────── */
+   ══════════════════════════════════════════════════════════════ */
 interface PortalHeroProps {
   assetBaseUrl?: string
   frameCount?: number
@@ -23,43 +24,59 @@ interface PortalHeroProps {
   ctaLabel?: string
 }
 
-/* ──────────────────────────────────────────────────────────────
-   KINETIC TEXT — staggered opacity/blur/y bound to frame index
-   ────────────────────────────────────────────────────────────── */
-const KineticScrollText = ({
-  frameIndex,
-  startFrame,
-  peakInFrame,
-  peakOutFrame,
-  endFrame,
+/* ══════════════════════════════════════════════════════════════
+   FLOATING TEXT — vertical parallax with staggered opacity
+   Each message floats upward and fades in/out at its own scroll phase.
+   ══════════════════════════════════════════════════════════════ */
+function FloatingMessage({
+  scrollProgress,
+  enterStart,
+  enterEnd,
+  exitStart,
+  exitEnd,
   children,
   className,
-}: any) => {
-  const blurValue = useTransform(
-    frameIndex,
-    [startFrame, peakInFrame, peakOutFrame, endFrame],
-    ['blur(12px)', 'blur(0px)', 'blur(0px)', 'blur(12px)'],
+}: {
+  scrollProgress: MotionValue<number>
+  enterStart: number
+  enterEnd: number
+  exitStart: number
+  exitEnd: number
+  children: React.ReactNode
+  className?: string
+}) {
+  // Vertical parallax: text drifts up from below center to above center
+  const y = useTransform(
+    scrollProgress,
+    [enterStart, enterEnd, exitStart, exitEnd],
+    ['30vh', '0vh', '0vh', '-30vh'],
   )
-  const yValue = useTransform(frameIndex, [startFrame, endFrame], [50, -50])
-  const opacityValue = useTransform(
-    frameIndex,
-    [startFrame, peakInFrame, peakOutFrame, endFrame],
+  // Opacity: fade in → hold → fade out
+  const opacity = useTransform(
+    scrollProgress,
+    [enterStart, enterEnd, exitStart, exitEnd],
     [0, 1, 1, 0],
+  )
+  // Blur: sharp during hold, blurred at edges
+  const filter = useTransform(
+    scrollProgress,
+    [enterStart, enterEnd, exitStart, exitEnd],
+    ['blur(8px)', 'blur(0px)', 'blur(0px)', 'blur(8px)'],
   )
 
   return (
     <motion.div
-      style={{ opacity: opacityValue, y: yValue, filter: blurValue }}
-      className={`transform-gpu will-change-[opacity,transform,filter] ${className}`}
+      style={{ y, opacity, filter }}
+      className={`absolute inset-0 z-20 flex items-center justify-center pointer-events-none transform-gpu will-change-[opacity,transform,filter] ${className || ''}`}
     >
       {children}
     </motion.div>
   )
 }
 
-/* ──────────────────────────────────────────────────────────────
+/* ══════════════════════════════════════════════════════════════
    PORTAL HERO COMPONENT
-   ────────────────────────────────────────────────────────────── */
+   ══════════════════════════════════════════════════════════════ */
 export default function PortalHero({
   assetBaseUrl = '/hero-frames',
   frameCount = 142,
@@ -70,27 +87,22 @@ export default function PortalHero({
   textPhase3Title = 'Prenez votre envol.',
   ctaLabel = 'Créer Mon Voyage',
 }: PortalHeroProps) {
-  /* ── State ──────────────────────────────────────────────── */
+  /* ────────────────────────────────────────────────────────────
+     Phase 1: SSR Safety & Mobile Bifurcation
+     ──────────────────────────────────────────────────────────── */
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [firstBatchReady, setFirstBatchReady] = useState(false)
+  const [firstFrameReady, setFirstFrameReady] = useState(false)
 
-  /* ── Refs ───────────────────────────────────────────────── */
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
   const currentFrameRef = useRef(1)
   const lastDrawnRef = useRef(-1)
-  const rafRef = useRef(0)
 
-  /* ──────────────────────────────────────────────────────────
-     Phase 1: SSR-safe mount check
-     - window does not exist on the server
-     - all browser API access lives inside useEffect
-     ────────────────────────────────────────────────────────── */
   useEffect(() => {
     setMounted(true)
-    setIsMobile(window.matchMedia('(max-width: 768px)').matches)
+    setIsMobile(window.innerWidth < 768)
 
     const mql = window.matchMedia('(max-width: 768px)')
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
@@ -98,38 +110,69 @@ export default function PortalHero({
     return () => mql.removeEventListener('change', onChange)
   }, [])
 
-  /* ──────────────────────────────────────────────────────────
-     Scroll tracking — all hooks unconditional (Rules of Hooks)
-     ────────────────────────────────────────────────────────── */
+  /* ────────────────────────────────────────────────────────────
+     Phase 2: Scroll tracking (all hooks unconditional)
+     Outer container = 250vh, sticky inner = 100vh
+     scrollYProgress: 0.0 → 1.0 over the 250vh distance
+     ──────────────────────────────────────────────────────────── */
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 25,
+    stiffness: 120,
+    damping: 30,
     mass: 0.05,
-    restDelta: 0.001,
+    restDelta: 0.0005,
   })
 
-  /* ── Phase A (0.0 → 0.75): Door opening + text ──────── */
-  // Frames 1→142 are compressed into the first 75% of scroll
-  const frameIndex = useTransform(smoothProgress, [0, 0.75], [1, frameCount], { clamp: true })
+  // Scroll indicator fades fast
+  const scrollIndicatorOpacity = useTransform(smoothProgress, [0, 0.04], [1, 0])
 
-  // Scroll indicator fades out by 5% scroll
-  const scrollIndicatorOpacity = useTransform(smoothProgress, [0, 0.05], [1, 0])
+  /* ────────────────────────────────────────────────────────────
+     Phase 4 (Desktop): Frame index mapped to 0.0→0.5 scroll
+     Door fully open (frame 142) by 50% scroll
+     ──────────────────────────────────────────────────────────── */
+  const desktopFrameIndex = useTransform(
+    smoothProgress,
+    [0, 0.5],
+    [1, frameCount],
+    { clamp: true },
+  )
 
-  // Mobile parallax — declared unconditionally
-  const mobileParallaxY = useTransform(smoothProgress, [0, 1], [0, 80])
+  /* ────────────────────────────────────────────────────────────
+     Phase 4 (Desktop): Zoom-through scale 0.5→0.9
+     Canvas scales from 1x to 20x into the doorway
+     ──────────────────────────────────────────────────────────── */
+  const desktopCanvasScale = useTransform(
+    smoothProgress,
+    [0.5, 0.9],
+    [1, 20],
+    { clamp: true },
+  )
 
-  /* ── Phase B (0.75 → 1.0): Portal zoom-through ─────── */
-  // Scale the canvas from 1x to 15x, zooming into the open doorway
-  const canvasScale = useTransform(smoothProgress, [0.75, 1.0], [1, 15], { clamp: true })
+  /* ────────────────────────────────────────────────────────────
+     Phase 3 (Mobile): Single image zoom 0.0→0.8
+     Scales from 1x to 20x (no canvas, no 142 frames)
+     ──────────────────────────────────────────────────────────── */
+  const mobileZoomScale = useTransform(
+    smoothProgress,
+    [0, 0.8],
+    [1, 20],
+    { clamp: true },
+  )
 
-  // Fade the entire sticky container out between 90% and 100% scroll
-  // This seamlessly reveals the next website section underneath
-  const portalOpacity = useTransform(smoothProgress, [0.9, 1.0], [1, 0], { clamp: true })
+  /* ────────────────────────────────────────────────────────────
+     Phase exit: Sticky container opacity fade 0.9→1.0
+     Reveals the website section below seamlessly
+     ──────────────────────────────────────────────────────────── */
+  const containerFadeOpacity = useTransform(
+    smoothProgress,
+    [0.88, 1.0],
+    [1, 0],
+    { clamp: true },
+  )
 
   /* ── Frame URL builder ─────────────────────────────────── */
   const frameUrl = useCallback(
@@ -138,46 +181,37 @@ export default function PortalHero({
     [assetBaseUrl],
   )
 
-  /* ──────────────────────────────────────────────────────────
-     Phase 2 (mobile): no frame loading at all
-     Phase 3 (desktop): progressive preloading
-     - Show first frame as soon as it loads (don't wait for 142)
-     - Continue loading remaining frames in background
-     ────────────────────────────────────────────────────────── */
+  /* ────────────────────────────────────────────────────────────
+     Phase 4: Desktop progressive frame preloading
+     Load frame 1 first for instant display, then batch the rest
+     ──────────────────────────────────────────────────────────── */
   useEffect(() => {
     if (!mounted || isMobile) return
 
     let cancelled = false
     const imgArray: HTMLImageElement[] = new Array(frameCount)
 
-    // Track which frames have loaded
-    const loaded = new Set<number>()
-
-    const loadFrame = (idx: number) => {
-      return new Promise<void>((resolve) => {
+    const loadFrame = (idx: number): Promise<void> =>
+      new Promise((resolve) => {
         const img = new Image()
-        img.src = frameUrl(idx + 1) // frames are 1-indexed
+        img.src = frameUrl(idx + 1)
         img.onload = () => {
           if (!cancelled) {
             imgArray[idx] = img
-            loaded.add(idx)
-            // As soon as frame 0 is ready, mark first batch ready
             if (idx === 0) {
               imagesRef.current = imgArray
-              setFirstBatchReady(true)
+              setFirstFrameReady(true)
             }
           }
           resolve()
         }
-        img.onerror = () => resolve() // skip broken frames
+        img.onerror = () => resolve()
       })
-    }
 
-    // Load frame 0 first for instant display
+    // Load frame 0 immediately for instant first paint
     loadFrame(0).then(async () => {
       if (cancelled) return
-      // Load remaining frames in batches of 10
-      const BATCH = 10
+      const BATCH = 8
       for (let start = 1; start < frameCount; start += BATCH) {
         if (cancelled) break
         const batch: Promise<void>[] = []
@@ -191,109 +225,109 @@ export default function PortalHero({
     return () => {
       cancelled = true
       imagesRef.current = []
-      setFirstBatchReady(false)
+      setFirstFrameReady(false)
     }
   }, [mounted, isMobile, frameCount, frameUrl])
 
-  /* ──────────────────────────────────────────────────────────
-     Canvas draw function
-     - DPR-aware for retina sharpness
-     - Object-fit: cover mapping
-     - Skips redundant redraws
-     ────────────────────────────────────────────────────────── */
-  const drawFrame = useCallback((index: number) => {
-    if (index === lastDrawnRef.current) return
+  /* ────────────────────────────────────────────────────────────
+     Canvas draw function — DPR-aware, object-fit: cover
+     ──────────────────────────────────────────────────────────── */
+  const drawFrame = useCallback(
+    (index: number) => {
+      if (index === lastDrawnRef.current) return
 
-    const canvas = canvasRef.current
-    if (!canvas) return
+      const canvas = canvasRef.current
+      if (!canvas) return
 
-    const images = imagesRef.current
-    if (!images || images.length === 0) return
+      const images = imagesRef.current
+      if (!images || images.length === 0) return
 
-    // Clamp and find nearest loaded frame
-    const target = Math.max(0, Math.min(index - 1, frameCount - 1))
-    let img = images[target]
+      const target = Math.max(0, Math.min(index - 1, frameCount - 1))
+      let img = images[target]
 
-    // Fallback: search for nearest loaded frame if target isn't ready
-    if (!img || !img.complete || img.naturalWidth === 0) {
-      for (let d = 1; d < frameCount; d++) {
-        if (target - d >= 0 && images[target - d]?.complete && images[target - d]?.naturalWidth > 0) {
-          img = images[target - d]
-          break
-        }
-        if (target + d < frameCount && images[target + d]?.complete && images[target + d]?.naturalWidth > 0) {
-          img = images[target + d]
-          break
+      // Fallback: nearest loaded frame
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        for (let d = 1; d < frameCount; d++) {
+          const lo = images[target - d]
+          const hi = images[target + d]
+          if (target - d >= 0 && lo?.complete && lo.naturalWidth > 0) {
+            img = lo
+            break
+          }
+          if (target + d < frameCount && hi?.complete && hi.naturalWidth > 0) {
+            img = hi
+            break
+          }
         }
       }
-    }
+      if (!img || !img.complete || img.naturalWidth === 0) return
 
-    if (!img || !img.complete || img.naturalWidth === 0) return
+      const ctx = canvas.getContext('2d', { alpha: false })
+      if (!ctx) return
 
-    const ctx = canvas.getContext('2d', { alpha: false })
-    if (!ctx) return
+      const dpr = window.devicePixelRatio || 1
+      const logicalW = canvas.clientWidth
+      const logicalH = canvas.clientHeight
 
-    // DPR scaling
-    const dpr = window.devicePixelRatio || 1
-    const logicalW = canvas.clientWidth
-    const logicalH = canvas.clientHeight
+      if (
+        canvas.width !== logicalW * dpr ||
+        canvas.height !== logicalH * dpr
+      ) {
+        canvas.width = logicalW * dpr
+        canvas.height = logicalH * dpr
+      }
 
-    if (canvas.width !== logicalW * dpr || canvas.height !== logicalH * dpr) {
-      canvas.width = logicalW * dpr
-      canvas.height = logicalH * dpr
-    }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      // Object-fit: cover
+      const iw = img.naturalWidth
+      const ih = img.naturalHeight
+      const scale = Math.max(logicalW / iw, logicalH / ih)
+      const sw = logicalW / scale
+      const sh = logicalH / scale
+      const sx = (iw - sw) / 2
+      const sy = (ih - sh) / 2
 
-    // Object-fit: cover
-    const iw = img.naturalWidth
-    const ih = img.naturalHeight
-    const scale = Math.max(logicalW / iw, logicalH / ih)
-    const sw = logicalW / scale
-    const sh = logicalH / scale
-    const sx = (iw - sw) / 2
-    const sy = (ih - sh) / 2
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, logicalW, logicalH)
+      lastDrawnRef.current = index
+    },
+    [frameCount],
+  )
 
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, logicalW, logicalH)
-    lastDrawnRef.current = index
-  }, [frameCount])
-
-  /* ── Scroll-driven frame scrubbing ─────────────────────── */
-  useMotionValueEvent(frameIndex, 'change', (latest) => {
-    if (!firstBatchReady || isMobile) return
+  /* ── Scroll-driven scrubbing ───────────────────────────── */
+  useMotionValueEvent(desktopFrameIndex, 'change', (latest) => {
+    if (!firstFrameReady || isMobile) return
     const idx = Math.round(latest as number)
     if (idx !== currentFrameRef.current) {
       currentFrameRef.current = idx
-      cancelAnimationFrame(rafRef.current)
-      rafRef.current = requestAnimationFrame(() => drawFrame(idx))
+      requestAnimationFrame(() => drawFrame(idx))
     }
   })
 
-  /* ── Draw first frame + handle resize ──────────────────── */
+  /* ── Initial draw + resize ─────────────────────────────── */
   useEffect(() => {
-    if (!firstBatchReady || isMobile) return
+    if (!firstFrameReady || isMobile) return
 
-    // Draw initial frame
     lastDrawnRef.current = -1
     drawFrame(currentFrameRef.current)
 
     const onResize = () => {
-      lastDrawnRef.current = -1 // force redraw on resize
+      lastDrawnRef.current = -1
       drawFrame(currentFrameRef.current)
     }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [firstBatchReady, isMobile, drawFrame])
+  }, [firstFrameReady, isMobile, drawFrame])
 
   /* ══════════════════════════════════════════════════════════
      RENDER
      ══════════════════════════════════════════════════════════ */
 
-  // Phase 1: SSR placeholder — matches scroll container structure
+  // Phase 1: SSR placeholder — dark screen, no browser APIs
   if (!mounted) {
     return (
-      <div className="relative w-full bg-[#0B132B] h-[400vh]">
-        <div className="sticky top-0 left-0 w-full h-screen bg-[#0B132B]" />
+      <div className="relative w-full h-[250vh] bg-[#050B14]">
+        <div className="sticky top-0 w-full h-screen bg-[#050B14]" />
       </div>
     )
   }
@@ -301,110 +335,126 @@ export default function PortalHero({
   return (
     <div
       ref={containerRef}
-      className="relative w-full bg-[#0B132B] overscroll-y-none"
-      style={{ touchAction: 'pan-y', height: isMobile ? '300vh' : '400vh' }}
+      className="relative w-full h-[250vh] bg-[#050B14]"
+      style={{ touchAction: 'pan-y' }}
     >
-      {/* ── Phase 1: Sticky viewport (locked to screen) ────── */}
+      {/* ── Sticky viewport (locked to screen while scrolling 250vh) ── */}
       <motion.div
-        className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-[#0B132B]"
-        style={{ opacity: portalOpacity }}
+        className="sticky top-0 w-full h-screen overflow-hidden bg-[#050B14]"
+        style={{ opacity: containerFadeOpacity }}
       >
-
-        {/* Phase 2: Mobile — single hero image, parallax scroll */}
+        {/* ════════════════════════════════════════════════════
+           MOBILE: Single image zoom-through (zero RAM overhead)
+           ════════════════════════════════════════════════════ */}
         {isMobile && (
           <motion.div
-            style={{ y: mobileParallaxY }}
-            className="absolute inset-0 w-full h-[115%] -top-[5%]"
+            className="absolute inset-0 w-full h-full"
+            style={{
+              scale: mobileZoomScale,
+              transformOrigin: '50% 55%',
+            }}
           >
             <img
-              src={`${assetBaseUrl}/ezgif-frame-001.jpg`}
+              src={`${assetBaseUrl}/ezgif-frame-${String(frameCount).padStart(3, '0')}.jpg`}
               alt="Ça Crée Voyage — Moroccan door"
-              className="w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </motion.div>
         )}
 
-        {/* Phase 3: Desktop — canvas flipbook + portal zoom */}
+        {/* ════════════════════════════════════════════════════
+           DESKTOP: Canvas flipbook (0→0.5) + zoom (0.5→0.9)
+           ════════════════════════════════════════════════════ */}
         {!isMobile && (
           <motion.div
             className="absolute inset-0 w-full h-full"
             style={{
-              scale: canvasScale,
-              transformOrigin: '50% 60%', // center of the doorway opening
+              scale: desktopCanvasScale,
+              transformOrigin: '50% 55%',
             }}
           >
             <canvas
               ref={canvasRef}
-              className={`w-full h-full will-change-transform transform-gpu transition-opacity duration-700 ${
-                firstBatchReady ? 'opacity-100' : 'opacity-0'
+              className={`w-full h-full transition-opacity duration-500 ${
+                firstFrameReady ? 'opacity-100' : 'opacity-0'
               }`}
             />
           </motion.div>
         )}
 
-        {/* ── Cinematic overlays ─────────────────────────────── */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/40 to-transparent pointer-events-none" />
+        {/* ── Cinematic overlays ──────────────────────────────── */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#050B14]/80 via-[#050B14]/30 to-transparent pointer-events-none" />
         <div
           className="absolute inset-0 pointer-events-none z-[11]"
           style={{
             background:
-              'radial-gradient(ellipse at center, transparent 40%, rgba(11,19,43,0.55) 100%)',
+              'radial-gradient(ellipse at center, transparent 40%, rgba(5,11,20,0.5) 100%)',
           }}
         />
 
-        {/* ── OVERLAY 1: Left-aligned (frames 1–45) ──────────── */}
-        <KineticScrollText
-          frameIndex={frameIndex}
-          startFrame={1}
-          peakInFrame={5}
-          peakOutFrame={35}
-          endFrame={45}
-          className="absolute left-[8%] top-[45%] md:top-[35%] z-20 max-w-xl pointer-events-none"
-        >
-          <h1 className="font-serif text-5xl md:text-7xl text-[#FFFFFF] font-light leading-tight drop-shadow-lg">
-            {textPhase1Title} <br />
-            <span className="italic text-[#C9A84C]">{textPhase1Sub}</span>
-          </h1>
-        </KineticScrollText>
+        {/* ════════════════════════════════════════════════════
+           Phase 5: Vertical text parallax — 3 staggered messages
+           Each floats upward and fades in/out at its own scroll window
+           ════════════════════════════════════════════════════ */}
 
-        {/* ── OVERLAY 2: Centered (frames 45–95) ─────────────── */}
-        <KineticScrollText
-          frameIndex={frameIndex}
-          startFrame={45}
-          peakInFrame={55}
-          peakOutFrame={85}
-          endFrame={95}
-          className="absolute inset-x-0 text-center top-[45%] md:top-[12%] z-20 pointer-events-none drop-shadow-2xl"
+        {/* Message 1: "L'art du voyage sur-mesure." — scroll 0.0 → 0.20 */}
+        <FloatingMessage
+          scrollProgress={smoothProgress}
+          enterStart={0.0}
+          enterEnd={0.04}
+          exitStart={0.14}
+          exitEnd={0.20}
         >
-          <h2 className="font-serif text-4xl md:text-6xl text-white font-light tracking-wide">
-            {textPhase2Title}
-          </h2>
-          <p className="font-sans text-sm md:text-base text-[#C9A84C] uppercase tracking-[0.3em] mt-4 font-light">
-            {textPhase2Sub}
-          </p>
-        </KineticScrollText>
+          <div className="text-center max-w-3xl px-6">
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-white font-light leading-tight drop-shadow-lg">
+              {textPhase1Title}
+            </h1>
+            <p className="font-serif italic text-xl sm:text-2xl md:text-3xl text-[#C9A84C] mt-4 drop-shadow-md">
+              {textPhase1Sub}
+            </p>
+          </div>
+        </FloatingMessage>
 
-        {/* ── OVERLAY 3: Bottom CTA (frames 95–150) ──────────── */}
-        <KineticScrollText
-          frameIndex={frameIndex}
-          startFrame={95}
-          peakInFrame={105}
-          peakOutFrame={142}
-          endFrame={150}
-          className="absolute inset-x-0 bottom-[120px] md:bottom-16 z-30 flex flex-col items-center pointer-events-none"
+        {/* Message 2: "Éveillez vos sens." — scroll 0.18 → 0.38 */}
+        <FloatingMessage
+          scrollProgress={smoothProgress}
+          enterStart={0.18}
+          enterEnd={0.23}
+          exitStart={0.33}
+          exitEnd={0.38}
         >
-          <h2 className="font-serif text-4xl md:text-5xl text-white font-light mb-6 drop-shadow-xl">
-            {textPhase3Title}
-          </h2>
-          <a
-            href="/sur-mesure"
-            className="pointer-events-auto px-10 py-4 rounded-full border border-[#38A3A5]/50 text-[#38A3A5] font-sans text-xs md:text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#38A3A5]/10 hover:border-[#38A3A5] backdrop-blur-md flex items-center gap-3"
-          >
-            {ctaLabel} <span>&rarr;</span>
-          </a>
-        </KineticScrollText>
+          <div className="text-center max-w-2xl px-6">
+            <h2 className="font-serif text-4xl md:text-6xl text-white font-light tracking-wide drop-shadow-lg">
+              {textPhase2Title}
+            </h2>
+            <p className="font-sans text-sm md:text-base text-[#C9A84C] uppercase tracking-[0.3em] mt-4 font-light">
+              {textPhase2Sub}
+            </p>
+          </div>
+        </FloatingMessage>
 
-        {/* ── Scroll indicator ───────────────────────────────── */}
+        {/* Message 3: "Prenez votre envol." + CTA — scroll 0.35 → 0.52 */}
+        <FloatingMessage
+          scrollProgress={smoothProgress}
+          enterStart={0.35}
+          enterEnd={0.40}
+          exitStart={0.47}
+          exitEnd={0.52}
+        >
+          <div className="text-center flex flex-col items-center">
+            <h2 className="font-serif text-4xl md:text-5xl text-white font-light mb-8 drop-shadow-xl">
+              {textPhase3Title}
+            </h2>
+            <a
+              href="/sur-mesure"
+              className="pointer-events-auto px-10 py-4 rounded-full border border-[#38A3A5]/50 text-[#38A3A5] font-sans text-xs md:text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#38A3A5]/10 hover:border-[#38A3A5] backdrop-blur-md flex items-center gap-3"
+            >
+              {ctaLabel} <span>&rarr;</span>
+            </a>
+          </div>
+        </FloatingMessage>
+
+        {/* ── Scroll indicator ────────────────────────────────── */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
           style={{ opacity: scrollIndicatorOpacity }}
