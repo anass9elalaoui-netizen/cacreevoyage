@@ -100,10 +100,8 @@ export default function PortalHero({
     [assetBaseUrl],
   )
 
-  useEffect(() => {
     const isMobile = window.innerWidth < 768
     const frameStep = isMobile ? 3 : 1
-    const resizeOpts = isMobile ? { resizeWidth: window.innerWidth, resizeQuality: 'low' as ResizeQuality } : undefined
 
     const bitmaps: (ImageBitmap | null)[] = new Array(frameCount).fill(null)
     bitmapsRef.current = bitmaps
@@ -116,7 +114,7 @@ export default function PortalHero({
         promises.push(
           fetch(frameUrl(i))
             .then(res => res.blob())
-            .then(blob => resizeOpts ? createImageBitmap(blob, resizeOpts) : createImageBitmap(blob))
+            .then(blob => createImageBitmap(blob))
             .then(bitmap => { 
               if (!cancelled) bitmaps[i - 1] = bitmap 
             })
@@ -184,8 +182,9 @@ export default function PortalHero({
 
     if (!activeBitmap) return
 
-    const cw = canvas.width
-    const ch = canvas.height
+    // Logical dimensions for drawing
+    const cw = window.innerWidth
+    const ch = window.innerHeight
     const iw = activeBitmap.width
     const ih = activeBitmap.height
 
@@ -196,6 +195,7 @@ export default function PortalHero({
     const sx = (iw - sw) / 2
     const sy = (ih - sh) / 2
 
+    // The context is scaled by DPR, so we draw into logical coords
     ctx.drawImage(activeBitmap, sx, sy, sw, sh, 0, 0, cw, ch)
 
     lastDrawnFrame.current = index // UPDATE CACHE
@@ -206,8 +206,24 @@ export default function PortalHero({
     const resize = () => {
       const canvas = canvasRef.current
       if (!canvas) return
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      
+      const dpr = window.devicePixelRatio || 1
+      const logicalWidth = window.innerWidth
+      const logicalHeight = window.innerHeight
+      
+      // Physical dimensions for retina sharpness
+      canvas.width = logicalWidth * dpr
+      canvas.height = logicalHeight * dpr
+      
+      // CSS dimensions stay 100%
+      canvas.style.width = '100%'
+      canvas.style.height = '100%'
+      
+      const ctx = canvas.getContext('2d', { alpha: false })
+      if (ctx) {
+        ctx.scale(dpr, dpr)
+      }
+      
       lastDrawnFrame.current = -1 // Force redraw after resize
       drawFrame(currentFrameRef.current)
     }
