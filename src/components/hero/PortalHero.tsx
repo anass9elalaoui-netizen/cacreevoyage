@@ -100,39 +100,42 @@ export default function PortalHero({
     [assetBaseUrl],
   )
 
-  const loadBatch = useCallback(
-    async (startIdx: number, endIdx: number, store: (ImageBitmap | null)[]) => {
-      const promises: Promise<void>[] = []
-      for (let i = startIdx; i <= endIdx; i++) {
-        promises.push(
-          fetch(frameUrl(i))
-            .then(res => res.blob())
-            .then(blob => createImageBitmap(blob))
-            .then(bitmap => { store[i - 1] = bitmap })
-            .catch(() => {}) // Swallow individual failures silently
-        )
-      }
-      return Promise.all(promises)
-    },
-    [frameUrl],
-  )
-
   useEffect(() => {
+    const isMobile = window.innerWidth < 768
+    const frameStep = isMobile ? 3 : 1
+    const resizeOpts = isMobile ? { resizeWidth: window.innerWidth, resizeQuality: 'low' as ResizeQuality } : undefined
+
     const bitmaps: (ImageBitmap | null)[] = new Array(frameCount).fill(null)
     bitmapsRef.current = bitmaps
 
     let cancelled = false
 
+    const loadBatchLocal = async (startIdx: number, endIdx: number) => {
+      const promises: Promise<void>[] = []
+      for (let i = startIdx; i <= endIdx; i += frameStep) {
+        promises.push(
+          fetch(frameUrl(i))
+            .then(res => res.blob())
+            .then(blob => resizeOpts ? createImageBitmap(blob, resizeOpts) : createImageBitmap(blob))
+            .then(bitmap => { 
+              if (!cancelled) bitmaps[i - 1] = bitmap 
+            })
+            .catch(() => {})
+        )
+      }
+      return Promise.all(promises)
+    }
+
     const preloadFirst = async () => {
-      await loadBatch(1, Math.min(PRELOAD_BATCH, frameCount), bitmaps)
+      await loadBatchLocal(1, Math.min(PRELOAD_BATCH * frameStep, frameCount))
       if (!cancelled) setIsPreloaded(true)
     }
 
     const loadRemaining = async () => {
-      for (let batchStart = PRELOAD_BATCH + 1; batchStart <= frameCount; batchStart += CONCURRENT_BATCH) {
+      for (let batchStart = (PRELOAD_BATCH * frameStep) + 1; batchStart <= frameCount; batchStart += CONCURRENT_BATCH * frameStep) {
         if (cancelled) break
-        const batchEnd = Math.min(batchStart + CONCURRENT_BATCH - 1, frameCount)
-        await loadBatch(batchStart, batchEnd, bitmaps)
+        const batchEnd = Math.min(batchStart + (CONCURRENT_BATCH * frameStep) - 1, frameCount)
+        await loadBatchLocal(batchStart, batchEnd)
       }
     }
 
@@ -142,10 +145,13 @@ export default function PortalHero({
 
     return () => {
       cancelled = true
-      // Clean up bitmaps to free GPU memory
-      bitmaps.forEach(bmp => bmp?.close())
+      // Garbage Collection: clean up bitmaps to free GPU and RAM memory
+      bitmaps.forEach(bmp => {
+        if (bmp) bmp.close()
+      })
+      bitmapsRef.current = []
     }
-  }, [frameCount, loadBatch])
+  }, [frameCount, frameUrl])
 
   /* ── Phase 2: Canvas drawing — draw cache + alpha:false ───── */
   const drawFrame = useCallback((index: number) => {
@@ -157,14 +163,26 @@ export default function PortalHero({
     if (!ctx) return
 
     const bitmaps = bitmapsRef.current
+    if (!bitmaps || bitmaps.length === 0) return
 
-    // Bulletproof: fallback to nearest available frame
-    let activeBitmap = bitmaps[index]
-    if (!activeBitmap) {
-      const available = bitmaps.filter(Boolean) as ImageBitmap[]
-      if (available.length === 0) return
-      activeBitmap = available[Math.min(index, available.length - 1)]
+    // Interpolate & fallback to nearest available frame due to mobile decimation
+    let activeBitmap: ImageBitmap | null = null
+    const targetIdx = index - 1
+    
+    let searchDist = 0
+    while (searchDist < bitmaps.length) {
+      if (targetIdx - searchDist >= 0 && bitmaps[targetIdx - searchDist]) {
+        activeBitmap = bitmaps[targetIdx - searchDist]
+        break
+      }
+      if (targetIdx + searchDist < bitmaps.length && bitmaps[targetIdx + searchDist]) {
+        activeBitmap = bitmaps[targetIdx + searchDist]
+        break
+      }
+      searchDist++
     }
+
+    if (!activeBitmap) return
 
     const cw = canvas.width
     const ch = canvas.height
