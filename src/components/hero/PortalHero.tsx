@@ -113,14 +113,23 @@ export default function PortalHero({
     restDelta: 0.001,
   })
 
-  // Map 0→1 scroll progress to frame 1→142
-  const frameIndex = useTransform(smoothProgress, [0, 1], [1, frameCount])
+  /* ── Phase A (0.0 → 0.75): Door opening + text ──────── */
+  // Frames 1→142 are compressed into the first 75% of scroll
+  const frameIndex = useTransform(smoothProgress, [0, 0.75], [1, frameCount], { clamp: true })
 
   // Scroll indicator fades out by 5% scroll
   const scrollIndicatorOpacity = useTransform(smoothProgress, [0, 0.05], [1, 0])
 
   // Mobile parallax — declared unconditionally
   const mobileParallaxY = useTransform(smoothProgress, [0, 1], [0, 80])
+
+  /* ── Phase B (0.75 → 1.0): Portal zoom-through ─────── */
+  // Scale the canvas from 1x to 15x, zooming into the open doorway
+  const canvasScale = useTransform(smoothProgress, [0.75, 1.0], [1, 15], { clamp: true })
+
+  // Fade the entire sticky container out between 90% and 100% scroll
+  // This seamlessly reveals the next website section underneath
+  const portalOpacity = useTransform(smoothProgress, [0.9, 1.0], [1, 0], { clamp: true })
 
   /* ── Frame URL builder ─────────────────────────────────── */
   const frameUrl = useCallback(
@@ -296,7 +305,10 @@ export default function PortalHero({
       style={{ touchAction: 'pan-y', height: isMobile ? '300vh' : '400vh' }}
     >
       {/* ── Phase 1: Sticky viewport (locked to screen) ────── */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-[#0B132B]">
+      <motion.div
+        className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-[#0B132B]"
+        style={{ opacity: portalOpacity }}
+      >
 
         {/* Phase 2: Mobile — single hero image, parallax scroll */}
         {isMobile && (
@@ -312,14 +324,22 @@ export default function PortalHero({
           </motion.div>
         )}
 
-        {/* Phase 3: Desktop — canvas flipbook scrubber */}
+        {/* Phase 3: Desktop — canvas flipbook + portal zoom */}
         {!isMobile && (
-          <canvas
-            ref={canvasRef}
-            className={`absolute inset-0 w-full h-full will-change-transform transform-gpu transition-opacity duration-700 ${
-              firstBatchReady ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
+          <motion.div
+            className="absolute inset-0 w-full h-full"
+            style={{
+              scale: canvasScale,
+              transformOrigin: '50% 60%', // center of the doorway opening
+            }}
+          >
+            <canvas
+              ref={canvasRef}
+              className={`w-full h-full will-change-transform transform-gpu transition-opacity duration-700 ${
+                firstBatchReady ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </motion.div>
         )}
 
         {/* ── Cinematic overlays ─────────────────────────────── */}
@@ -394,7 +414,7 @@ export default function PortalHero({
           </span>
           <div className="w-[1px] h-8 bg-gradient-to-b from-white/40 to-transparent animate-pulse" />
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   )
 }
