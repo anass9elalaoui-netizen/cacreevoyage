@@ -13,11 +13,13 @@ export const Testimonials: CollectionConfig = {
     {
       name: 'travelerName',
       type: 'text',
+      localized: true,
       admin: { description: 'Nom complet du voyageur' },
     },
     {
       name: 'travelerOrigin',
       type: 'text',
+      localized: true,
       admin: { description: 'Ex: Paris, France' },
     },
     {
@@ -37,6 +39,7 @@ export const Testimonials: CollectionConfig = {
     {
       name: 'testimonialText',
       type: 'textarea',
+      localized: true,
       admin: { description: 'Le témoignage du voyageur' },
     },
     {

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
 import HeroGallery from '@/components/HeroGallery'
+import { getDictionary } from '@/i18n/dictionaries'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,7 +16,28 @@ const themeLabel: Record<string, string> = {
   forest_nature: 'Forêt & Nature',
 }
 
-export default async function DestinationsPage() {
+const themeLabelEn: Record<string, string> = {
+  ocean: 'Ocean',
+  desert: 'Desert',
+  mountain: 'Mountain',
+  culture: 'Culture',
+  forest_nature: 'Forest & Nature',
+}
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const resolvedSearchParams = await searchParams
+  const locale = (resolvedSearchParams.locale as string) || 'fr'
+  const isEn = locale === 'en'
+  return {
+    title: isEn ? 'Our Destinations — Ça Crée Voyage' : 'Nos Destinations — Ça Crée Voyage',
+    description: isEn ? 'From Morocco to the world, find your next adventure.' : 'Du Maroc aux quatre coins du monde, trouvez votre prochaine aventure.',
+  }
+}
+
+export default async function DestinationsPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const locale = (searchParams.locale as string) || 'fr';
+  const t = getDictionary(locale).destinationsList;
   const payload = await getPayload({ config: configPromise })
 
   // Fetch all destinations
@@ -23,6 +45,7 @@ export default async function DestinationsPage() {
     collection: 'destinations',
     depth: 1,
     limit: 50,
+    locale: locale as any,
   })
 
   // Fetch HeroGallery panels
@@ -31,6 +54,7 @@ export default async function DestinationsPage() {
     const heroGallery = await payload.findGlobal({
       slug: 'hero-gallery',
       depth: 1,
+      locale: locale as any,
     }) as any
     if (heroGallery?.panels && heroGallery.panels.length > 0) {
       heroPanels = heroGallery.panels
@@ -50,16 +74,16 @@ export default async function DestinationsPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-blue/8 rounded-full blur-[180px] pointer-events-none" />
 
         <span className="relative z-10 uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md">
-          Explorer
+          {t.explore}
         </span>
         <h1
           className="relative z-10 text-6xl md:text-8xl font-serif text-white tracking-tighter leading-none mb-6"
           style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
         >
-          Nos Destinations
+          {t.title}
         </h1>
         <p className="relative z-10 text-white/50 text-lg md:text-xl font-light max-w-2xl mx-auto">
-          Du Maroc aux quatre coins du monde, trouvez votre prochaine aventure.
+          {t.subtitle}
         </p>
 
         {/* Scope filter links */}
@@ -125,7 +149,7 @@ export default async function DestinationsPage() {
                     {dest.theme && (
                       <div className="absolute top-4 left-4 z-20">
                         <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white/80 text-[10px] uppercase tracking-widest font-medium">
-                          {themeLabel[dest.theme] || dest.theme}
+                          {locale === 'en' ? (themeLabelEn[dest.theme] || dest.theme) : (themeLabel[dest.theme] || dest.theme)}
                         </span>
                       </div>
                     )}
@@ -137,7 +161,7 @@ export default async function DestinationsPage() {
                           ? 'bg-brand-blue/15 border-brand-blue/30 text-brand-blue'
                           : 'bg-brand-gold/15 border-brand-gold/30 text-brand-gold'
                       }`}>
-                        {dest.scope === 'international' ? 'International' : 'Maroc'}
+                        {dest.scope === 'international' ? 'International' : (locale === 'en' ? 'Morocco' : 'Maroc')}
                       </span>
                     </div>
 
@@ -158,8 +182,8 @@ export default async function DestinationsPage() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center relative z-10">
-            <h2 className="text-3xl font-serif text-white mb-4">Aucune destination pour le moment</h2>
-            <p className="text-white/40">Nos experts préparent actuellement nos itinéraires.</p>
+            <h2 className="text-3xl font-serif text-white mb-4">{t.emptyTitle}</h2>
+            <p className="text-white/40">{t.emptySubtitle}</p>
           </div>
         )}
       </section>

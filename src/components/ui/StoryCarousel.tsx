@@ -155,6 +155,54 @@ function StoryCard({
   )
 }
 
+function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
+  const mediaUrl = typeof day.media === 'object' && day.media?.url ? day.media.url : null
+  const isVideo = typeof day.media === 'object' && day.media?.mimeType?.startsWith('video')
+
+  return (
+    <div className="relative w-full aspect-[9/16] md:aspect-auto md:h-[600px] overflow-hidden rounded-[32px] group">
+      {/* ── Background Media ── */}
+      {mediaUrl && isVideo ? (
+        <video src={mediaUrl} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" />
+      ) : mediaUrl ? (
+        <Image src={mediaUrl} alt={day.title} fill className="object-cover z-0" />
+      ) : (
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#0B132B] via-[#162040] to-[#0B132B]" />
+      )}
+
+      {/* ── Cinematic Overlay ── */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/55 to-transparent z-10" />
+
+      {/* ── Day Badge ── */}
+      <div className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase tracking-[0.2em] drop-shadow-lg">
+        Jour {String(day.dayNumber).padStart(2, '0')}
+      </div>
+
+      {/* ── Content Block ── */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
+        <h3 className="text-3xl md:text-4xl font-serif text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+          {day.title}
+        </h3>
+        <div className="flex items-center gap-2 text-brand-blue">
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+          </svg>
+          <span className="text-sm font-medium tracking-wide">{day.location}</span>
+        </div>
+        <div className="flex flex-col gap-1.5 mt-2">
+          {day.activities.map((act, actIdx) => (
+            <div key={act.id || actIdx} className="flex items-start gap-2.5">
+              <span className="w-1.5 h-1.5 mt-2 rounded-full bg-brand-blue/60 flex-shrink-0" />
+              <span className="text-white/70 text-sm font-light leading-relaxed">{act.activity}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─── Main StoryCarousel Component ─────────────────────── */
 export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -165,6 +213,16 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   const sorted = [...itinerary].sort((a, b) => a.dayNumber - b.dayNumber)
   const count = sorted.length
+
+  if (count <= 5) {
+    return (
+      <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto px-4 md:px-12 lg:px-20">
+        {sorted.map((day, index) => (
+          <VerticalStoryCard key={day.dayNumber} day={day} index={index} />
+        ))}
+      </div>
+    )
+  }
 
   // Card width + gap calculation
   const getCardWidth = useCallback(() => {
@@ -301,11 +359,10 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
             aria-label={`Go to Day ${day.dayNumber}`}
           >
             <div className="relative w-3 h-3 flex items-center justify-center">
-              <div className={`rounded-full transition-all duration-300 ${
-                index === activeIndex
+              <div className={`rounded-full transition-all duration-300 ${index === activeIndex
                   ? 'w-8 h-2 bg-brand-blue shadow-[0_0_12px_rgba(56,163,165,0.6)]'
                   : 'w-2 h-2 bg-white/20 hover:bg-white/40'
-              }`} />
+                }`} />
               {index === activeIndex && (
                 <motion.div
                   layoutId="activeIndicator"

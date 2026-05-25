@@ -46,6 +46,7 @@ export const PaymentSettings: GlobalConfig = {
       name: 'paymentInstructions',
       type: 'richText',
       label: 'Instructions de paiement',
+      localized: true,
       defaultValue: {
         root: {
           children: [

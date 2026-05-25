@@ -14,6 +14,7 @@ export const Tours: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'slug',
@@ -41,6 +42,7 @@ export const Tours: CollectionConfig = {
     {
       name: 'shortDescription',
       type: 'textarea',
+      localized: true,
       admin: {
         description: '2-3 phrases pour les cartes et previews',
       },
@@ -49,6 +51,7 @@ export const Tours: CollectionConfig = {
       name: 'duration',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'departureDate',
@@ -136,6 +139,7 @@ export const Tours: CollectionConfig = {
       name: 'excerpt',
       type: 'textarea',
       required: true,
+      localized: true,
     },
     {
       name: 'thumbnail',
@@ -185,13 +189,13 @@ export const Tours: CollectionConfig = {
         {
           name: 'priceIncludes',
           type: 'array',
-          fields: [{ name: 'item', type: 'text' }],
+          fields: [{ name: 'item', type: 'text', localized: true }],
           admin: { description: 'Ce qui est inclus dans le prix' },
         },
         {
           name: 'priceExcludes',
           type: 'array',
-          fields: [{ name: 'item', type: 'text' }],
+          fields: [{ name: 'item', type: 'text', localized: true }],
           admin: { description: 'Ce qui n\'est pas inclus' },
         },
         {
@@ -220,7 +224,7 @@ export const Tours: CollectionConfig = {
           type: 'select',
           options: ['Facile', 'Modéré', 'Exigeant', 'Difficile'],
         },
-        { name: 'departureCity', type: 'text', defaultValue: 'Casablanca' },
+        { name: 'departureCity', type: 'text', defaultValue: 'Casablanca', localized: true },
         {
           name: 'languages',
           type: 'select',
@@ -257,10 +261,10 @@ export const Tours: CollectionConfig = {
       type: 'group',
       admin: { description: 'Optimisation pour les moteurs de recherche' },
       fields: [
-        { name: 'metaTitle', type: 'text' },
-        { name: 'metaDescription', type: 'textarea', admin: { description: '150-160 caractères max' } },
+        { name: 'metaTitle', type: 'text', localized: true },
+        { name: 'metaDescription', type: 'textarea', localized: true, admin: { description: '150-160 caractères max' } },
         { name: 'ogImage', type: 'upload', relationTo: 'media' },
-        { name: 'keywords', type: 'text' },
+        { name: 'keywords', type: 'text', localized: true },
       ],
     },
 
@@ -296,6 +300,7 @@ export const Tours: CollectionConfig = {
         {
           name: 'dayTitle',
           type: 'text',
+          localized: true,
         },
         {
           name: 'dayImage',
@@ -305,6 +310,7 @@ export const Tours: CollectionConfig = {
         {
           name: 'dayContent',
           type: 'richText',
+          localized: true,
         },
       ],
     },
@@ -332,6 +338,7 @@ export const Tours: CollectionConfig = {
           name: 'title',
           type: 'text',
           required: true,
+          localized: true,
           admin: {
             description: 'Titre du jour (ex: "Arrivée aux Dunes")',
           },
@@ -340,6 +347,7 @@ export const Tours: CollectionConfig = {
           name: 'location',
           type: 'text',
           required: true,
+          localized: true,
           admin: {
             description: 'Lieu principal (ex: "Errachidia -> Merzouga")',
           },
@@ -356,6 +364,7 @@ export const Tours: CollectionConfig = {
               name: 'activity',
               type: 'text',
               required: true,
+              localized: true,
             },
           ],
         },

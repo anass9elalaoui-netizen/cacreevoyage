@@ -4,15 +4,20 @@ import configPromise from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
+import { getDictionary } from '@/i18n/dictionaries'
 
 export const dynamic = 'force-dynamic'
 
 type Args = {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default async function DestinationPage({ params }: Args) {
+export default async function DestinationPage({ params, searchParams }: Args) {
   const { slug } = await params
+  const resolvedSearchParams = await searchParams
+  const locale = (resolvedSearchParams.locale as string) || 'fr'
+  const t = getDictionary(locale).destinationPage
   const payload = await getPayload({ config: configPromise })
 
   // 1. Fetch the Destination record by slug (case-insensitive via lowercase)
@@ -21,6 +26,7 @@ export default async function DestinationPage({ params }: Args) {
     where: { slug: { equals: slug.toLowerCase() } },
     depth: 1,
     limit: 1,
+    locale: locale as any,
   })
 
   const destination = destDocs[0]
@@ -32,6 +38,7 @@ export default async function DestinationPage({ params }: Args) {
     where: { destination: { equals: destination.id } },
     depth: 2,
     limit: 24,
+    locale: locale as any,
   })
 
   // Resolve header media URL
@@ -46,6 +53,13 @@ export default async function DestinationPage({ params }: Args) {
     mountain: 'Montagne',
     culture: 'Culture',
     forest_nature: 'Forêt & Nature',
+  }
+  const themeLabelEn: Record<string, string> = {
+    ocean: 'Ocean',
+    desert: 'Desert',
+    mountain: 'Mountain',
+    culture: 'Culture',
+    forest_nature: 'Forest & Nature',
   }
 
   return (
@@ -88,7 +102,7 @@ export default async function DestinationPage({ params }: Args) {
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-20 px-4 text-center">
           {destination.theme && (
             <span className="uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 drop-shadow-md">
-              {themeLabel[destination.theme] || destination.theme}
+              {locale === 'en' ? (themeLabelEn[destination.theme] || destination.theme) : (themeLabel[destination.theme] || destination.theme)}
             </span>
           )}
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif text-white tracking-tighter leading-none mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
@@ -117,20 +131,20 @@ export default async function DestinationPage({ params }: Args) {
             <div className="mb-16 flex items-end justify-between relative z-10">
               <div>
                 <span className="uppercase tracking-[0.2em] text-brand-blue font-semibold text-xs mb-3 block">
-                  Circuits
+                  {t.toursLabel}
                 </span>
                 <h2 className="text-4xl md:text-5xl font-serif text-white mb-2">
-                  Nos Circuits
+                  {t.ourTours}
                 </h2>
                 <p className="text-white/40 font-light text-lg">
-                  {tours.length} itinéraire{tours.length > 1 ? 's' : ''} disponible{tours.length > 1 ? 's' : ''}
+                  {tours.length} {t.itinerariesAvailable}
                 </p>
               </div>
               <Link
                 href="/sur-mesure"
                 className="hidden md:inline-flex items-center gap-2 text-brand-blue font-medium hover:text-white transition-colors text-sm"
               >
-                Circuit sur mesure
+                {t.customTour}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
@@ -160,7 +174,7 @@ export default async function DestinationPage({ params }: Args) {
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0B132B] to-[#1a2744]">
-                          <span className="text-white/20 font-serif italic text-sm">Image bientôt disponible</span>
+                          <span className="text-white/20 font-serif italic text-sm">{t.imageComingSoon}</span>
                         </div>
                       )}
 
@@ -186,7 +200,7 @@ export default async function DestinationPage({ params }: Args) {
                         </p>
                       )}
                       <div className="mt-auto pt-4 flex items-center gap-2 text-brand-blue font-medium text-sm">
-                        Voir l'itinéraire
+                        {t.viewItinerary}
                         <svg className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
@@ -208,18 +222,18 @@ export default async function DestinationPage({ params }: Args) {
             <h2 className="text-4xl md:text-5xl font-serif text-white mb-6"
                 style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
             >
-              En cours de préparation
+              {t.inPreparation}
             </h2>
             <p className="text-white/50 font-light text-lg max-w-lg mb-10">
-              Nos experts préparent actuellement de nouveaux itinéraires pour{' '}
+              {t.expertsPreparing}{' '}
               <strong className="font-medium text-white">{destination.title}</strong>.
-              Contactez-nous pour un voyage entièrement sur mesure.
+              <br/>{t.contactForCustom}
             </p>
             <Link
               href={`/sur-mesure?destination=${encodeURIComponent(destination.title)}`}
               className="inline-flex items-center gap-2 bg-white/10 border border-white/20 hover:bg-white/20 backdrop-blur-md text-white px-10 py-4 rounded-full font-medium transition-all shadow-[0_0_30px_rgba(56,163,165,0.2)] hover:shadow-[0_0_40px_rgba(56,163,165,0.4)] hover:scale-105"
             >
-              Demander un voyage sur mesure
+              {t.requestCustom}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>

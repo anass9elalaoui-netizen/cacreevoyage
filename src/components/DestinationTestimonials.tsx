@@ -72,11 +72,10 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                 setActiveTab(dest.id)
                 setPlayingId(null)
               }}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeTab === dest.id
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeTab === dest.id
                   ? 'bg-brand-blue text-white shadow-[0_4px_20px_rgba(56,163,165,0.4)]'
                   : 'bg-white/5 text-white/70 border border-white/10 hover:border-white/30 hover:text-white'
-              }`}
+                }`}
             >
               {dest.title}
             </button>
@@ -94,8 +93,8 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {activeTestimonials.map(test => (
-              <div 
-                key={test.id} 
+              <div
+                key={test.id}
                 className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-black/50 border border-white/10 group shadow-xl"
               >
                 {/* Media */}
@@ -113,14 +112,14 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 p-6 text-center">
-                     <span className="text-4xl mb-4">🎵</span>
-                     <p className="text-brand-silver text-sm italic mb-4">Témoignage Audio</p>
-                     <audio 
-                       src={test.media?.url} 
-                       controls 
-                       className="w-full h-10"
-                       onPlay={() => setPlayingId(test.id)}
-                     />
+                    <span className="text-4xl mb-4">🎵</span>
+                    <p className="text-brand-silver text-sm italic mb-4">Témoignage Audio</p>
+                    <audio
+                      src={test.media?.url}
+                      controls
+                      className="w-full h-10"
+                      onPlay={() => setPlayingId(test.id)}
+                    />
                   </div>
                 )}
 
@@ -157,13 +156,13 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     </div>
                   </>
                 )}
-                
+
                 {/* Invisible button to trigger video play if overlay is clicked */}
                 {playingId !== test.id && test.media?.mimeType?.startsWith('video/') && (
-                  <button 
-                    className="absolute inset-0 w-full h-full cursor-pointer z-10"
+                  <button
+                    className="absolute inset-0 w-full h-full cursor-pointer z-20"
                     onClick={(e) => {
-                      const video = e.currentTarget.previousElementSibling as HTMLVideoElement;
+                      const video = e.currentTarget.parentElement?.querySelector('video');
                       if (video && video.play) {
                         video.play();
                         setPlayingId(test.id);

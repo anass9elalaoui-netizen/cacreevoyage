@@ -14,6 +14,7 @@ export const Destinations: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'slug',
@@ -44,6 +45,7 @@ export const Destinations: CollectionConfig = {
     {
       name: 'tagline',
       type: 'text',
+      localized: true,
       admin: {
         description: 'Une ligne poétique, ex: "Là où le désert rencontre l\'éternité"',
       },
@@ -51,6 +53,7 @@ export const Destinations: CollectionConfig = {
     {
       name: 'description',
       type: 'textarea',
+      localized: true,
     },
     {
       name: 'scope',
@@ -120,12 +123,14 @@ export const Destinations: CollectionConfig = {
         {
           name: 'highlight',
           type: 'text',
+          localized: true,
         },
       ],
     },
     {
       name: 'bestTimeToVisit',
       type: 'text',
+      localized: true,
       admin: {
         description: 'Meilleure période pour visiter (ex: "Mars - Octobre")',
       },
@@ -145,8 +150,8 @@ export const Destinations: CollectionConfig = {
       type: 'group',
       admin: { description: 'Optimisation pour les moteurs de recherche' },
       fields: [
-        { name: 'metaTitle', type: 'text' },
-        { name: 'metaDescription', type: 'textarea' },
+        { name: 'metaTitle', type: 'text', localized: true },
+        { name: 'metaDescription', type: 'textarea', localized: true },
         { name: 'ogImage', type: 'upload', relationTo: 'media' },
       ],
     },

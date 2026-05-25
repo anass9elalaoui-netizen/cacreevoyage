@@ -1,41 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const faqs = [
-  {
-    question: 'Comment fonctionne un voyage sur-mesure ?',
-    answer: "Tout commence par un échange avec nos experts. Vous nous partagez vos envies, votre budget et vos dates, et nous construisons un itinéraire 100% personnalisé. Chaque détail est ajusté jusqu'à ce que le voyage vous ressemble parfaitement.",
-  },
-  {
-    question: 'Quelles destinations couvrez-vous ?',
-    answer: "Nous proposons des circuits au Maroc (désert, montagne, côte atlantique) ainsi qu'à l'international : Zanzibar, Turquie, Thaïlande, Indonésie, et bien d'autres. Notre réseau de partenaires locaux s'étend sur 45+ destinations.",
-  },
-  {
-    question: 'Quel est le délai pour organiser un voyage ?',
-    answer: "Nous recommandons de nous contacter au moins 4 à 6 semaines avant votre départ pour un voyage optimal. Cependant, pour les demandes urgentes, nous pouvons organiser un séjour en 2 semaines selon la disponibilité.",
-  },
-  {
-    question: 'Les vols sont-ils inclus ?',
-    answer: "Par défaut, nos circuits n'incluent pas les vols internationaux afin de vous laisser la flexibilité de choisir votre compagnie et vos horaires. Nous pouvons cependant vous assister dans la recherche et la réservation de vos billets.",
-  },
-  {
-    question: "Comment réserver et payer ?",
-    answer: "La réservation se confirme par un acompte de 30% du montant total. Le solde est à régler 30 jours avant le départ. Nous acceptons les virements bancaires et les paiements par carte via notre plateforme sécurisée.",
-  },
-  {
-    question: 'Proposez-vous une assurance voyage ?',
-    answer: "Nous recommandons fortement de souscrire une assurance voyage. Nous pouvons vous orienter vers nos partenaires assureurs qui proposent des formules adaptées à votre type de voyage (annulation, rapatriement, bagages).",
-  },
-]
 
 export default function FAQAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [faqs, setFaqs] = useState<{question: string; answer: string}[]>([])
+
+  useEffect(() => {
+    // Fetch FAQs from Payload CMS API using current locale
+    const params = new URLSearchParams(window.location.search)
+    const locale = params.get('locale') || 'fr'
+
+    fetch(`/api/faq?locale=${locale}&sort=order`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.docs) {
+          setFaqs(data.docs.filter((f: any) => f.isActive !== false))
+        }
+      })
+      .catch((err) => console.error('Error fetching FAQs:', err))
+  }, [])
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
   }
+
+  if (faqs.length === 0) return null
 
   return (
     <section className="relative w-full py-24 bg-brand-dark overflow-hidden">

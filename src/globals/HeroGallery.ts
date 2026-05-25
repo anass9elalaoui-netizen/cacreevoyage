@@ -26,6 +26,7 @@ export const HeroGallery: GlobalConfig = {
           type: 'text',
           required: true,
           label: 'Titre',
+          localized: true,
           admin: {
             description: 'Nom de la destination affiché sur le panneau',
           },
@@ -34,6 +35,7 @@ export const HeroGallery: GlobalConfig = {
           name: 'subtitle',
           type: 'text',
           label: 'Sous-titre',
+          localized: true,
           admin: {
             description: 'Texte secondaire (ex: "Archipel Paradisiaque")',
           },

@@ -2,12 +2,22 @@ import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
 import SurMesureForm from '@/components/SurMesureForm'
 
-export const metadata: Metadata = {
-  title: 'Voyage Sur-Mesure — Créez Votre Itinéraire',
-  description: 'Créez votre voyage sur-mesure avec Ça Crée Voyage. Destinations, budget, style — tout est personnalisable.',
+import { getDictionary } from '@/i18n/dictionaries'
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+  const resolvedSearchParams = await searchParams
+  const locale = (resolvedSearchParams.locale as string) || 'fr'
+  const isEn = locale === 'en'
+  return {
+    title: isEn ? 'Tailor-Made Trip — Create Your Itinerary' : 'Voyage Sur-Mesure — Créez Votre Itinéraire',
+    description: isEn ? 'Create your tailor-made trip with Ça Crée Voyage. Destinations, budget, style — everything is customizable.' : 'Créez votre voyage sur-mesure avec Ça Crée Voyage. Destinations, budget, style — tout est personnalisable.',
+  }
 }
 
-export default function SurMesurePage() {
+export default async function SurMesurePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const locale = (searchParams.locale as string) || 'fr';
+  const t = getDictionary(locale).surMesurePage;
   return (
     <>
       <main className="relative min-h-screen bg-brand-dark overflow-clip">
@@ -20,15 +30,14 @@ export default function SurMesurePage() {
             {/* Hero Text */}
             <div className="text-center mb-16">
               <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
-                Sur Mesure
+                {t.tag}
               </span>
               <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-[1.1]">
-                Créez le Voyage<br />
-                <span className="text-brand-blue">de Vos Rêves</span>
+                {t.title1}<br />
+                <span className="text-brand-blue">{t.title2}</span>
               </h1>
               <p className="text-brand-silver text-lg max-w-xl mx-auto">
-                En 5 étapes simples, décrivez votre voyage idéal.
-                Nos experts se chargent du reste.
+                {t.subtitle}
               </p>
             </div>
 

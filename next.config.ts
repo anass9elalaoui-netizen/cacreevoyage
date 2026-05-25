@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '*.r2.dev',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-925c6a08cfd74451a3f7e27ee1e4c8d3.r2.dev',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
   },

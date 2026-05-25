@@ -6,12 +6,15 @@ import ReelsShowcase from '@/components/ReelsShowcase'
 import Footer from '@/components/Footer'
 import PortalHero from '@/components/hero/PortalHero'
 import TrustStats from '@/components/TrustStats'
-import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
 import FeaturedToursGrid from '@/components/FeaturedToursGrid'
 import FAQAccordion from '@/components/FAQAccordion'
+import { getDictionary, Locale } from '@/i18n/dictionaries'
 
-export default async function HomePage() {
+export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const locale = (searchParams.locale as string) || 'fr';
+  const t = getDictionary(locale).home;
   const payload = await getPayload({ config: configPromise })
 
   // Fetch international destinations
@@ -20,6 +23,7 @@ export default async function HomePage() {
     where: { scope: { equals: 'international' } },
     depth: 1,
     limit: 20,
+    locale: locale as any,
   })
 
   // Fetch national (Maroc) destinations
@@ -28,6 +32,7 @@ export default async function HomePage() {
     where: { scope: { equals: 'national' } },
     depth: 1,
     limit: 20,
+    locale: locale as any,
   })
 
   // Fetch featured tours
@@ -37,6 +42,7 @@ export default async function HomePage() {
     depth: 1,
     limit: 6,
     sort: 'featuredOrder',
+    locale: locale as any,
   })
 
   // Fallback: if no featured tours, get latest tours
@@ -45,6 +51,7 @@ export default async function HomePage() {
     depth: 1,
     limit: 6,
     sort: '-createdAt',
+    locale: locale as any,
   })).docs
 
   // Fetch highlighted testimonials
@@ -52,12 +59,13 @@ export default async function HomePage() {
     collection: 'testimonials',
     depth: 1,
     limit: 10,
+    locale: locale as any,
   })
 
   // Fetch trust stats from SiteSettings
   let trustStats: { number: string; label: string }[] = []
   try {
-    const settings = await payload.findGlobal({ slug: 'site-settings' }) as any
+    const settings = await payload.findGlobal({ slug: 'site-settings', locale: locale as any }) as any
     if (settings?.trustStats && settings.trustStats.length > 0) {
       trustStats = settings.trustStats
     }
@@ -79,6 +87,7 @@ export default async function HomePage() {
   try {
     const portal = await payload.findGlobal({
       slug: 'hero-portal-config',
+      locale: locale as any,
     }) as any
     if (portal) {
       for (const key of Object.keys(portalConfig)) {
@@ -148,20 +157,7 @@ export default async function HomePage() {
         <DestinationTestimonials testimonials={testimonials as any[]} />
       )}
 
-      {/* ──────────────────────────────────────────────────────────
-          TESTIMONIALS CAROUSEL (TEXT)
-      ─────────────────────────────────────────────────────────── */}
-      {testimonials && testimonials.length > 0 && (
-        <TestimonialsCarousel testimonials={testimonials.map((t: any) => ({
-          id: t.id,
-          travelerName: t.travelerName || t.clientName || 'Voyageur',
-          travelerOrigin: t.travelerOrigin,
-          travelerPhoto: typeof t.travelerPhoto === 'object' ? t.travelerPhoto : null,
-          rating: t.rating || 5,
-          testimonialText: t.testimonialText || '',
-          platform: t.platform,
-        }))} />
-      )}
+
 
       {/* ──────────────────────────────────────────────────────────
           SUR MESURE PHILOSOPHY BLOCK
@@ -173,22 +169,20 @@ export default async function HomePage() {
           {/* Left — Text */}
           <div>
             <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
-              Notre Philosophie
+              {t.philosophySubtitle}
             </span>
             <h2 className="font-serif text-4xl md:text-6xl text-white mb-8 leading-[1.1]">
-              Chaque voyage est une œuvre unique
+              {t.philosophyTitle}
             </h2>
             <p className="text-brand-silver text-lg leading-relaxed mb-8">
-              Chez Ça Crée Voyage, nous ne proposons pas de voyages standard. 
-              Chaque itinéraire est conçu sur-mesure, du premier sourire à la dernière 
-              étoile, pour créer des souvenirs qui vous ressemblent.
+              {t.philosophyText}
             </p>
             <div className="space-y-4">
               {[
-                '🧭 Itinéraires 100% personnalisés',
-                '🏨 Hébergements triés sur le volet',
-                '🗺️ Guides locaux passionnés',
-                '✨ Attention aux moindres détails',
+                t.philosophyBullet1,
+                t.philosophyBullet2,
+                t.philosophyBullet3,
+                t.philosophyBullet4,
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 text-white/80 text-sm font-sans">
                   <span>{item}</span>
@@ -199,7 +193,7 @@ export default async function HomePage() {
               href="/sur-mesure"
               className="inline-block mt-10 bg-brand-gold/20 border border-brand-gold/30 hover:bg-brand-gold/30 text-brand-gold px-8 py-4 rounded-full font-sans text-sm uppercase tracking-[0.1em] font-medium transition-all duration-300"
             >
-              Créer votre voyage sur-mesure
+              {t.philosophyCTA}
             </Link>
           </div>
 
@@ -226,17 +220,17 @@ export default async function HomePage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="relative z-20 flex flex-col items-center text-center p-12 rounded-[2.5rem] bg-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-white/10 max-w-4xl w-full">
           <h2 className="text-5xl md:text-7xl font-serif text-white mb-6 tracking-tighter drop-shadow-md">
-            Prêt à partir ?
+            {t.readyTitle}
           </h2>
           <p className="text-white/80 text-xl font-light mb-10 max-w-xl mx-auto">
-            Contactez nos experts pour dessiner le voyage qui ne ressemble qu&apos;à vous.
+            {t.readyText}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/sur-mesure"
               className="inline-block bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_0_30px_rgba(56,163,165,0.3)] hover:shadow-[0_0_40px_rgba(56,163,165,0.5)]"
             >
-              Créer mon voyage
+              {t.readyCTA}
             </Link>
             <a
               href="https://wa.me/212661373347?text=Bonjour, je souhaite en savoir plus sur vos voyages"

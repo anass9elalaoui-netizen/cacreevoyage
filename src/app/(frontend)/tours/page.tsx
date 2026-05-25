@@ -4,13 +4,24 @@ import configPromise from '@payload-config'
 import Footer from '@/components/Footer'
 import TourCard from '@/components/TourCard'
 import HeroGallery from '@/components/HeroGallery'
+import { getDictionary } from '@/i18n/dictionaries'
 
-export const metadata: Metadata = {
-  title: 'Nos Circuits — Ça Crée Voyage',
-  description: 'Découvrez notre collection de circuits et voyages d\'exception.',
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+  const resolvedSearchParams = await searchParams
+  const locale = (resolvedSearchParams.locale as string) || 'fr'
+  const isEn = locale === 'en'
+  return {
+    title: isEn ? 'Our Tours — Ça Crée Voyage' : 'Nos Circuits — Ça Crée Voyage',
+    description: isEn ? 'Discover our collection of exceptional tours and journeys.' : 'Découvrez notre collection de circuits et voyages d\'exception.',
+  }
 }
 
-export default async function ToursPage() {
+export default async function ToursPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const locale = (searchParams.locale as string) || 'fr';
+  const t = getDictionary(locale).toursList;
   const payload = await getPayload({ config: configPromise })
 
   // Fetch all tours (limit to 50 for now)
@@ -19,6 +30,7 @@ export default async function ToursPage() {
     depth: 1,
     limit: 50,
     sort: '-createdAt',
+    locale: locale as any,
   })
 
   // Fetch HeroGallery panels
@@ -27,6 +39,7 @@ export default async function ToursPage() {
     const heroGallery = await payload.findGlobal({
       slug: 'hero-gallery',
       depth: 1,
+      locale: locale as any,
     }) as any
     if (heroGallery?.panels && heroGallery.panels.length > 0) {
       heroPanels = heroGallery.panels
@@ -49,14 +62,13 @@ export default async function ToursPage() {
         <section className="relative pt-40 pb-20 px-6">
           <div className="max-w-7xl mx-auto text-center">
             <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
-              Collection Privée
+              {t.privateCollection}
             </span>
             <h1 className="font-serif text-5xl md:text-7xl text-white mb-6 leading-[1.1]">
-              Nos <span className="text-brand-blue">Circuits</span>
+              {t.toursPrefix} <span className="text-brand-blue">{t.toursHighlight}</span>
             </h1>
             <p className="text-brand-silver text-lg max-w-2xl mx-auto">
-              Plongez dans notre sélection de voyages immersifs. 
-              Chaque itinéraire est pensé pour éveiller vos sens et créer des souvenirs impérissables.
+              {t.description}
             </p>
           </div>
         </section>
@@ -81,8 +93,8 @@ export default async function ToursPage() {
             ) : (
               <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/10">
                 <span className="text-4xl block mb-4">✨</span>
-                <h3 className="font-serif text-2xl text-white mb-2">De nouvelles destinations arrivent</h3>
-                <p className="text-brand-silver">Nos experts préparent actuellement de nouveaux circuits.</p>
+                <h3 className="font-serif text-2xl text-white mb-2">{t.comingSoon}</h3>
+                <p className="text-brand-silver">{t.expertsPreparing}</p>
               </div>
             )}
           </div>

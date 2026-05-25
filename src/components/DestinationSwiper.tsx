@@ -53,7 +53,7 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
       className="relative flex-shrink-0 w-[280px] md:w-[340px] h-[420px] md:h-[480px] rounded-[2rem] overflow-hidden snap-center cursor-pointer group"
     >
       {/* Background Media with DOF */}
-      <div className="absolute inset-0 overflow-hidden z-0">
+      <div className="absolute inset-0 overflow-hidden z-0 bg-[#0B132B]">
         {headerUrl && isVideo ? (
           <motion.video
             src={headerUrl}
@@ -64,18 +64,16 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
             style={{ scale, filter: blur }}
             className="absolute inset-0 w-full h-full object-cover"
           />
-        ) : headerUrl ? (
+        ) : (
           <motion.div style={{ scale, filter: blur }} className="absolute inset-0">
             <Image
-              src={headerUrl}
-              alt={dest.title}
+              src={headerUrl || '/logo.jpeg'}
+              alt={dest.title || 'Destination'}
               fill
-              className="object-cover"
+              className="object-cover z-0"
               sizes="340px"
             />
           </motion.div>
-        ) : (
-          <div className="absolute inset-0 bg-brand-dark/20" />
         )}
       </div>
 

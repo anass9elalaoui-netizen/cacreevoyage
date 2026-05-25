@@ -25,8 +25,8 @@ export default async function CheckoutSuccessPage() {
 
   const qrUrl =
     paymentSettings?.qrCodeImage &&
-    typeof paymentSettings.qrCodeImage === 'object' &&
-    'url' in paymentSettings.qrCodeImage
+      typeof paymentSettings.qrCodeImage === 'object' &&
+      'url' in paymentSettings.qrCodeImage
       ? paymentSettings.qrCodeImage.url
       : null
 

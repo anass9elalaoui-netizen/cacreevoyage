@@ -27,6 +27,7 @@ export const SiteSettings: GlobalConfig = {
           type: 'text',
           label: 'Texte du Logo (Fallback)',
           defaultValue: 'Ça Crée Voyage',
+          localized: true,
         },
         {
           name: 'logoHeight',
@@ -79,6 +80,7 @@ export const SiteSettings: GlobalConfig = {
       name: 'address',
       type: 'textarea',
       label: 'Adresse physique',
+      localized: true,
     },
 
     /* ──────────────────────────────────────────────────────────
@@ -117,16 +119,19 @@ export const SiteSettings: GlobalConfig = {
           name: 'headline',
           type: 'text',
           defaultValue: "Voyages d'Exception, Créés Pour Vous",
+          localized: true,
         },
         {
           name: 'subheadline',
           type: 'textarea',
           defaultValue: 'Laissez-vous guider par nos experts pour vivre des expériences uniques et sur-mesure, aux quatre coins du monde.',
+          localized: true,
         },
         {
           name: 'ctaLabel',
           type: 'text',
           defaultValue: 'Créer Mon Voyage',
+          localized: true,
         },
       ],
     },
@@ -143,11 +148,13 @@ export const SiteSettings: GlobalConfig = {
           name: 'defaultTitle',
           type: 'text',
           defaultValue: 'Ça Crée Voyage — Voyages de Luxe Sur-Mesure',
+          localized: true,
         },
         {
           name: 'defaultDescription',
           type: 'textarea',
           defaultValue: "Circuits et voyages sur mesure. Laissez-vous inspirer par nos destinations d'exception.",
+          localized: true,
         },
         {
           name: 'defaultOgImage',
@@ -177,6 +184,7 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'label',
           type: 'text',
+          localized: true,
           admin: { description: 'Ex: Voyageurs Satisfaits' },
         },
       ],

@@ -7,8 +7,7 @@ const steps = [
   { id: 1, title: 'Destination', icon: '🌍' },
   { id: 2, title: 'Dates & Style', icon: '📅' },
   { id: 3, title: 'Voyageurs', icon: '👥' },
-  { id: 4, title: 'Budget', icon: '💰' },
-  { id: 5, title: 'Contact', icon: '✉️' },
+  { id: 4, title: 'Contact', icon: '✉️' },
 ]
 
 const destinations = [
@@ -30,14 +29,6 @@ const travelStyles = [
   { value: 'corporate', label: 'Corporate / Incentive', emoji: '🏢' },
 ]
 
-const budgetTiers = [
-  { value: 'under-1k', label: 'Moins de 1 000€', desc: 'Essentiel' },
-  { value: '1k-2.5k', label: '1 000 — 2 500€', desc: 'Confort' },
-  { value: '2.5k-5k', label: '2 500 — 5 000€', desc: 'Premium' },
-  { value: '5k-10k', label: '5 000 — 10 000€', desc: 'Luxe' },
-  { value: 'over-10k', label: 'Plus de 10 000€', desc: 'Prestige' },
-]
-
 export default function SurMesureForm() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -50,7 +41,6 @@ export default function SurMesureForm() {
     durationDays: '',
     travelers: '2',
     children: '0',
-    budget: '',
     fullName: '',
     email: '',
     phone: '',
@@ -61,7 +51,8 @@ export default function SurMesureForm() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const next = () => setCurrentStep((s) => Math.min(s + 1, 5))
+  const totalSteps = steps.length
+  const next = () => setCurrentStep((s) => Math.min(s + 1, totalSteps))
   const prev = () => setCurrentStep((s) => Math.max(s - 1, 1))
 
   const handleSubmit = async () => {
@@ -72,8 +63,7 @@ export default function SurMesureForm() {
       `🎯 Style: ${formData.travelStyle}\n` +
       `📅 Dates: ${formData.preferredDates || 'Flexible'}\n` +
       `⏱ Durée: ${formData.durationDays || 'À définir'} jours\n` +
-      `👥 Voyageurs: ${formData.travelers} adultes, ${formData.children} enfants\n` +
-      `💰 Budget: ${budgetTiers.find(b => b.value === formData.budget)?.label || 'Non précisé'}\n\n` +
+      `👥 Voyageurs: ${formData.travelers} adultes, ${formData.children} enfants\n\n` +
       `👤 ${formData.fullName}\n` +
       `📧 ${formData.email}\n` +
       `📞 ${formData.phone}\n\n` +
@@ -117,17 +107,16 @@ export default function SurMesureForm() {
           <div key={step.id} className="flex items-center gap-2">
             <button
               onClick={() => step.id < currentStep && setCurrentStep(step.id)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
-                step.id === currentStep
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${step.id === currentStep
                   ? 'bg-brand-blue text-white shadow-[0_0_20px_rgba(56,163,165,0.4)]'
                   : step.id < currentStep
-                  ? 'bg-brand-blue/30 text-brand-blue cursor-pointer'
-                  : 'bg-white/5 text-white/30 border border-white/10'
-              }`}
+                    ? 'bg-brand-blue/30 text-brand-blue cursor-pointer'
+                    : 'bg-white/5 text-white/30 border border-white/10'
+                }`}
             >
               {step.id < currentStep ? '✓' : step.icon}
             </button>
-            {step.id < 5 && (
+            {step.id < totalSteps && (
               <div className={`w-8 h-px ${step.id < currentStep ? 'bg-brand-blue/50' : 'bg-white/10'}`} />
             )}
           </div>
@@ -156,11 +145,10 @@ export default function SurMesureForm() {
                   <button
                     key={dest.value}
                     onClick={() => update('destination', dest.value)}
-                    className={`p-5 rounded-2xl border text-left transition-all duration-200 ${
-                      formData.destination === dest.value
+                    className={`p-5 rounded-2xl border text-left transition-all duration-200 ${formData.destination === dest.value
                         ? 'bg-brand-blue/20 border-brand-blue/50 text-white'
                         : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/8 hover:border-white/20'
-                    }`}
+                      }`}
                   >
                     <span className="text-2xl block mb-2">{dest.emoji}</span>
                     <span className="text-sm font-medium">{dest.label}</span>
@@ -227,11 +215,10 @@ export default function SurMesureForm() {
                       <button
                         key={style.value}
                         onClick={() => update('travelStyle', style.value)}
-                        className={`p-4 rounded-2xl border text-left transition-all duration-200 ${
-                          formData.travelStyle === style.value
+                        className={`p-4 rounded-2xl border text-left transition-all duration-200 ${formData.travelStyle === style.value
                             ? 'bg-brand-blue/20 border-brand-blue/50 text-white'
                             : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/8'
-                        }`}
+                          }`}
                       >
                         <span className="text-xl">{style.emoji}</span>
                         <span className="text-xs font-medium block mt-1">{style.label}</span>
@@ -283,39 +270,8 @@ export default function SurMesureForm() {
             </div>
           )}
 
-          {/* STEP 4: Budget */}
+          {/* STEP 4: Contact */}
           {currentStep === 4 && (
-            <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">
-                Votre budget
-              </h2>
-              <p className="text-brand-silver text-center mb-8">Par personne, hors vols internationaux</p>
-              <div className="space-y-3">
-                {budgetTiers.map((tier) => (
-                  <button
-                    key={tier.value}
-                    onClick={() => update('budget', tier.value)}
-                    className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all duration-200 ${
-                      formData.budget === tier.value
-                        ? 'bg-brand-gold/15 border-brand-gold/40 text-white'
-                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/8'
-                    }`}
-                  >
-                    <div>
-                      <span className="text-sm font-medium">{tier.label}</span>
-                      <span className="text-xs text-brand-silver block mt-0.5">{tier.desc}</span>
-                    </div>
-                    {formData.budget === tier.value && (
-                      <span className="text-brand-gold">✓</span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* STEP 5: Contact */}
-          {currentStep === 5 && (
             <div>
               <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">
                 Dernière étape
@@ -383,7 +339,7 @@ export default function SurMesureForm() {
           <div />
         )}
 
-        {currentStep < 5 ? (
+        {currentStep < totalSteps ? (
           <button
             onClick={next}
             className="px-8 py-3 rounded-full text-sm font-medium text-white bg-brand-blue hover:bg-brand-blue/90 transition-all shadow-[0_4px_16px_rgba(56,163,165,0.3)]"

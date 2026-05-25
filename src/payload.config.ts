@@ -19,6 +19,8 @@ import { PaymentSettings } from './globals/PaymentSettings'
 import { HeroGallery } from './globals/HeroGallery'
 import { HeroPortalConfig } from './globals/HeroPortalConfig'
 
+import { FAQ } from './collections/FAQ'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -39,7 +41,12 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Destinations, Tours, Testimonials, Inquiries, Articles, Media, Orders],
+  localization: {
+    locales: ['fr', 'en'],
+    defaultLocale: 'fr',
+    fallback: true,
+  },
+  collections: [Users, Destinations, Tours, Testimonials, Inquiries, Articles, Media, Orders, FAQ],
   globals: [SiteSettings, PaymentSettings, HeroGallery, HeroPortalConfig],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'ca_cree_voyage_super_secret_key_2026_xyz',

@@ -14,6 +14,7 @@ export const Articles: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'slug',
@@ -57,11 +58,13 @@ export const Articles: CollectionConfig = {
     {
       name: 'excerpt',
       type: 'textarea',
+      localized: true,
       admin: { description: 'Résumé court pour les cartes d\'aperçu' },
     },
     {
       name: 'content',
       type: 'richText',
+      localized: true,
     },
     {
       name: 'relatedDestinations',
@@ -95,10 +98,10 @@ export const Articles: CollectionConfig = {
       name: 'seo',
       type: 'group',
       fields: [
-        { name: 'metaTitle', type: 'text' },
-        { name: 'metaDescription', type: 'textarea', admin: { description: '150-160 caractères max' } },
+        { name: 'metaTitle', type: 'text', localized: true },
+        { name: 'metaDescription', type: 'textarea', localized: true, admin: { description: '150-160 caractères max' } },
         { name: 'ogImage', type: 'upload', relationTo: 'media' },
-        { name: 'keywords', type: 'text' },
+        { name: 'keywords', type: 'text', localized: true },
       ],
     },
   ],

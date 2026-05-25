@@ -8,20 +8,26 @@ import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
 import BookingSidebar from '@/components/BookingSidebar'
 
+import { getDictionary, Locale } from '@/i18n/dictionaries'
+
 export const dynamic = 'force-dynamic'
 
 type Args = {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export async function generateMetadata({ params }: Args): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Args): Promise<Metadata> {
   const { slug } = await params
+  const resolvedSearchParams = await searchParams
+  const locale = (resolvedSearchParams.locale as string) || 'fr'
   const payload = await getPayload({ config: configPromise })
   const { docs } = await payload.find({
     collection: 'tours',
     where: { slug: { equals: slug.toLowerCase() } },
     limit: 1,
     depth: 1,
+    locale: locale as any,
   })
   const tour = docs[0] as any
   if (!tour) return { title: 'Circuit non trouvé' }
@@ -32,8 +38,11 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
   }
 }
 
-export default async function TourPage({ params }: Args) {
+export default async function TourPage({ params, searchParams }: Args) {
   const { slug } = await params
+  const resolvedSearchParams = await searchParams
+  const locale = (resolvedSearchParams.locale as string) || 'fr'
+  const t = getDictionary(locale).tourPage
   const payload = await getPayload({ config: configPromise })
 
   const { docs } = await payload.find({
@@ -41,10 +50,11 @@ export default async function TourPage({ params }: Args) {
     where: { slug: { equals: slug.toLowerCase() } },
     depth: 2,
     limit: 1,
+    locale: locale as any,
   })
 
   const tour = docs[0] as any
-  if (!tour) return notFound()
+  if (!tour) return <div className="text-white flex justify-center py-20">{t.notFound}</div>
 
   const heroVideoUrl = typeof tour.heroVideo === 'object' && tour.heroVideo?.url ? tour.heroVideo.url : null
   const thumbnailUrl = typeof tour.thumbnail === 'object' && tour.thumbnail?.url ? tour.thumbnail.url : null
@@ -149,10 +159,10 @@ export default async function TourPage({ params }: Args) {
             {/* Tour Overview */}
             <section>
               <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
-                Aperçu
+                {t.overview}
               </span>
               <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">
-                À propos de ce circuit
+                {t.about}
               </h2>
 
               {/* Meta badges */}
@@ -174,7 +184,7 @@ export default async function TourPage({ params }: Args) {
                 )}
                 {tour.logistics?.departureCity && (
                   <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/80">
-                    📍 Départ: {tour.logistics.departureCity}
+                    📍 {t.departure} {tour.logistics.departureCity}
                   </span>
                 )}
                 {tour.seasons && tour.seasons.length > 0 && (
@@ -192,13 +202,13 @@ export default async function TourPage({ params }: Args) {
             {/* Includes / Excludes */}
             {(tour.pricing?.priceIncludes?.length > 0 || tour.pricing?.priceExcludes?.length > 0) && (
               <section>
-                <h2 className="font-serif text-3xl text-white mb-8">Ce qui est inclus</h2>
+                <h2 className="font-serif text-3xl text-white mb-8">{t.includes}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {tour.pricing?.priceIncludes?.length > 0 && (
                     <div className="rounded-2xl p-6 bg-white/5 border border-white/8">
                       <h3 className="text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs">✓</span>
-                        Inclus
+                        {t.included}
                       </h3>
                       <ul className="space-y-2">
                         {tour.pricing.priceIncludes.map((item: any, i: number) => (
@@ -214,7 +224,7 @@ export default async function TourPage({ params }: Args) {
                     <div className="rounded-2xl p-6 bg-white/5 border border-white/8">
                       <h3 className="text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-xs">✕</span>
-                        Non inclus
+                        {t.notIncluded}
                       </h3>
                       <ul className="space-y-2">
                         {tour.pricing.priceExcludes.map((item: any, i: number) => (
@@ -233,14 +243,14 @@ export default async function TourPage({ params }: Args) {
             {/* Departure dates table */}
             {tour.departureDates && tour.departureDates.length > 0 && (
               <section>
-                <h2 className="font-serif text-3xl text-white mb-8">Dates de départ</h2>
+                <h2 className="font-serif text-3xl text-white mb-8">{t.departureDates}</h2>
                 <div className="rounded-2xl border border-white/8 overflow-hidden">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-white/5">
-                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">Date</th>
-                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">Places</th>
-                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">Statut</th>
+                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">{t.date}</th>
+                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">{t.spots}</th>
+                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">{t.status}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -249,12 +259,11 @@ export default async function TourPage({ params }: Args) {
                           <td className="px-6 py-4 text-white">{formatDate(dep.date)}</td>
                           <td className="px-6 py-4 text-brand-silver">{dep.spotsLeft ?? '—'}</td>
                           <td className="px-6 py-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              dep.status === 'Available' ? 'bg-green-500/20 text-green-400' :
-                              dep.status === 'Limited' ? 'bg-yellow-500/20 text-yellow-400' :
-                              dep.status === 'Full' ? 'bg-red-500/20 text-red-400' :
-                              'bg-white/10 text-white/60'
-                            }`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${dep.status === 'Available' ? 'bg-green-500/20 text-green-400' :
+                                dep.status === 'Limited' ? 'bg-yellow-500/20 text-yellow-400' :
+                                  dep.status === 'Full' ? 'bg-red-500/20 text-red-400' :
+                                    'bg-white/10 text-white/60'
+                              }`}>
                               {dep.status}
                             </span>
                           </td>
@@ -276,6 +285,7 @@ export default async function TourPage({ params }: Args) {
               logistics={tour.logistics}
               duration={durationText}
               tourStatus={tour.tourStatus}
+              locale={locale}
             />
           </div>
         </div>
@@ -289,15 +299,15 @@ export default async function TourPage({ params }: Args) {
 
         <div className="max-w-4xl mx-auto text-center mb-16 md:mb-20 px-4 relative z-10">
           <span className="uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md">
-            Itinéraire
+            {t.itinerary}
           </span>
           <h2 className="text-4xl md:text-6xl font-serif text-white mb-6"
-              style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
+            style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
           >
-            Votre Voyage, Jour par Jour
+            {t.dayByDay}
           </h2>
           <p className="text-white/50 font-light text-xl max-w-2xl mx-auto">
-            Glissez pour explorer chaque étape de votre aventure.
+            {t.swipe}
           </p>
         </div>
 
@@ -309,7 +319,7 @@ export default async function TourPage({ params }: Args) {
           </div>
         ) : (
           <div className="text-center text-white/30 italic py-12 relative z-10">
-            Détails de l&apos;itinéraire bientôt disponibles.
+            {t.detailsSoon}
           </div>
         )}
       </section>
@@ -323,13 +333,13 @@ export default async function TourPage({ params }: Args) {
 
         <div className="max-w-3xl mx-auto relative z-10">
           <span className="uppercase tracking-widest text-brand-blue font-semibold mb-4 text-sm block">
-            Passez à l&apos;action
+            {t.takeAction}
           </span>
           <h2 className="text-4xl md:text-5xl font-serif text-white mb-6">
-            Intéressé par ce voyage ?
+            {t.interested}
           </h2>
           <p className="text-white/50 text-lg font-light mb-10 max-w-2xl mx-auto">
-            Contactez nos experts pour l&apos;adapter à vos envies et créer un séjour qui ne ressemble qu&apos;à vous.
+            {t.contactExperts}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -338,13 +348,13 @@ export default async function TourPage({ params }: Args) {
               rel="noopener noreferrer"
               className="inline-block bg-[#25D366] hover:bg-[#25D366]/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_4px_20px_rgba(37,211,102,0.3)]"
             >
-              💬 Réserver via WhatsApp
+              {t.bookWhatsapp}
             </a>
             <Link
               href="/sur-mesure"
               className="inline-block bg-white/10 border border-white/20 hover:bg-white/20 text-white px-10 py-5 rounded-full font-medium text-lg transition-all"
             >
-              Personnaliser ce voyage
+              {t.customize}
             </Link>
           </div>
         </div>

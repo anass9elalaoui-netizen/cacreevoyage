@@ -61,19 +61,16 @@ export default function TourCard({
         className="group block relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer"
       >
         {/* Background Image */}
-        <div className="absolute inset-0">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={thumbnail?.alt || title}
-              fill
-              className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#0B132B] via-[#1a2744] to-[#0B132B]" suppressHydrationWarning />
-          )}
+        <div className="absolute inset-0 z-0 bg-[#0B132B]">
+          <Image
+            src={imageUrl || '/logo.jpeg'}
+            alt={thumbnail?.alt || title || 'Placeholder'}
+            fill
+            className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/40 to-transparent" suppressHydrationWarning />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/40 to-transparent z-10" suppressHydrationWarning />
         </div>
 
         {/* Content (Bottom) */}
