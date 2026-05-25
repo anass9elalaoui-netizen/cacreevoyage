@@ -279,6 +279,8 @@ export default function PortalHero({
   /* ══════════════════════════════════════════════════════════
      RENDER
      ══════════════════════════════════════════════════════════ */
+  if (!isMounted) return <div className="w-full h-[100vh] bg-[#0B132B]"></div>
+
   return (
     <div
       ref={containerRef}
