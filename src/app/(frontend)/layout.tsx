@@ -41,14 +41,14 @@ export default async function FrontendLayout({
   }
 
   return (
-    <html lang="fr" className={`${inter.variable} lenis lenis-smooth`}>
+    <html lang="fr" className={`${inter.variable} lenis lenis-smooth`} suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#0B132B] text-white antialiased relative">
+      <body className="bg-[#0B132B] text-white antialiased relative" suppressHydrationWarning>
         <GlassNavbar brandIdentity={brandIdentity} />
         <main className="relative flex min-h-screen flex-col">
           {children}

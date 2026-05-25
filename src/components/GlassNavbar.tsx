@@ -33,6 +33,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
     : null
 
   return (
+    <>
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -193,67 +194,84 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
         </svg>
       </button>
 
+    </motion.nav>
+
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-x-0 top-20 mx-auto w-[92%] max-w-sm bg-[#0B132B]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-6 flex flex-col gap-3 z-50 md:hidden"
+            initial={{ clipPath: "circle(0% at calc(100% - 40px) 40px)" }}
+            animate={{ clipPath: "circle(150% at calc(100% - 40px) 40px)" }}
+            exit={{ clipPath: "circle(0% at calc(100% - 40px) 40px)" }}
+            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[100] w-screen h-[100dvh] bg-[#050814]/95 backdrop-blur-2xl md:hidden"
           >
-            {/* Mobile Destinations */}
-            <div className="border-b border-white/10 pb-3 mb-1">
-              <span className="text-white/40 text-xs uppercase tracking-widest mb-2 block">Destinations</span>
-              <Link href="/destinations/international" onClick={() => setIsMobileOpen(false)} className="block text-white/70 hover:text-white py-2 text-sm">
-                🌍 International
-              </Link>
-              <Link href="/destinations/national" onClick={() => setIsMobileOpen(false)} className="block text-white/70 hover:text-white py-2 text-sm">
-                🇲🇦 Maroc
-              </Link>
-            </div>
-
-            <Link href="/tours" onClick={() => setIsMobileOpen(false)} className="text-base font-medium py-2 text-white/80">
-              Nos Circuits
-            </Link>
-            
-            <Link
-              href="/sur-mesure"
+            {/* Close Button */}
+            <button
               onClick={() => setIsMobileOpen(false)}
-              className="mt-1 mb-2 text-center bg-[#78B3CE] text-white px-6 py-3 rounded-full text-sm uppercase tracking-wider font-medium shadow-md"
+              className="absolute top-6 right-6 text-white hover:text-[#C9A84C] transition-colors p-2 z-[101]"
+              aria-label="Fermer"
             >
-              Sur-Mesure
-            </Link>
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
 
-            <Link href="/blog" onClick={() => setIsMobileOpen(false)} className="text-base font-medium py-2 text-white/80">
-              Blog
-            </Link>
-
-            <Link href="/about" onClick={() => setIsMobileOpen(false)} className="text-base font-medium py-2 text-white/80">
-              À Propos
-            </Link>
-
-            {/* Mobile Language and WhatsApp */}
-            <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
-              <div className="flex items-center gap-2 text-sm font-medium text-white/70">
-                <button onClick={() => setLang('FR')} className={lang === 'FR' ? 'text-white' : ''}>FR</button>
-                <span className="opacity-50">|</span>
-                <button onClick={() => setLang('EN')} className={lang === 'EN' ? 'text-white' : ''}>EN</button>
+            <div className="flex flex-col justify-between h-full w-full px-8 pt-32 pb-12 items-start text-left relative z-[100]">
+              {/* Main Links Group */}
+              <div className="flex flex-col gap-8">
+                {[
+                  { num: '01', label: 'Destinations', href: '/destinations' },
+                  { num: '02', label: 'Nos Circuits', href: '/tours' },
+                  { num: '03', label: 'Sur-Mesure', href: '/sur-mesure' },
+                  { num: '04', label: 'Blog', href: '/blog' },
+                ].map((item, idx) => (
+                  <motion.div key={item.num} className="overflow-hidden flex flex-row items-baseline justify-start w-full">
+                    <motion.div
+                      initial={{ y: "120%", rotateZ: 5, opacity: 0 }}
+                      animate={{ y: 0, rotateZ: 0, opacity: 1 }}
+                      transition={{ delay: idx * 0.1, duration: 0.8, ease: [0.33, 1, 0.68, 1] }}
+                    >
+                      <Link 
+                        href={item.href} 
+                        onClick={() => setIsMobileOpen(false)}
+                        className="flex items-baseline group"
+                      >
+                        <span className="font-sans text-[#A0ABC0] text-sm tracking-widest w-8 shrink-0">
+                          {item.num}
+                        </span>
+                        <span className="font-serif text-5xl md:text-6xl text-white font-light tracking-wide group-hover:text-[#C9A84C] transition-colors">
+                          {item.label}
+                        </span>
+                      </Link>
+                    </motion.div>
+                  </motion.div>
+                ))}
               </div>
 
-              <a
-                href="https://wa.me/212661373347"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-[#4ADE80] text-[#0B132B] px-4 py-2 rounded-full text-xs font-semibold"
+              {/* Footer Block */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="border-t border-white/10 pt-8 mt-auto flex flex-col gap-4 w-full"
               >
-                WhatsApp
-              </a>
+                <span className="font-sans text-[#C9A84C] text-xs uppercase tracking-widest font-semibold">
+                  Contactez-Nous
+                </span>
+                <div className="flex flex-col gap-1 text-white/50 text-sm font-sans">
+                  <a href="https://wa.me/212661373347" className="hover:text-white transition-colors">
+                    WhatsApp: +212 6 61 37 33 47
+                  </a>
+                  <a href="mailto:contact@cacreevoyage.com" className="hover:text-white transition-colors">
+                    contact@cacreevoyage.com
+                  </a>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   )
 }

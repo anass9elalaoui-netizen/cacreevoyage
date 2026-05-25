@@ -4,7 +4,7 @@ import configPromise from '@payload-config'
 import DestinationSwiper from '@/components/DestinationSwiper'
 import ReelsShowcase from '@/components/ReelsShowcase'
 import Footer from '@/components/Footer'
-import HeroGallery from '@/components/HeroGallery'
+import PortalHero from '@/components/hero/PortalHero'
 import TrustStats from '@/components/TrustStats'
 import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
@@ -65,26 +65,45 @@ export default async function HomePage() {
     // Fallback to defaults in component
   }
 
-  // Fetch HeroGallery panels
-  let heroPanels: any[] = []
+  // Fetch HeroPortalConfig
+  let portalConfig: Record<string, any> = {
+    assetBaseUrl: '/hero-frames',
+    frameCount: 142,
+    textPhase1Title: "L'art du voyage sur-mesure.",
+    textPhase1Sub: 'Chaque grand voyage commence par une porte fermée.',
+    textPhase2Title: 'Éveillez vos sens.',
+    textPhase2Sub: "Un monde d'exceptions s'ouvre à vous.",
+    textPhase3Title: 'Prenez votre envol.',
+    ctaLabel: 'Créer Mon Voyage',
+  }
   try {
-    const heroGallery = await payload.findGlobal({
-      slug: 'hero-gallery',
-      depth: 1,
+    const portal = await payload.findGlobal({
+      slug: 'hero-portal-config',
     }) as any
-    if (heroGallery?.panels && heroGallery.panels.length > 0) {
-      heroPanels = heroGallery.panels
+    if (portal) {
+      for (const key of Object.keys(portalConfig)) {
+        if (portal[key] != null) portalConfig[key] = portal[key]
+      }
     }
   } catch {
-    // No hero gallery configured yet — component will show fallback
+    // Fallback to defaults
   }
 
   return (
-    <main className="relative w-full min-h-screen flex flex-col overflow-x-hidden">
+    <main className="relative w-full min-h-screen flex flex-col overflow-x-clip">
       {/* ──────────────────────────────────────────────────────────
-          HERO SECTION — Cinematic 4-panel video gallery
+          HERO SECTION — Cinematic canvas scroll portal
       ─────────────────────────────────────────────────────────── */}
-      <HeroGallery panels={heroPanels} />
+      <PortalHero
+        assetBaseUrl={portalConfig.assetBaseUrl}
+        frameCount={portalConfig.frameCount}
+        textPhase1Title={portalConfig.textPhase1Title}
+        textPhase1Sub={portalConfig.textPhase1Sub}
+        textPhase2Title={portalConfig.textPhase2Title}
+        textPhase2Sub={portalConfig.textPhase2Sub}
+        textPhase3Title={portalConfig.textPhase3Title}
+        ctaLabel={portalConfig.ctaLabel}
+      />
 
       {/* ──────────────────────────────────────────────────────────
           TRUST STATS — Animated counter bar
@@ -147,7 +166,7 @@ export default async function HomePage() {
       {/* ──────────────────────────────────────────────────────────
           SUR MESURE PHILOSOPHY BLOCK
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full py-32 bg-brand-dark overflow-hidden">
+      <section className="relative w-full py-32 bg-brand-dark overflow-clip">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-gold/5 rounded-full blur-[180px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">

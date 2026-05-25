@@ -80,7 +80,7 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
       </div>
 
       {/* Strict Vignette Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/30 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/30 to-transparent z-10 pointer-events-none" suppressHydrationWarning />
 
       {/* Ambient Glow behind card */}
       <div className="absolute -inset-2 bg-brand-blue/5 rounded-[2.5rem] blur-[40px] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />

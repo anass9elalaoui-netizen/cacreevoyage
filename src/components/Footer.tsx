@@ -41,7 +41,7 @@ export default function Footer() {
   return (
     <footer className="relative w-full bg-[#060D1F] text-white overflow-hidden">
       {/* ── Top Divider — Ambient glow line ──────────────────── */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-px bg-gradient-to-r from-transparent via-brand-blue/40 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-px bg-gradient-to-r from-transparent via-brand-blue/40 to-transparent" suppressHydrationWarning />
 
       {/* ── Ambient Background Glow ──────────────────────────── */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />

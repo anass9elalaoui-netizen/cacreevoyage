@@ -70,10 +70,10 @@ export default function TourCard({
               className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#0B132B] via-[#1a2744] to-[#0B132B]" />
+            <div className="w-full h-full bg-gradient-to-br from-[#0B132B] via-[#1a2744] to-[#0B132B]" suppressHydrationWarning />
           )}
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/40 to-transparent" suppressHydrationWarning />
         </div>
 
         {/* Content (Bottom) */}

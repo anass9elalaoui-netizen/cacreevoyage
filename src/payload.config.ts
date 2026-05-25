@@ -17,6 +17,7 @@ import { Orders } from './collections/Orders'
 import { SiteSettings } from './globals/SiteSettings'
 import { PaymentSettings } from './globals/PaymentSettings'
 import { HeroGallery } from './globals/HeroGallery'
+import { HeroPortalConfig } from './globals/HeroPortalConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -39,7 +40,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Destinations, Tours, Testimonials, Inquiries, Articles, Media, Orders],
-  globals: [SiteSettings, PaymentSettings, HeroGallery],
+  globals: [SiteSettings, PaymentSettings, HeroGallery, HeroPortalConfig],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'ca_cree_voyage_super_secret_key_2026_xyz',
   typescript: {

@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Footer from '@/components/Footer'
 import TourCard from '@/components/TourCard'
+import HeroGallery from '@/components/HeroGallery'
 
 export const metadata: Metadata = {
   title: 'Nos Circuits — Ça Crée Voyage',
@@ -20,9 +21,26 @@ export default async function ToursPage() {
     sort: '-createdAt',
   })
 
+  // Fetch HeroGallery panels
+  let heroPanels: any[] = []
+  try {
+    const heroGallery = await payload.findGlobal({
+      slug: 'hero-gallery',
+      depth: 1,
+    }) as any
+    if (heroGallery?.panels && heroGallery.panels.length > 0) {
+      heroPanels = heroGallery.panels
+    }
+  } catch {
+    // No hero gallery configured yet
+  }
+
   return (
     <>
-      <main className="relative min-h-screen bg-brand-dark overflow-hidden">
+      <main className="relative min-h-screen bg-brand-dark overflow-clip">
+        {/* ── HERO GALLERY — 4-panel cinematic grid ── */}
+        <HeroGallery panels={heroPanels} />
+
         {/* Ambient glows */}
         <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
         <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-brand-gold/5 rounded-full blur-[150px] pointer-events-none" />

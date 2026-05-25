@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function SurMesurePage() {
   return (
     <>
-      <main className="relative min-h-screen bg-brand-dark overflow-hidden">
+      <main className="relative min-h-screen bg-brand-dark overflow-clip">
         {/* Ambient glows */}
         <div className="absolute top-20 left-1/4 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/3 w-[400px] h-[400px] bg-brand-gold/5 rounded-full blur-[150px] pointer-events-none" />
