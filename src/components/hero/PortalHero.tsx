@@ -100,6 +100,7 @@ export default function PortalHero({
     [assetBaseUrl],
   )
 
+  useEffect(() => {
     const isMobile = window.innerWidth < 768
     const frameStep = isMobile ? 3 : 1
 
