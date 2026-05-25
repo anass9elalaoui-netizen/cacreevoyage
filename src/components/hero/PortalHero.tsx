@@ -23,14 +23,10 @@ interface PortalHeroProps {
   ctaLabel?: string
 }
 
-const PRELOAD_BATCH = 20
-const CONCURRENT_BATCH = 10
-
 /* ──────────────────────────────────────────────────────────────
    KINETIC TEXT HELPER — absolute frame synchronization
    ────────────────────────────────────────────────────────────── */
 const KineticScrollText = ({ frameIndex, startFrame, peakInFrame, peakOutFrame, endFrame, children, className }: any) => {
-  // Map directly to the absolute video frames (1 to 150)
   const blurValue = useTransform(frameIndex, [startFrame, peakInFrame, peakOutFrame, endFrame], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
   const yValue = useTransform(frameIndex, [startFrame, endFrame], [50, -50]);
   const opacityValue = useTransform(frameIndex, [startFrame, peakInFrame, peakOutFrame, endFrame], [0, 1, 1, 0]);
@@ -58,49 +54,34 @@ export default function PortalHero({
   textPhase3Title = 'Prenez votre envol.',
   ctaLabel = 'Créer Mon Voyage',
 }: PortalHeroProps) {
-  /* ── refs ─────────────────────────────────────────────────── */
+
+  /* ── Phase 1: SSR-safe mounting ──────────────────────────── */
+  const [mounted, setMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
   const currentFrameRef = useRef(1)
 
-  /* ── state ───────────────────────────────────────────────── */
-  const [mounted, setMounted] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [imagesLoaded, setImagesLoaded] = useState(false)
-
-  /* ── Phase 1: Clean State & SSR Safety ────────────────────── */
+  // Mount check — runs only on client, never on server
   useEffect(() => {
     setMounted(true)
-    const mediaQuery = window.matchMedia('(max-width: 768px)')
-    setIsMobile(mediaQuery.matches)
+    setIsMobile(window.matchMedia('(max-width: 768px)').matches)
 
-    const handleResize = (e: MediaQueryListEvent) => {
-      setIsMobile(e.matches)
-    }
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleResize)
-    } else {
-      mediaQuery.addListener(handleResize)
-    }
-
-    return () => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', handleResize)
-      } else {
-        mediaQuery.removeListener(handleResize)
-      }
-    }
+    const mql = window.matchMedia('(max-width: 768px)')
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
   }, [])
 
-  /* ── scroll tracking ─────────────────────────────────────── */
+  /* ── Scroll tracking (hooks called unconditionally) ──────── */
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  // Snappy trackpad physics
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 25,
@@ -109,21 +90,20 @@ export default function PortalHero({
   })
 
   const frameIndex = useTransform(smoothProgress, [0, 1], [1, frameCount])
+  const scrollIndicatorOpacity = useTransform(smoothProgress, [0, 0.05], [1, 0])
 
-  // Scroll indicator (fades by 0.05)
-  const scrollIndicatorOpacity = useTransform(
-    smoothProgress,
-    [0, 0.05],
-    [1, 0],
-  )
+  // Mobile parallax offset — declared unconditionally (Rules of Hooks)
+  const mobileParallaxY = useTransform(smoothProgress, [0, 1], [0, 120])
 
+  /* ── Frame URL builder ───────────────────────────────────── */
   const frameUrl = useCallback(
     (n: number) => `${assetBaseUrl}/ezgif-frame-${String(n).padStart(3, '0')}.jpg`,
     [assetBaseUrl],
   )
 
-  /* ── Phase 3: Bulletproof Desktop Preloading ──────────────── */
+  /* ── Phase 3: Desktop frame preloading ───────────────────── */
   useEffect(() => {
+    // Guard: do not load frames on server or on mobile
     if (!mounted || isMobile) return
 
     let loadedCount = 0
@@ -141,6 +121,14 @@ export default function PortalHero({
           setImagesLoaded(true)
         }
       }
+      img.onerror = () => {
+        if (cancelled) return
+        loadedCount++
+        if (loadedCount === frameCount) {
+          imagesRef.current = imgArray
+          setImagesLoaded(true)
+        }
+      }
       imgArray.push(img)
     }
 
@@ -151,74 +139,79 @@ export default function PortalHero({
     }
   }, [mounted, isMobile, frameCount, frameUrl])
 
-  /* ── Phase 4: Safe Canvas Rendering ───────────────────────── */
+  /* ── Phase 4: Canvas draw function ───────────────────────── */
   const drawFrame = useCallback((index: number) => {
     const canvas = canvasRef.current
-    if (!canvas || !imagesLoaded || isMobile) return
-
-    const ctx = canvas.getContext('2d', { alpha: false })
-    if (!ctx) return
+    if (!canvas) return
 
     const images = imagesRef.current
     if (!images || images.length === 0) return
 
-    // Bound the index
-    const targetIdx = Math.max(0, Math.min(index - 1, images.length - 1))
-    const img = images[targetIdx]
-    if (!img) return
+    const ctx = canvas.getContext('2d', { alpha: false })
+    if (!ctx) return
 
-    // Scale canvas to match DPR
+    // Clamp index to valid range
+    const clampedIdx = Math.max(0, Math.min(index - 1, images.length - 1))
+    const img = images[clampedIdx]
+    if (!img || !img.complete || img.naturalWidth === 0) return
+
+    // DPR scaling for retina sharpness
     const dpr = window.devicePixelRatio || 1
-    const logicalWidth = window.innerWidth
-    const logicalHeight = window.innerHeight
+    const logicalW = canvas.clientWidth
+    const logicalH = canvas.clientHeight
 
-    canvas.width = logicalWidth * dpr
-    canvas.height = logicalHeight * dpr
-    canvas.style.width = '100%'
-    canvas.style.height = '100%'
+    // Only resize the canvas buffer if dimensions changed
+    if (canvas.width !== logicalW * dpr || canvas.height !== logicalH * dpr) {
+      canvas.width = logicalW * dpr
+      canvas.height = logicalH * dpr
+    }
 
-    ctx.scale(dpr, dpr)
+    // Reset transform before drawing
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-    // Draw logic (object-fit: cover)
-    const cw = logicalWidth
-    const ch = logicalHeight
-    const iw = img.width
-    const ih = img.height
-
-    const scale = Math.max(cw / iw, ch / ih)
-    const sw = cw / scale
-    const sh = ch / scale
+    // Object-fit: cover math
+    const iw = img.naturalWidth
+    const ih = img.naturalHeight
+    const scale = Math.max(logicalW / iw, logicalH / ih)
+    const sw = logicalW / scale
+    const sh = logicalH / scale
     const sx = (iw - sw) / 2
     const sy = (ih - sh) / 2
 
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch)
-  }, [imagesLoaded, isMobile])
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, logicalW, logicalH)
+  }, [])
 
-  // Scrub through images
+  /* ── Scroll-driven frame scrubbing ───────────────────────── */
   useMotionValueEvent(frameIndex, 'change', (latest) => {
     if (!imagesLoaded || isMobile) return
-    const idx = Math.round(latest)
+    const idx = Math.round(latest as number)
     if (idx !== currentFrameRef.current) {
       currentFrameRef.current = idx
       requestAnimationFrame(() => drawFrame(idx))
     }
   })
 
-  // Initial draw and window resize handling
+  /* ── Draw first frame + resize handler ───────────────────── */
   useEffect(() => {
-    if (imagesLoaded && !isMobile) {
-      drawFrame(currentFrameRef.current)
-      
-      const handleResize = () => drawFrame(currentFrameRef.current)
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
-    }
+    if (!imagesLoaded || isMobile) return
+
+    drawFrame(currentFrameRef.current)
+
+    const onResize = () => drawFrame(currentFrameRef.current)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [imagesLoaded, isMobile, drawFrame])
 
   /* ══════════════════════════════════════════════════════════
      RENDER
      ══════════════════════════════════════════════════════════ */
-  if (!mounted) return <div className="w-full h-[100vh] bg-[#0B132B]"></div>
+
+  // Phase 1 guard: SSR placeholder — no window access, no canvas, just a dark div
+  if (!mounted) {
+    return <div className="relative w-full bg-[#0B132B] h-[300vh] md:h-[250vh]">
+      <div className="sticky top-0 left-0 w-full h-screen bg-[#0B132B]" />
+    </div>
+  }
 
   return (
     <div
@@ -227,36 +220,38 @@ export default function PortalHero({
       style={{ touchAction: 'pan-y' }}
     >
       {/* ── Sticky viewport ──────────────────────────────────── */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-clip bg-black">
-        {!isMobile ? (
-          /* Desktop Canvas */
+      <div className="sticky top-0 left-0 w-full h-screen overflow-clip bg-[#0B132B]">
+
+        {/* Phase 2: Mobile — single image with parallax, zero frame loading */}
+        {isMobile && (
+          <motion.div
+            style={{ y: mobileParallaxY }}
+            className="absolute inset-0 w-full h-[115%] -top-[5%]"
+          >
+            <img
+              src={`${assetBaseUrl}/ezgif-frame-001.jpg`}
+              alt="Moroccan door"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        )}
+
+        {/* Phase 3: Desktop — full canvas cinematic scroll */}
+        {!isMobile && (
           <canvas
             ref={canvasRef}
             className={`absolute inset-0 w-full h-full will-change-transform transform-gpu transition-opacity duration-1000 ${
               imagesLoaded ? 'opacity-100' : 'opacity-0'
             }`}
           />
-        ) : (
-          /* Phase 2: The Mobile Guarantee (Zero Crash Policy) */
-          <motion.div
-            style={{ y: useTransform(smoothProgress, [0, 1], [0, 120]) }}
-            className="absolute inset-0 w-full h-[115%] -top-[5%]"
-          >
-            <img 
-              src={`${assetBaseUrl}/ezgif-frame-001.jpg`} 
-              alt="Moroccan door" 
-              className="w-full h-full object-cover" 
-            />
-          </motion.div>
         )}
 
         {/* Dark luxury text scrim — ensures legibility over bright video */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/40 to-transparent pointer-events-none" suppressHydrationWarning />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/40 to-transparent pointer-events-none" />
 
         {/* Cinematic vignette overlay */}
         <div
           className="absolute inset-0 pointer-events-none z-[11]"
-          suppressHydrationWarning
           style={{
             background:
               'radial-gradient(ellipse at center, transparent 40%, rgba(11,19,43,0.55) 100%)',
@@ -264,7 +259,7 @@ export default function PortalHero({
         />
 
         {/* ── OVERLAY 1: Left-aligned (Scroll 0 – 0.30) ─────── */}
-        <KineticScrollText 
+        <KineticScrollText
           frameIndex={frameIndex} startFrame={1} peakInFrame={5} peakOutFrame={35} endFrame={45}
           className="absolute left-[8%] top-[45%] md:top-[35%] z-20 max-w-xl pointer-events-none"
         >
@@ -275,7 +270,7 @@ export default function PortalHero({
         </KineticScrollText>
 
         {/* ── OVERLAY 2: Top-centered (Scroll 0.35 – 0.70) ───── */}
-        <KineticScrollText 
+        <KineticScrollText
           frameIndex={frameIndex} startFrame={45} peakInFrame={55} peakOutFrame={85} endFrame={95}
           className="absolute inset-x-0 text-center top-[45%] md:top-[12%] z-20 pointer-events-none drop-shadow-2xl"
         >
@@ -288,7 +283,7 @@ export default function PortalHero({
         </KineticScrollText>
 
         {/* ── OVERLAY 3: Bottom-centered (Scroll 0.75 – 1.0) ── */}
-        <KineticScrollText 
+        <KineticScrollText
           frameIndex={frameIndex} startFrame={95} peakInFrame={105} peakOutFrame={142} endFrame={150}
           className="absolute inset-x-0 bottom-[120px] md:bottom-16 z-30 flex flex-col items-center pointer-events-none"
         >
@@ -296,8 +291,8 @@ export default function PortalHero({
             {textPhase3Title}
           </h2>
           {/* Ocean Cyan luxury pill CTA — brand identity */}
-          <a 
-            href="/sur-mesure" 
+          <a
+            href="/sur-mesure"
             className="pointer-events-auto px-10 py-4 rounded-full border border-[#38A3A5]/50 text-[#38A3A5] font-sans text-xs md:text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#38A3A5]/10 hover:border-[#38A3A5] backdrop-blur-md flex items-center gap-3"
           >
             {ctaLabel} <span>&rarr;</span>
