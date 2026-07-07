@@ -9,6 +9,7 @@ import TrustStats from '@/components/TrustStats'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
 import FeaturedToursGrid from '@/components/FeaturedToursGrid'
 import FAQAccordion from '@/components/FAQAccordion'
+import ReviewBadges from '@/components/ReviewBadges'
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 
 export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -64,10 +65,14 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
 
   // Fetch trust stats from SiteSettings
   let trustStats: { number: string; label: string }[] = []
+  let reviewBadges = undefined
   try {
     const settings = await payload.findGlobal({ slug: 'site-settings', locale: locale as any }) as any
     if (settings?.trustStats && settings.trustStats.length > 0) {
       trustStats = settings.trustStats
+    }
+    if (settings?.reviewBadges) {
+      reviewBadges = settings.reviewBadges
     }
   } catch {
     // Fallback to defaults in component
@@ -178,13 +183,12 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
             </Link>
           </div>
 
-          {/* Right — Decorative glass cards */}
-          <div className="relative hidden lg:block">
-            <div className="absolute top-0 right-0 w-64 h-80 rounded-3xl bg-white/5 border border-white/8 backdrop-blur-md transform rotate-3 translate-x-4" />
-            <div className="absolute top-8 right-8 w-64 h-80 rounded-3xl bg-white/5 border border-white/8 backdrop-blur-md transform -rotate-2" />
-            <div className="relative w-64 h-80 rounded-3xl bg-white/8 border border-white/12 backdrop-blur-md flex items-center justify-center transform translate-x-12 translate-y-4">
-              <span className="font-serif text-6xl text-brand-gold/60">✦</span>
-            </div>
+          {/* Right — Review Badges */}
+          <div className="flex justify-center lg:justify-end mt-12 lg:mt-0 relative z-20">
+            <ReviewBadges 
+              google={reviewBadges?.googleReviews} 
+              trustpilot={reviewBadges?.trustpilot} 
+            />
           </div>
         </div>
       </section>

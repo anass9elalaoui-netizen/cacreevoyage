@@ -205,5 +205,96 @@ export const SiteSettings: GlobalConfig = {
       label: 'Meta Description par défaut (Legacy)',
       admin: { description: 'Utiliser seoDefaults.defaultDescription à la place' },
     },
+
+    /* ──────────────────────────────────────────────────────────
+       REVIEW BADGES (Google & Trustpilot)
+    ─────────────────────────────────────────────────────────── */
+    {
+      name: 'reviewBadges',
+      type: 'group',
+      label: 'Badges Avis (Google & Trustpilot)',
+      admin: {
+        description: 'Configurez les widgets d\'avis affichés dans la section Philosophie de la page d\'accueil.',
+      },
+      fields: [
+        {
+          name: 'googleReviews',
+          type: 'group',
+          label: 'Google Reviews',
+          fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              label: 'Afficher le badge Google',
+              defaultValue: true,
+            },
+            {
+              name: 'rating',
+              type: 'text',
+              label: 'Note (ex: 4.9)',
+              defaultValue: '4.9',
+            },
+            {
+              name: 'reviewCount',
+              type: 'text',
+              label: 'Nombre d\'avis (ex: 120+)',
+              defaultValue: '120+',
+            },
+            {
+              name: 'profileUrl',
+              type: 'text',
+              label: 'Lien vers le profil Google',
+              defaultValue: 'https://g.co/kgs/cacreevoyage',
+              admin: { description: 'URL de votre fiche Google Business' },
+            },
+            {
+              name: 'quote',
+              type: 'text',
+              label: 'Citation mise en avant',
+              defaultValue: 'Une expérience inoubliable !',
+              localized: true,
+            },
+          ],
+        },
+        {
+          name: 'trustpilot',
+          type: 'group',
+          label: 'Trustpilot',
+          fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              label: 'Afficher le badge Trustpilot',
+              defaultValue: true,
+            },
+            {
+              name: 'rating',
+              type: 'text',
+              label: 'Note (ex: 4.8)',
+              defaultValue: '4.8',
+            },
+            {
+              name: 'reviewCount',
+              type: 'text',
+              label: 'Nombre d\'avis (ex: 85+)',
+              defaultValue: '85+',
+            },
+            {
+              name: 'profileUrl',
+              type: 'text',
+              label: 'Lien Trustpilot',
+              defaultValue: 'https://trustpilot.com/review/cacreevoyage.com',
+            },
+            {
+              name: 'quote',
+              type: 'text',
+              label: 'Citation mise en avant',
+              defaultValue: 'Service exceptionnel, voyage parfait',
+              localized: true,
+            },
+          ],
+        },
+      ],
+    },
   ],
 }
