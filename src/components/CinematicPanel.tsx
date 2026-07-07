@@ -39,6 +39,7 @@ interface CinematicPanelProps {
   index: number
   isActive: boolean
   onActivate: () => void
+  paginationSlot?: React.ReactNode
 }
 
 export default function CinematicPanel({
@@ -46,6 +47,7 @@ export default function CinematicPanel({
   index,
   isActive,
   onActivate,
+  paginationSlot,
 }: CinematicPanelProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -138,20 +140,21 @@ export default function CinematicPanel({
       {/* ══════════════════════════════════════════════════════════
           CONTENT — Glassmorphism card + CTA
       ══════════════════════════════════════════════════════════ */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-12 lg:pb-16 pointer-events-none">
-        <div className="w-[90%] max-w-sm p-8 rounded-[2rem] bg-white/10 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col items-center text-center transition-all duration-500 pointer-events-auto">
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-8 lg:pb-16 pointer-events-none">
+        <div className="w-[88%] max-w-sm px-6 py-6 lg:p-8 rounded-[1.75rem] lg:rounded-[2rem] bg-white/10 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col items-center text-center gap-1 transition-all duration-500 pointer-events-auto">
           {panel.subtitle && (
-            <span className="uppercase tracking-widest text-brand-blue font-semibold text-xs mb-2 drop-shadow-sm">
+            <span className="uppercase tracking-widest text-brand-blue font-semibold text-[10px] lg:text-xs drop-shadow-sm">
               {panel.subtitle}
             </span>
           )}
-          <h2 className="text-5xl lg:text-6xl font-serif text-white tracking-tighter leading-none mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+          <h2 className="text-3xl lg:text-6xl font-serif text-white tracking-tighter leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
             {panel.title}
           </h2>
-          <div className="w-10 h-px bg-white/40 my-4" />
+          <div className="w-10 h-px bg-white/40 my-2 lg:my-4" />
+          {paginationSlot}
           <Link
             href={link}
-            className="mt-2 px-8 py-3 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 backdrop-blur-md text-white font-medium transition-all duration-300 shadow-[0_0_20px_rgba(56,163,165,0.2)] hover:shadow-[0_0_30px_rgba(56,163,165,0.4)] flex items-center gap-2 text-sm"
+            className="px-8 py-3 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 backdrop-blur-md text-white font-medium transition-all duration-300 shadow-[0_0_20px_rgba(56,163,165,0.2)] hover:shadow-[0_0_30px_rgba(56,163,165,0.4)] flex items-center gap-2 text-sm"
           >
             Explorer
             <svg

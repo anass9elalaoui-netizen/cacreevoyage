@@ -23,6 +23,7 @@ interface BookingSidebarProps {
   duration?: string
   tourStatus?: string
   locale?: string
+  programPDF?: any
 }
 
 export default function BookingSidebar({
@@ -33,6 +34,7 @@ export default function BookingSidebar({
   duration,
   tourStatus,
   locale,
+  programPDF,
 }: BookingSidebarProps) {
   // Try to use the passed locale, fallback to reading URL, or default to fr.
   const [currentLocale, setCurrentLocale] = useState<Locale>((locale as Locale) || 'fr')
@@ -151,13 +153,27 @@ export default function BookingSidebar({
           {t.bookWhatsapp}
         </button>
 
-        {/* Secondary CTA — Sur-Mesure */}
         <Link
           href="/sur-mesure"
           className="flex items-center justify-center w-full bg-white/5 border border-white/15 hover:bg-white/10 text-white py-4 rounded-full font-medium text-base transition-all"
         >
           {t.customize}
         </Link>
+
+        {/* Download PDF Program */}
+        {programPDF?.url && (
+          <a
+            href={programPDF.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center w-full bg-brand-gold/10 border border-brand-gold/30 hover:bg-brand-gold/20 text-brand-gold py-4 rounded-full font-medium text-base transition-all"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Télécharger le Programme (PDF)
+          </a>
+        )}
 
         {/* No price fallback */}
         {!pricing?.basePrice && (

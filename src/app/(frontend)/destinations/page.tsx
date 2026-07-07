@@ -3,7 +3,7 @@ import configPromise from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
-import HeroGallery from '@/components/HeroGallery'
+import SubpageHero from '@/components/hero/SubpageHero'
 import { getDictionary } from '@/i18n/dictionaries'
 
 export const dynamic = 'force-dynamic'
@@ -48,46 +48,45 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
     locale: locale as any,
   })
 
-  // Fetch HeroGallery panels
-  let heroPanels: any[] = []
+  // Fetch SubpageHeroes
+  let heroData: any = {}
   try {
-    const heroGallery = await payload.findGlobal({
-      slug: 'hero-gallery',
+    const globals = await payload.findGlobal({
+      slug: 'subpage-heroes',
       depth: 1,
       locale: locale as any,
     }) as any
-    if (heroGallery?.panels && heroGallery.panels.length > 0) {
-      heroPanels = heroGallery.panels
+    if (globals?.destinationsHero) {
+      heroData = globals.destinationsHero
     }
   } catch {
-    // No hero gallery configured yet — component will show fallback
+    // Component will show fallback
   }
+
+  const backgroundMedia = heroData.backgroundMedia
+  const backgroundUrl = typeof backgroundMedia === 'object' && backgroundMedia?.url ? backgroundMedia.url : undefined
+  const isVideo = typeof backgroundMedia === 'object' && backgroundMedia?.mimeType?.startsWith('video')
 
   return (
     <main className="relative w-full min-h-screen bg-[#0B132B] overflow-x-clip">
-      {/* ── HERO GALLERY (legacy, relocated from homepage) ── */}
-      <HeroGallery panels={heroPanels} />
+      {/* ── SUBPAGE HERO ── */}
+      <SubpageHero 
+        title={heroData.title || t.title}
+        subtitle={heroData.subtitle || t.explore}
+        description={heroData.description}
+        backgroundUrl={backgroundUrl}
+        isVideo={isVideo}
+        ctaLabel={heroData.ctaLabel}
+        ctaHref={heroData.ctaHref}
+        badge1Number={heroData.badgeStat1Number}
+        badge1Label={heroData.badgeStat1Label}
+        badge2Number={heroData.badgeStat2Number}
+        badge2Label={heroData.badgeStat2Label}
+      />
 
-      {/* ── PAGE HEADER ── */}
-      <section className="relative w-full pt-20 pb-16 px-4 md:px-12 lg:px-20 text-center overflow-clip">
-        {/* Ambient Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-blue/8 rounded-full blur-[180px] pointer-events-none" />
-
-        <span className="relative z-10 uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md">
-          {t.explore}
-        </span>
-        <h1
-          className="relative z-10 text-6xl md:text-8xl font-serif text-white tracking-tighter leading-none mb-6"
-          style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
-        >
-          {t.title}
-        </h1>
-        <p className="relative z-10 text-white/50 text-lg md:text-xl font-light max-w-2xl mx-auto">
-          {t.subtitle}
-        </p>
-
-        {/* Scope filter links */}
-        <div className="relative z-10 flex justify-center gap-4 mt-10">
+      {/* ── SCOPE FILTERS ── */}
+      <section className="relative w-full pt-12 pb-8 px-4 text-center overflow-clip">
+        <div className="relative z-10 flex justify-center gap-4">
           <Link
             href="/destinations/international"
             className="px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-white/10 hover:border-white/20 transition-all duration-300"

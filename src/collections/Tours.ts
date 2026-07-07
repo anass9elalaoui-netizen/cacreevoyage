@@ -9,7 +9,37 @@ export const Tours: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (data.importJSON) {
+          let parsed = data.importJSON
+          if (typeof parsed === 'string') {
+            try {
+              parsed = JSON.parse(parsed)
+            } catch (e) {
+              // Ignore parse error
+            }
+          }
+          if (parsed && typeof parsed === 'object') {
+            // Merge the parsed JSON into the document data
+            Object.assign(data, parsed)
+          }
+          // Clear the field so it doesn't clutter the DB
+          data.importJSON = null
+        }
+        return data
+      },
+    ],
+  },
   fields: [
+    {
+      name: 'importJSON',
+      type: 'json',
+      admin: {
+        description: '⚡ AUTO-FILL: Collez le code JSON généré par l\'IA ici, puis cliquez sur Save. Tous les champs seront remplis automatiquement.',
+      },
+    },
     {
       name: 'title',
       type: 'text',
@@ -165,6 +195,15 @@ export const Tours: CollectionConfig = {
           relationTo: 'media',
         },
       ],
+    },
+    {
+      name: 'programPDF',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      admin: {
+        description: 'Uploader le programme en PDF (ex: Itinéraire détaillé).',
+      },
     },
 
     /* ──────────────────────────────────────────────────────────

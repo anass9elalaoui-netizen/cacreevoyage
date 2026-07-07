@@ -226,15 +226,18 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   // Card width + gap calculation
   const getCardWidth = useCallback(() => {
+    if (typeof window === 'undefined') return 340
     return Math.min(window.innerWidth * 0.85, 400)
   }, [])
 
   const getGap = useCallback(() => {
+    if (typeof window === 'undefined') return 24
     return window.innerWidth >= 768 ? 24 : 20
   }, [])
 
   // Calculate drag constraints
   const getDragConstraints = useCallback(() => {
+    if (typeof window === 'undefined') return { left: -2000, right: 0 }
     const cardW = getCardWidth()
     const gap = getGap()
     const totalWidth = count * cardW + (count - 1) * gap
@@ -339,7 +342,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
         className="flex gap-5 md:gap-6 cursor-grab active:cursor-grabbing"
         style={{ x }}
         drag="x"
-        dragConstraints={typeof window !== 'undefined' ? getDragConstraints() : { left: -2000, right: 0 }}
+        dragConstraints={getDragConstraints()}
         dragElastic={0.1}
         dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
         onDragEnd={handleDragEnd}

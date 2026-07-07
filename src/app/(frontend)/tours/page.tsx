@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Footer from '@/components/Footer'
 import TourCard from '@/components/TourCard'
-import HeroGallery from '@/components/HeroGallery'
+import SubpageHero from '@/components/hero/SubpageHero'
 import { getDictionary } from '@/i18n/dictionaries'
 
 export const dynamic = 'force-dynamic'
@@ -33,48 +33,49 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
     locale: locale as any,
   })
 
-  // Fetch HeroGallery panels
-  let heroPanels: any[] = []
+  // Fetch SubpageHeroes
+  let heroData: any = {}
   try {
-    const heroGallery = await payload.findGlobal({
-      slug: 'hero-gallery',
+    const globals = await payload.findGlobal({
+      slug: 'subpage-heroes',
       depth: 1,
       locale: locale as any,
     }) as any
-    if (heroGallery?.panels && heroGallery.panels.length > 0) {
-      heroPanels = heroGallery.panels
+    if (globals?.toursHero) {
+      heroData = globals.toursHero
     }
   } catch {
-    // No hero gallery configured yet
+    // Component will show fallback
   }
+
+  const backgroundMedia = heroData.backgroundMedia
+  const backgroundUrl = typeof backgroundMedia === 'object' && backgroundMedia?.url ? backgroundMedia.url : undefined
+  const isVideo = typeof backgroundMedia === 'object' && backgroundMedia?.mimeType?.startsWith('video')
 
   return (
     <>
       <main className="relative min-h-screen bg-brand-dark overflow-clip">
-        {/* ── HERO GALLERY — 4-panel cinematic grid ── */}
-        <HeroGallery panels={heroPanels} />
+        {/* ── SUBPAGE HERO ── */}
+        <SubpageHero 
+          title={heroData.title || `${t.toursPrefix} ${t.toursHighlight}`}
+          subtitle={heroData.subtitle || t.privateCollection}
+          description={heroData.description}
+          backgroundUrl={backgroundUrl}
+          isVideo={isVideo}
+          ctaLabel={heroData.ctaLabel}
+          ctaHref={heroData.ctaHref}
+          badge1Number={heroData.badgeStat1Number}
+          badge1Label={heroData.badgeStat1Label}
+          badge2Number={heroData.badgeStat2Number}
+          badge2Label={heroData.badgeStat2Label}
+        />
 
         {/* Ambient glows */}
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
         <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-brand-gold/5 rounded-full blur-[150px] pointer-events-none" />
 
-        {/* Cinematic Header */}
-        <section className="relative pt-40 pb-20 px-6">
-          <div className="max-w-7xl mx-auto text-center">
-            <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
-              {t.privateCollection}
-            </span>
-            <h1 className="font-serif text-5xl md:text-7xl text-white mb-6 leading-[1.1]">
-              {t.toursPrefix} <span className="text-brand-blue">{t.toursHighlight}</span>
-            </h1>
-            <p className="text-brand-silver text-lg max-w-2xl mx-auto">
-              {t.description}
-            </p>
-          </div>
-        </section>
-
         {/* Tours Grid */}
-        <section className="relative pb-32 px-6">
+        <section className="relative py-20 px-6">
           <div className="max-w-7xl mx-auto">
             {tours.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -286,6 +286,7 @@ export default async function TourPage({ params, searchParams }: Args) {
               duration={durationText}
               tourStatus={tour.tourStatus}
               locale={locale}
+              programPDF={typeof tour.programPDF === 'object' ? tour.programPDF : undefined}
             />
           </div>
         </div>

@@ -109,33 +109,33 @@ export default function HeroGallery({ panels = [] }: HeroGalleryProps) {
               index={index}
               isActive={activeIndex === index}
               onActivate={() => activate(index)}
+              paginationSlot={
+                <div className="flex justify-center gap-2 mb-2">
+                  {panels.map((_, dotIndex) => (
+                    <button
+                      key={dotIndex}
+                      type="button"
+                      onClick={() => {
+                        setActiveIndex(dotIndex)
+                        const container = mobileRef.current
+                        if (container) {
+                          container.scrollTo({
+                            left: dotIndex * container.offsetWidth,
+                            behavior: 'smooth',
+                          })
+                        }
+                      }}
+                      aria-label={`Slide ${dotIndex + 1}`}
+                      className={`h-[2px] rounded-full transition-all duration-500 ease-out ${
+                        dotIndex === activeIndex ? 'w-8 bg-white' : 'w-4 bg-white/30'
+                      }`}
+                    />
+                  ))}
+                </div>
+              }
             />
           </div>
         ))}
-
-        {/* Luxury Dash Pagination */}
-        <div className="absolute bottom-28 left-0 right-0 z-40 flex justify-center gap-2">
-          {panels.map((_, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => {
-                setActiveIndex(index)
-                const container = mobileRef.current
-                if (container) {
-                  container.scrollTo({
-                    left: index * container.offsetWidth,
-                    behavior: 'smooth',
-                  })
-                }
-              }}
-              aria-label={`Slide ${index + 1}`}
-              className={`h-[2px] rounded-full transition-all duration-500 ease-out ${
-                index === activeIndex ? 'w-8 bg-white' : 'w-4 bg-white/30'
-              }`}
-            />
-          ))}
-        </div>
       </section>
     </>
   )

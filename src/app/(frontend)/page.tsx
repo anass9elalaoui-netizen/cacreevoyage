@@ -4,7 +4,7 @@ import configPromise from '@payload-config'
 import DestinationSwiper from '@/components/DestinationSwiper'
 import ReelsShowcase from '@/components/ReelsShowcase'
 import Footer from '@/components/Footer'
-import PortalHero from '@/components/hero/PortalHero'
+import HeroGallery from '@/components/HeroGallery'
 import TrustStats from '@/components/TrustStats'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
 import FeaturedToursGrid from '@/components/FeaturedToursGrid'
@@ -73,26 +73,16 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     // Fallback to defaults in component
   }
 
-  // Fetch HeroPortalConfig
-  let portalConfig: Record<string, any> = {
-    assetBaseUrl: '/hero-frames',
-    frameCount: 142,
-    textPhase1Title: "L'art du voyage sur-mesure.",
-    textPhase1Sub: 'Chaque grand voyage commence par une porte fermée.',
-    textPhase2Title: 'Éveillez vos sens.',
-    textPhase2Sub: "Un monde d'exceptions s'ouvre à vous.",
-    textPhase3Title: 'Prenez votre envol.',
-    ctaLabel: 'Créer Mon Voyage',
-  }
+  // Fetch HeroGallery panels
+  let heroPanels: any[] = []
   try {
-    const portal = await payload.findGlobal({
-      slug: 'hero-portal-config',
+    const heroGallery = await payload.findGlobal({
+      slug: 'hero-gallery',
+      depth: 1,
       locale: locale as any,
     }) as any
-    if (portal) {
-      for (const key of Object.keys(portalConfig)) {
-        if (portal[key] != null) portalConfig[key] = portal[key]
-      }
+    if (heroGallery?.panels && heroGallery.panels.length > 0) {
+      heroPanels = heroGallery.panels
     }
   } catch {
     // Fallback to defaults
@@ -103,16 +93,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION — Cinematic canvas scroll portal
       ─────────────────────────────────────────────────────────── */}
-      <PortalHero
-        assetBaseUrl={portalConfig.assetBaseUrl}
-        frameCount={portalConfig.frameCount}
-        textPhase1Title={portalConfig.textPhase1Title}
-        textPhase1Sub={portalConfig.textPhase1Sub}
-        textPhase2Title={portalConfig.textPhase2Title}
-        textPhase2Sub={portalConfig.textPhase2Sub}
-        textPhase3Title={portalConfig.textPhase3Title}
-        ctaLabel={portalConfig.ctaLabel}
-      />
+      <HeroGallery panels={heroPanels} />
 
       {/* ──────────────────────────────────────────────────────────
           TRUST STATS — Animated counter bar

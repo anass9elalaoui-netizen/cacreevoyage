@@ -18,6 +18,7 @@ import { SiteSettings } from './globals/SiteSettings'
 import { PaymentSettings } from './globals/PaymentSettings'
 import { HeroGallery } from './globals/HeroGallery'
 import { HeroPortalConfig } from './globals/HeroPortalConfig'
+import { SubpageHeroes } from './globals/SubpageHeroes'
 
 import { FAQ } from './collections/FAQ'
 
@@ -47,7 +48,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Users, Destinations, Tours, Testimonials, Inquiries, Articles, Media, Orders, FAQ],
-  globals: [SiteSettings, PaymentSettings, HeroGallery, HeroPortalConfig],
+  globals: [SiteSettings, PaymentSettings, HeroGallery, HeroPortalConfig, SubpageHeroes],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'ca_cree_voyage_super_secret_key_2026_xyz',
   typescript: {
