@@ -111,6 +111,7 @@ export default function ContactPage() {
                     href="https://wa.me/212661373347?text=Bonjour, je souhaite en savoir plus sur vos voyages"
                     target="_blank"
                     rel="noopener noreferrer"
+                  >
                     <div className="bg-[#25D366]/10 border border-[#25D366]/20 text-brand-blue px-3 py-3 rounded-2xl mb-4 transition-colors hover:bg-[#25D366]/20 flex items-center gap-3">
                       <span className="text-2xl">💬</span>
                       <div>
