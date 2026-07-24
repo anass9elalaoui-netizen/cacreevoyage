@@ -21,11 +21,6 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
   })
 
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.03, 1.05])
-  const blur = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    ['blur(0px)', 'blur(0px)', 'blur(4px)', 'blur(6px)'],
-  )
 
   let headerUrl =
     typeof dest.headerMedia === 'object' && dest.headerMedia?.url
@@ -67,11 +62,11 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
             loop
             muted
             playsInline
-            style={{ scale, filter: blur }}
+            style={{ scale }}
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : headerUrl ? (
-          <motion.div style={{ scale, filter: blur }} className="absolute inset-0">
+          <motion.div style={{ scale }} className="absolute inset-0">
             <Image
               src={headerUrl}
               alt={dest.title || 'Destination'}
@@ -137,7 +132,7 @@ export default function DestinationSwiper({
   }
 
   return (
-    <section className="relative w-full py-20 md:py-28 overflow-hidden">
+    <section className="relative w-full py-16 md:py-20 overflow-hidden">
       {/* Section Header */}
       <div className="px-4 md:px-12 lg:px-20 mb-10 md:mb-14 flex items-end justify-between">
         <div>
