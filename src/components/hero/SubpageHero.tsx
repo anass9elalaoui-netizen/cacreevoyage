@@ -31,7 +31,7 @@ export default function SubpageHero({
   badge2Label,
 }: SubpageHeroProps) {
   return (
-    <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-[#0B132B]">
+    <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700">
       {/* Background Media */}
       <div className="absolute inset-0 z-0">
         {backgroundUrl ? (
@@ -54,14 +54,14 @@ export default function SubpageHero({
             />
           )
         ) : (
-          <div className="w-full h-full bg-gradient-to-b from-[#0B132B] to-[#1a2744]">
+          <div className="w-full h-full bg-gradient-to-b from-slate-100 dark:from-[#0B132B] to-slate-200 dark:to-[#1a2744]">
             {/* Fallback ambient glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#38A3A5]/10 rounded-full blur-[150px] pointer-events-none" />
           </div>
         )}
         
         {/* Overlay Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/50 dark:from-[#0B132B] dark:via-[#0B132B]/50 to-transparent" />
         <div className="absolute inset-0 bg-black/30" />
       </div>
 
@@ -76,14 +76,14 @@ export default function SubpageHero({
         )}
         
         <h1 
-          className="text-5xl md:text-7xl lg:text-[6rem] font-serif text-white tracking-tight leading-[1.1] mb-6 drop-shadow-2xl"
+          className="text-5xl md:text-7xl lg:text-[6rem] font-serif text-slate-900 dark:text-white tracking-tight leading-[1.1] mb-6 drop-shadow-2xl"
           style={{ textShadow: '0 4px 40px rgba(0,0,0,0.6)' }}
         >
           {title}
         </h1>
 
         {description && (
-          <p className="text-white/80 text-lg md:text-xl font-light leading-relaxed max-w-2xl mb-10 drop-shadow-md">
+          <p className="text-slate-700 dark:text-white/80 text-lg md:text-xl font-light leading-relaxed max-w-2xl mb-10 drop-shadow-md">
             {description}
           </p>
         )}
@@ -102,15 +102,15 @@ export default function SubpageHero({
         {(badge1Number || badge2Number) && (
            <div className="flex flex-wrap justify-center gap-6 mt-16">
              {badge1Number && badge1Label && (
-               <div className="bg-white/5 backdrop-blur-md border border-white/15 rounded-2xl px-6 py-4 text-center min-w-[140px]">
+               <div className="bg-white/70 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/15 rounded-2xl px-6 py-4 text-center min-w-[140px] shadow-sm dark:shadow-none">
                  <span className="text-[#D4AF37] text-3xl font-serif block leading-none mb-1">{badge1Number}</span>
-                 <span className="text-white/60 text-[11px] uppercase tracking-widest">{badge1Label}</span>
+                 <span className="text-slate-500 dark:text-white/60 text-[11px] uppercase tracking-widest">{badge1Label}</span>
                </div>
              )}
              {badge2Number && badge2Label && (
-               <div className="bg-white/5 backdrop-blur-md border border-white/15 rounded-2xl px-6 py-4 text-center min-w-[140px]">
+               <div className="bg-white/70 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/15 rounded-2xl px-6 py-4 text-center min-w-[140px] shadow-sm dark:shadow-none">
                  <span className="text-[#38A3A5] text-3xl font-serif block leading-none mb-1">{badge2Number}</span>
-                 <span className="text-white/60 text-[11px] uppercase tracking-widest">{badge2Label}</span>
+                 <span className="text-slate-500 dark:text-white/60 text-[11px] uppercase tracking-widest">{badge2Label}</span>
                </div>
              )}
            </div>

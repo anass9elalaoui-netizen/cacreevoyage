@@ -30,7 +30,7 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
   if (!tours || tours.length === 0) return null
 
   return (
-    <section className="relative w-full py-24 bg-brand-dark overflow-hidden">
+    <section className="relative w-full py-24 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
@@ -50,7 +50,7 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-serif text-4xl md:text-6xl text-white mb-4"
+          className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-4"
         >
           Nos Voyages d&apos;Exception
         </motion.h2>
@@ -59,7 +59,7 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-brand-silver text-lg max-w-xl mx-auto"
+          className="text-slate-600 dark:text-brand-silver text-lg max-w-xl mx-auto"
         >
           Des expériences triées sur le volet, conçues pour les voyageurs exigeants.
         </motion.p>

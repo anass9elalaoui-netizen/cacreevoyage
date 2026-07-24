@@ -10,6 +10,9 @@ import DestinationTestimonials from '@/components/DestinationTestimonials'
 import FeaturedToursGrid from '@/components/FeaturedToursGrid'
 import FAQAccordion from '@/components/FAQAccordion'
 import ReviewBadges from '@/components/ReviewBadges'
+import MagneticButton from '@/components/MagneticButton'
+import ScrollTextReveal from '@/components/ScrollTextReveal'
+import HeroVideoSwitcher from '@/components/HeroVideoSwitcher'
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 
 export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -93,12 +96,34 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     // Fallback to defaults
   }
 
+  // Fetch HeroSwitcher slides
+  let heroSwitcherSlides: any[] | undefined = undefined;
+  try {
+    const heroSwitcherGlobal = await payload.findGlobal({
+      slug: 'hero-switcher',
+      depth: 1,
+      locale: locale as any,
+    }) as any;
+    
+    if (heroSwitcherGlobal?.slides && heroSwitcherGlobal.slides.length > 0) {
+      heroSwitcherSlides = heroSwitcherGlobal.slides.map((slide: any) => ({
+        id: slide.id || slide._id,
+        label: slide.label,
+        subtitle: slide.subtitle,
+        title: slide.title,
+        videoUrl: slide.backgroundVideo?.url || '',
+      }));
+    }
+  } catch (err) {
+    console.error('Error fetching hero-switcher global', err);
+  }
+
   return (
     <main className="relative w-full min-h-screen flex flex-col overflow-x-clip">
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION — Cinematic canvas scroll portal
       ─────────────────────────────────────────────────────────── */}
-      <HeroGallery panels={heroPanels} />
+      <HeroGallery />
 
       {/* ──────────────────────────────────────────────────────────
           TRUST STATS — Animated counter bar
@@ -108,7 +133,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           ROW 1 — ÉVASIONS INTERNATIONALES
       ─────────────────────────────────────────────────────────── */}
-      <div className="relative bg-[#0B132B] w-full">
+      <div className="relative bg-slate-50 dark:bg-[#0B132B] w-full transition-colors duration-700">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
         <DestinationSwiper
           destinations={internationalDestinations as any[]}
@@ -120,7 +145,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           ROW 2 — TRÉSORS DU MAROC
       ─────────────────────────────────────────────────────────── */}
-      <div className="relative bg-[#0B132B] w-full">
+      <div className="relative bg-slate-50 dark:bg-[#0B132B] w-full transition-colors duration-700">
         <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none" />
         <DestinationSwiper
           destinations={nationalDestinations as any[]}
@@ -144,11 +169,15 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       )}
 
 
+      {/* ──────────────────────────────────────────────────────────
+          MID-PAGE IMMERSIVE BREAK
+      ─────────────────────────────────────────────────────────── */}
+      <HeroVideoSwitcher slides={heroSwitcherSlides} />
 
       {/* ──────────────────────────────────────────────────────────
           SUR MESURE PHILOSOPHY BLOCK
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full py-32 bg-brand-dark overflow-clip">
+      <section className="relative w-full py-32 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-clip">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-gold/5 rounded-full blur-[180px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -157,12 +186,13 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
             <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
               {t.philosophySubtitle}
             </span>
-            <h2 className="font-serif text-4xl md:text-6xl text-white mb-8 leading-[1.1]">
+            <h2 className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-8 leading-[1.1]">
               {t.philosophyTitle}
             </h2>
-            <p className="text-brand-silver text-lg leading-relaxed mb-8">
-              {t.philosophyText}
-            </p>
+            <ScrollTextReveal 
+              text={t.philosophyText} 
+              className="text-slate-700 dark:text-brand-silver text-lg leading-relaxed mb-8" 
+            />
             <div className="space-y-4">
               {[
                 t.philosophyBullet1,
@@ -170,17 +200,19 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
                 t.philosophyBullet3,
                 t.philosophyBullet4,
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 text-white/80 text-sm font-sans">
+                <div key={i} className="flex items-center gap-3 text-slate-800 dark:text-white/80 font-medium dark:font-normal text-sm font-sans">
                   <span>{item}</span>
                 </div>
               ))}
             </div>
-            <Link
-              href="/sur-mesure"
-              className="inline-block mt-10 bg-brand-gold/20 border border-brand-gold/30 hover:bg-brand-gold/30 text-brand-gold px-8 py-4 rounded-full font-sans text-sm uppercase tracking-[0.1em] font-medium transition-all duration-300"
-            >
-              {t.philosophyCTA}
-            </Link>
+            <MagneticButton>
+              <Link
+                href="/sur-mesure"
+                className="inline-block mt-10 bg-brand-gold/10 dark:bg-brand-gold/20 border border-brand-gold/30 hover:bg-brand-gold/20 dark:hover:bg-brand-gold/30 text-yellow-700 dark:text-brand-gold px-8 py-4 rounded-full font-sans text-sm uppercase tracking-[0.1em] font-bold dark:font-medium transition-all duration-300"
+              >
+                {t.philosophyCTA}
+              </Link>
+            </MagneticButton>
           </div>
 
           {/* Right — Review Badges */}
@@ -201,30 +233,34 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           FINAL CTA SECTION
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full py-32 bg-brand-deeper flex justify-center px-4">
+      <section className="relative w-full py-32 bg-slate-100 dark:bg-brand-deeper transition-colors duration-700 flex justify-center px-4">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
-        <div className="relative z-20 flex flex-col items-center text-center p-12 rounded-[2.5rem] bg-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-white/10 max-w-4xl w-full">
-          <h2 className="text-5xl md:text-7xl font-serif text-white mb-6 tracking-tighter drop-shadow-md">
+        <div className="relative z-20 flex flex-col items-center text-center p-12 rounded-[2.5rem] bg-white dark:bg-white/5 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-none ring-1 ring-black/5 dark:ring-white/10 max-w-4xl w-full">
+          <h2 className="text-5xl md:text-7xl font-serif text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-md dark:drop-shadow-none">
             {t.readyTitle}
           </h2>
-          <p className="text-white/80 text-xl font-light mb-10 max-w-xl mx-auto">
+          <p className="text-slate-600 dark:text-white/80 text-xl font-light mb-10 max-w-xl mx-auto">
             {t.readyText}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/sur-mesure"
-              className="inline-block bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_0_30px_rgba(56,163,165,0.3)] hover:shadow-[0_0_40px_rgba(56,163,165,0.5)]"
-            >
-              {t.readyCTA}
-            </Link>
-            <a
-              href="https://wa.me/212661373347?text=Bonjour, je souhaite en savoir plus sur vos voyages"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#25D366]/20 border border-[#25D366]/30 hover:bg-[#25D366]/30 text-[#25D366] px-10 py-5 rounded-full font-medium text-lg transition-all"
-            >
-              💬 WhatsApp
-            </a>
+            <MagneticButton>
+              <Link
+                href="/sur-mesure"
+                className="inline-block bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_0_30px_rgba(56,163,165,0.3)] hover:shadow-[0_0_40px_rgba(56,163,165,0.5)]"
+              >
+                {t.readyCTA}
+              </Link>
+            </MagneticButton>
+            <MagneticButton>
+              <a
+                href="https://wa.me/212661373347?text=Bonjour, je souhaite en savoir plus sur vos voyages"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-[#25D366]/20 border border-[#25D366]/30 hover:bg-[#25D366]/30 text-[#25D366] px-10 py-5 rounded-full font-medium text-lg transition-all"
+              >
+                💬 WhatsApp
+              </a>
+            </MagneticButton>
           </div>
         </div>
       </section>

@@ -54,7 +54,7 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
 
   return (
     <>
-      <main className="relative min-h-screen bg-brand-dark overflow-clip">
+      <main className="relative min-h-screen bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-clip">
         {/* ── SUBPAGE HERO ── */}
         <SubpageHero 
           title={heroData.title || `${t.toursPrefix} ${t.toursHighlight}`}
@@ -92,10 +92,10 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/10">
+              <div className="text-center py-20 bg-white dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
                 <span className="text-4xl block mb-4">✨</span>
-                <h3 className="font-serif text-2xl text-white mb-2">{t.comingSoon}</h3>
-                <p className="text-brand-silver">{t.expertsPreparing}</p>
+                <h3 className="font-serif text-2xl text-slate-900 dark:text-white mb-2">{t.comingSoon}</h3>
+                <p className="text-slate-600 dark:text-brand-silver">{t.expertsPreparing}</p>
               </div>
             )}
           </div>

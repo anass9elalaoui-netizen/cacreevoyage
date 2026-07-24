@@ -4,6 +4,7 @@ import '../globals.css'
 import GlassNavbar from '@/components/GlassNavbar'
 import FloatingWhatsApp from '@/components/FloatingWhatsApp'
 import CookieBanner from '@/components/CookieBanner'
+import AmbientCanvas from '@/components/AmbientCanvas'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -48,7 +49,8 @@ export default async function FrontendLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#0B132B] text-white antialiased relative" suppressHydrationWarning>
+      <body className="antialiased relative" suppressHydrationWarning>
+        <AmbientCanvas />
         <GlassNavbar brandIdentity={brandIdentity} />
         <main className="relative flex min-h-screen flex-col">
           {children}

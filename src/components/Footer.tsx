@@ -39,9 +39,9 @@ function QRCodeIcon() {
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-[#060D1F] text-white overflow-hidden">
+    <footer className="relative w-full bg-slate-50 dark:bg-[#0B132B] text-slate-900 dark:text-white transition-colors duration-700 overflow-hidden">
       {/* ── Top Divider — Ambient glow line ──────────────────── */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-px bg-gradient-to-r from-transparent via-brand-blue/40 to-transparent" suppressHydrationWarning />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-px bg-gradient-to-r from-transparent via-brand-blue/20 dark:via-brand-blue/40 to-transparent" suppressHydrationWarning />
 
       {/* ── Ambient Background Glow ──────────────────────────── */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
@@ -52,11 +52,11 @@ export default function Footer() {
           {/* COL 1 — Brand & Bio */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6 group">
-              <span className="font-serif text-3xl tracking-wide text-white group-hover:text-brand-blue transition-colors drop-shadow-[0_2px_8px_rgba(56,163,165,0.3)]">
+              <span className="font-serif text-3xl tracking-wide text-slate-900 dark:text-white group-hover:text-brand-blue transition-colors dark:drop-shadow-[0_2px_8px_rgba(56,163,165,0.3)]">
                 Ça Crée Voyage
               </span>
             </Link>
-            <p className="text-white/50 text-sm font-light leading-relaxed mb-6 max-w-xs">
+            <p className="text-slate-600 dark:text-white/50 text-sm font-light leading-relaxed mb-6 max-w-xs">
               Agence de voyages sur mesure basée au Maroc. Nous dessinons des itinéraires d'exception pour les voyageurs exigeants — du désert de Merzouga aux archipels du Pacifique.
             </p>
             {/* Social Icons */}
@@ -65,7 +65,7 @@ export default function Footer() {
                 href="https://instagram.com/cacreevoyage"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                className="w-10 h-10 rounded-full liquid-glass flex items-center justify-center text-slate-700 dark:text-white/50 hover:text-brand-blue dark:hover:text-white transition-all duration-300"
                 aria-label="Instagram"
               >
                 <InstagramIcon />
@@ -74,7 +74,7 @@ export default function Footer() {
                 href="https://wa.me/212600000000"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                className="w-10 h-10 rounded-full liquid-glass flex items-center justify-center text-slate-700 dark:text-white/50 hover:text-brand-blue dark:hover:text-white transition-all duration-300"
                 aria-label="WhatsApp"
               >
                 <WhatsAppIcon />
@@ -84,26 +84,26 @@ export default function Footer() {
 
           {/* COL 2 — Destinations */}
           <div>
-            <h4 className="uppercase tracking-[0.2em] text-brand-blue font-semibold text-xs mb-6">
+            <h4 className="uppercase tracking-[0.2em] text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6">
               Destinations
             </h4>
             <div className="flex flex-col gap-1">
-              <span className="text-white/30 text-[10px] uppercase tracking-widest mb-1">International</span>
+              <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase tracking-widest mb-1">International</span>
               {['Philippines', 'Turquie', 'Zanzibar', 'Égypte', 'Vietnam'].map((name) => (
                 <Link
                   key={name}
                   href={`/destinations/${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}
-                  className="text-white/60 text-sm font-light hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
+                  className="text-slate-600 dark:text-white/60 text-sm font-light hover:text-brand-blue dark:hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
                 >
                   {name}
                 </Link>
               ))}
-              <span className="text-white/30 text-[10px] uppercase tracking-widest mt-3 mb-1">Maroc</span>
+              <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase tracking-widest mt-3 mb-1">Maroc</span>
               {['Merzouga', 'Dakhla', 'Imlil', 'Imsfrane'].map((name) => (
                 <Link
                   key={name}
                   href={`/destinations/${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}
-                  className="text-white/60 text-sm font-light hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
+                  className="text-slate-600 dark:text-white/60 text-sm font-light hover:text-brand-blue dark:hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
                 >
                   {name}
                 </Link>
@@ -113,7 +113,7 @@ export default function Footer() {
 
           {/* COL 3 — Support */}
           <div>
-            <h4 className="uppercase tracking-[0.2em] text-brand-blue font-semibold text-xs mb-6">
+            <h4 className="uppercase tracking-[0.2em] text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6">
               Support
             </h4>
             <div className="flex flex-col gap-1">
@@ -127,7 +127,7 @@ export default function Footer() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-white/60 text-sm font-light hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
+                  className="text-slate-600 dark:text-white/60 text-sm font-light hover:text-brand-blue dark:hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
                 >
                   {label}
                 </Link>
@@ -137,31 +137,31 @@ export default function Footer() {
 
           {/* COL 4 — Payments */}
           <div>
-            <h4 className="uppercase tracking-[0.2em] text-brand-blue font-semibold text-xs mb-6">
+            <h4 className="uppercase tracking-[0.2em] text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6">
               Paiement
             </h4>
-            <p className="text-white/50 text-sm font-light leading-relaxed mb-6">
+            <p className="text-slate-600 dark:text-white/50 text-sm font-light leading-relaxed mb-6">
               Réglez en toute sécurité par virement bancaire ou QR code.
             </p>
             <div className="flex items-center gap-4">
-              <div className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
+              <div className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl liquid-glass text-slate-600 dark:text-white/50">
                 <BankTransferIcon />
-                <span className="text-white/50 text-[10px] uppercase tracking-wider">Virement</span>
+                <span className="text-[10px] uppercase tracking-wider">Virement</span>
               </div>
-              <div className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
+              <div className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl liquid-glass text-slate-600 dark:text-white/50">
                 <QRCodeIcon />
-                <span className="text-white/50 text-[10px] uppercase tracking-wider">QR Code</span>
+                <span className="text-[10px] uppercase tracking-wider">QR Code</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* ── Bottom Bar ─────────────────────────────────────── */}
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-white/30 text-xs font-light">
+        <div className="border-t border-slate-200 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <span className="text-slate-500 dark:text-white/30 text-xs font-light">
             © 2025 Ça Crée Voyage. Tous droits réservés.
           </span>
-          <span className="text-white/20 text-xs font-light">
+          <span className="text-slate-400 dark:text-white/20 text-xs font-light">
             Conçu avec passion au Maroc 🇲🇦
           </span>
         </div>

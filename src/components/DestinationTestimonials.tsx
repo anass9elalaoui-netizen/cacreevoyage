@@ -52,13 +52,13 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
   }
 
   return (
-    <section className="py-24 bg-[#0B132B] relative">
+    <section className="py-24 bg-slate-50 dark:bg-[#0B132B] relative transition-colors duration-700">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
             Avis Clients
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl text-white mb-6">
+          <h2 className="font-serif text-4xl md:text-5xl text-slate-900 dark:text-white mb-6">
             Ils Ont Vécu <span className="text-brand-blue">l'Expérience</span>
           </h2>
         </div>
@@ -74,7 +74,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
               }}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeTab === dest.id
                   ? 'bg-brand-blue text-white shadow-[0_4px_20px_rgba(56,163,165,0.4)]'
-                  : 'bg-white/5 text-white/70 border border-white/10 hover:border-white/30 hover:text-white'
+                  : 'bg-white/80 dark:bg-white/5 text-slate-600 dark:text-white/70 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-white'
                 }`}
             >
               {dest.title}

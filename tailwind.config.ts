@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,8 +11,9 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          blue: '#38A3A5',
-          dark: '#0B132B',
+          blue: '#1C8CC9', /* Ocean Blue */
+          cyan: '#49C0EA',
+          dark: '#0B132B', /* Dark Navy */
           deeper: '#050814',
           gold: '#C9A84C',
           silver: '#A0ABC0',
@@ -28,7 +30,7 @@ const config: Config = {
       },
       fontFamily: {
         serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         glass: '0 8px 32px 0 rgba(31, 38, 135, 0.07)',

@@ -89,8 +89,8 @@ export default function SurMesureForm() {
           className="text-center max-w-md"
         >
           <span className="text-6xl mb-6 block">✨</span>
-          <h2 className="font-serif text-4xl text-white mb-4">Merci !</h2>
-          <p className="text-brand-silver text-lg mb-8">
+          <h2 className="font-serif text-4xl text-slate-900 dark:text-white mb-4">Merci !</h2>
+          <p className="text-slate-600 dark:text-brand-silver text-lg mb-8">
             Votre demande a été envoyée via WhatsApp. Nos experts vous répondront sous 24h.
           </p>
           <a href="/" className="text-brand-blue hover:underline text-sm">← Retour à l&apos;accueil</a>
@@ -111,13 +111,13 @@ export default function SurMesureForm() {
                   ? 'bg-brand-blue text-white shadow-[0_0_20px_rgba(56,163,165,0.4)]'
                   : step.id < currentStep
                     ? 'bg-brand-blue/30 text-brand-blue cursor-pointer'
-                    : 'bg-white/5 text-white/30 border border-white/10'
+                    : 'bg-white dark:bg-white/5 text-slate-400 dark:text-white/30 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none'
                 }`}
             >
               {step.id < currentStep ? '✓' : step.icon}
             </button>
             {step.id < totalSteps && (
-              <div className={`w-8 h-px ${step.id < currentStep ? 'bg-brand-blue/50' : 'bg-white/10'}`} />
+              <div className={`w-8 h-px ${step.id < currentStep ? 'bg-brand-blue/50' : 'bg-slate-200 dark:bg-white/10'}`} />
             )}
           </div>
         ))}
@@ -136,18 +136,18 @@ export default function SurMesureForm() {
           {/* STEP 1: Destination */}
           {currentStep === 1 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">
+              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
                 Où souhaitez-vous voyager ?
               </h2>
-              <p className="text-brand-silver text-center mb-8">Choisissez votre destination de rêve</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Choisissez votre destination de rêve</p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {destinations.map((dest) => (
                   <button
                     key={dest.value}
                     onClick={() => update('destination', dest.value)}
                     className={`p-5 rounded-2xl border text-left transition-all duration-200 ${formData.destination === dest.value
-                        ? 'bg-brand-blue/20 border-brand-blue/50 text-white'
-                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/8 hover:border-white/20'
+                        ? 'bg-brand-blue/20 border-brand-blue/50 text-brand-blue dark:text-white'
+                        : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 hover:bg-slate-50 dark:hover:bg-white/8 hover:border-slate-300 dark:hover:border-white/20 shadow-sm dark:shadow-none'
                       }`}
                   >
                     <span className="text-2xl block mb-2">{dest.emoji}</span>
@@ -161,7 +161,7 @@ export default function SurMesureForm() {
                   placeholder="Précisez votre destination..."
                   value={formData.otherDestination}
                   onChange={(e) => update('otherDestination', e.target.value)}
-                  className="w-full mt-4 px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm"
+                  className="w-full mt-4 px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm shadow-sm dark:shadow-none"
                 />
               )}
             </div>
@@ -170,33 +170,33 @@ export default function SurMesureForm() {
           {/* STEP 2: Dates & Style */}
           {currentStep === 2 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">
+              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
                 Quand et comment ?
               </h2>
-              <p className="text-brand-silver text-center mb-8">Vos préférences de dates et de style</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Vos préférences de dates et de style</p>
               <div className="space-y-6">
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Dates souhaitées</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Dates souhaitées</label>
                   <input
                     type="text"
                     placeholder="Ex: 15 Juin — 25 Juin 2026"
                     value={formData.preferredDates}
                     onChange={(e) => update('preferredDates', e.target.value)}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm shadow-sm dark:shadow-none"
                   />
                   <label className="flex items-center gap-2 mt-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.flexibleDates}
                       onChange={(e) => update('flexibleDates', e.target.checked)}
-                      className="rounded border-white/20 bg-white/5"
+                      className="rounded border-slate-300 dark:border-white/20 bg-white dark:bg-white/5"
                     />
-                    <span className="text-brand-silver text-xs">Mes dates sont flexibles</span>
+                    <span className="text-slate-600 dark:text-brand-silver text-xs">Mes dates sont flexibles</span>
                   </label>
                 </div>
 
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Durée souhaitée (jours)</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Durée souhaitée (jours)</label>
                   <input
                     type="number"
                     min="1"
@@ -204,20 +204,20 @@ export default function SurMesureForm() {
                     placeholder="Ex: 10"
                     value={formData.durationDays}
                     onChange={(e) => update('durationDays', e.target.value)}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm shadow-sm dark:shadow-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-brand-silver text-sm mb-3">Style de voyage</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-3">Style de voyage</label>
                   <div className="grid grid-cols-2 gap-3">
                     {travelStyles.map((style) => (
                       <button
                         key={style.value}
                         onClick={() => update('travelStyle', style.value)}
                         className={`p-4 rounded-2xl border text-left transition-all duration-200 ${formData.travelStyle === style.value
-                            ? 'bg-brand-blue/20 border-brand-blue/50 text-white'
-                            : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/8'
+                            ? 'bg-brand-blue/20 border-brand-blue/50 text-brand-blue dark:text-white'
+                            : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 hover:bg-slate-50 dark:hover:bg-white/8 shadow-sm dark:shadow-none'
                           }`}
                       >
                         <span className="text-xl">{style.emoji}</span>
@@ -233,36 +233,36 @@ export default function SurMesureForm() {
           {/* STEP 3: Travelers */}
           {currentStep === 3 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">
+              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
                 Qui voyage ?
               </h2>
-              <p className="text-brand-silver text-center mb-8">Nombre de voyageurs</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Nombre de voyageurs</p>
               <div className="space-y-6 max-w-sm mx-auto">
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Adultes</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Adultes</label>
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => update('travelers', String(Math.max(1, parseInt(formData.travelers) - 1)))}
-                      className="w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white text-xl hover:bg-white/10 transition-colors"
+                      className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
                     >−</button>
-                    <span className="text-3xl font-serif text-white w-12 text-center">{formData.travelers}</span>
+                    <span className="text-3xl font-serif text-slate-900 dark:text-white w-12 text-center">{formData.travelers}</span>
                     <button
                       onClick={() => update('travelers', String(parseInt(formData.travelers) + 1))}
-                      className="w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white text-xl hover:bg-white/10 transition-colors"
+                      className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
                     >+</button>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Enfants (0-12 ans)</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Enfants (0-12 ans)</label>
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => update('children', String(Math.max(0, parseInt(formData.children) - 1)))}
-                      className="w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white text-xl hover:bg-white/10 transition-colors"
+                      className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
                     >−</button>
-                    <span className="text-3xl font-serif text-white w-12 text-center">{formData.children}</span>
+                    <span className="text-3xl font-serif text-slate-900 dark:text-white w-12 text-center">{formData.children}</span>
                     <button
                       onClick={() => update('children', String(parseInt(formData.children) + 1))}
-                      className="w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white text-xl hover:bg-white/10 transition-colors"
+                      className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
                     >+</button>
                   </div>
                 </div>
@@ -273,50 +273,50 @@ export default function SurMesureForm() {
           {/* STEP 4: Contact */}
           {currentStep === 4 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">
+              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
                 Dernière étape
               </h2>
-              <p className="text-brand-silver text-center mb-8">Vos coordonnées pour recevoir votre devis</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Vos coordonnées pour recevoir votre devis</p>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Prénom & Nom *</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Prénom & Nom *</label>
                   <input
                     type="text"
                     required
                     value={formData.fullName}
                     onChange={(e) => update('fullName', e.target.value)}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm shadow-sm dark:shadow-none"
                     placeholder="Votre nom complet"
                   />
                 </div>
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Email *</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Email *</label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => update('email', e.target.value)}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm shadow-sm dark:shadow-none"
                     placeholder="votre@email.com"
                   />
                 </div>
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Téléphone / WhatsApp</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Téléphone / WhatsApp</label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => update('phone', e.target.value)}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm shadow-sm dark:shadow-none"
                     placeholder="+33 6 XX XX XX XX"
                   />
                 </div>
                 <div>
-                  <label className="block text-brand-silver text-sm mb-2">Message (optionnel)</label>
+                  <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Message (optionnel)</label>
                   <textarea
                     value={formData.message}
                     onChange={(e) => update('message', e.target.value)}
                     rows={4}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm resize-none"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 text-sm resize-none shadow-sm dark:shadow-none"
                     placeholder="Des envies particulières, des questions..."
                   />
                 </div>
@@ -331,7 +331,7 @@ export default function SurMesureForm() {
         {currentStep > 1 ? (
           <button
             onClick={prev}
-            className="px-6 py-3 rounded-full text-sm font-medium text-brand-silver border border-white/10 hover:border-white/20 hover:text-white transition-all"
+            className="px-6 py-3 rounded-full text-sm font-medium text-slate-600 dark:text-brand-silver border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:text-slate-900 dark:hover:text-white transition-all bg-white dark:bg-transparent shadow-sm dark:shadow-none"
           >
             ← Retour
           </button>

@@ -29,7 +29,7 @@ export default function FAQAccordion() {
   if (faqs.length === 0) return null
 
   return (
-    <section className="relative w-full py-24 bg-brand-dark overflow-hidden">
+    <section className="relative w-full py-24 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-hidden">
       <div className="absolute top-1/2 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none -translate-y-1/2" />
 
       <div className="max-w-3xl mx-auto px-6 relative z-10">
@@ -48,7 +48,7 @@ export default function FAQAccordion() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-serif text-4xl md:text-5xl text-white"
+            className="font-serif text-4xl md:text-5xl text-slate-900 dark:text-white"
           >
             Questions Fréquentes
           </motion.h2>
@@ -63,16 +63,15 @@ export default function FAQAccordion() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="rounded-2xl border border-white/8 overflow-hidden transition-colors"
-              style={{
-                background: openIndex === index ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
-              }}
+              className={`rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden transition-colors ${
+                openIndex === index ? 'bg-white dark:bg-white/[0.06]' : 'bg-slate-100/50 dark:bg-white/[0.03]'
+              }`}
             >
               <button
                 onClick={() => toggle(index)}
                 className="w-full flex items-center justify-between px-6 py-5 text-left group"
               >
-                <span className="font-sans text-white text-sm md:text-base font-medium pr-4">
+                <span className="font-sans text-slate-900 dark:text-white text-sm md:text-base font-medium pr-4">
                   {faq.question}
                 </span>
                 <motion.svg
@@ -96,7 +95,7 @@ export default function FAQAccordion() {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-5 text-brand-silver text-sm leading-relaxed border-t border-white/5 pt-4">
+                    <div className="px-6 pb-5 text-slate-600 dark:text-brand-silver text-sm leading-relaxed border-t border-slate-200 dark:border-white/5 pt-4">
                       {faq.answer}
                     </div>
                   </motion.div>
