@@ -177,7 +177,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           SUR MESURE PHILOSOPHY BLOCK
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full py-32 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-clip">
+      <section className="relative w-full py-16 lg:py-24 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-clip">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-gold/5 rounded-full blur-[180px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -233,7 +233,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           FINAL CTA SECTION
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full py-32 bg-slate-100 dark:bg-brand-deeper transition-colors duration-700 flex justify-center px-4">
+      <section className="relative w-full py-16 lg:py-24 bg-slate-100 dark:bg-brand-deeper transition-colors duration-700 flex justify-center px-4">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="relative z-20 flex flex-col items-center text-center p-12 rounded-[2.5rem] bg-white dark:bg-white/5 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-none ring-1 ring-black/5 dark:ring-white/10 max-w-4xl w-full">
           <h2 className="text-5xl md:text-7xl font-serif text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-md dark:drop-shadow-none">
