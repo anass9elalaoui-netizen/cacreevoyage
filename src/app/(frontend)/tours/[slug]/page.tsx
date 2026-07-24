@@ -54,7 +54,7 @@ export default async function TourPage({ params, searchParams }: Args) {
   })
 
   const tour = docs[0] as any
-  if (!tour) return <div className="text-white flex justify-center py-20">{t.notFound}</div>
+  if (!tour) return <div className="text-slate-900 dark:text-white flex justify-center py-20">{t.notFound}</div>
 
   const heroVideoUrl = typeof tour.heroVideo === 'object' && tour.heroVideo?.url ? tour.heroVideo.url : null
   const thumbnailUrl = typeof tour.thumbnail === 'object' && tour.thumbnail?.url ? tour.thumbnail.url : null
@@ -84,7 +84,7 @@ export default async function TourPage({ params, searchParams }: Args) {
     : tour.duration || ''
 
   return (
-    <main className="relative w-full min-h-screen bg-[#0B132B] overflow-x-hidden">
+    <main className="relative w-full min-h-screen bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-hidden">
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION
       ─────────────────────────────────────────────────────────── */}
@@ -107,13 +107,13 @@ export default async function TourPage({ params, searchParams }: Args) {
           />
         ) : (
           <div className="absolute inset-0 w-full h-full z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0B132B] via-[#1a2744] to-[#0B132B]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-200 dark:from-[#0B132B] via-slate-300 dark:via-[#1a2744] to-slate-200 dark:to-[#0B132B]" />
             <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/8 rounded-full blur-[180px]" />
           </div>
         )}
 
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/40 dark:from-[#0B132B] dark:via-[#0B132B]/40 to-transparent z-10" />
 
         {/* Glass Card Content */}
         <div className="relative z-20 glass-card p-10 md:p-14 w-[90%] max-w-4xl text-center flex flex-col items-center transform translate-y-16">
@@ -122,13 +122,13 @@ export default async function TourPage({ params, searchParams }: Args) {
           </span>
 
           <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-6 drop-shadow-md leading-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-serif text-slate-900 dark:text-white mb-6 drop-shadow-sm dark:drop-shadow-md leading-tight"
             style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
           >
             {tour.title}
           </h1>
 
-          <p className="text-white/70 text-lg md:text-xl max-w-2xl font-light mb-8">
+          <p className="text-slate-600 dark:text-white/70 text-lg md:text-xl max-w-2xl font-light mb-8">
             {tour.excerpt}
           </p>
 
@@ -138,14 +138,14 @@ export default async function TourPage({ params, searchParams }: Args) {
               <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-white font-serif text-sm md:text-base">
+              <span className="text-slate-900 dark:text-white font-serif text-sm md:text-base">
                 {formatDate(tour.departureDate)} — {formatDate(tour.returnDate)}
               </span>
             </div>
           )}
 
           <div className="w-px h-16 bg-gradient-to-b from-brand-blue to-transparent animate-pulse" />
-          <span className="text-white/50 text-xs tracking-widest uppercase mt-4">Scroll to discover</span>
+          <span className="text-slate-500 dark:text-white/50 text-xs tracking-widest uppercase mt-4">Scroll to discover</span>
         </div>
       </section>
 
@@ -161,40 +161,40 @@ export default async function TourPage({ params, searchParams }: Args) {
               <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
                 {t.overview}
               </span>
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">
+              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-6">
                 {t.about}
               </h2>
 
               {/* Meta badges */}
               <div className="flex flex-wrap gap-3 mb-8">
                 {durationText && (
-                  <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/80">
+                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     🕐 {durationText}
                   </span>
                 )}
                 {tour.logistics?.maxGroupSize && (
-                  <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/80">
+                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     👥 Max {tour.logistics.maxGroupSize} pers.
                   </span>
                 )}
                 {tour.logistics?.difficulty && (
-                  <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/80">
+                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     ⭐ {tour.logistics.difficulty}
                   </span>
                 )}
                 {tour.logistics?.departureCity && (
-                  <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/80">
+                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     📍 {t.departure} {tour.logistics.departureCity}
                   </span>
                 )}
                 {tour.seasons && tour.seasons.length > 0 && (
-                  <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/80">
+                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     🌤️ {tour.seasons.join(', ')}
                   </span>
                 )}
               </div>
 
-              <p className="text-brand-silver text-base leading-relaxed">
+              <p className="text-slate-600 dark:text-brand-silver text-base leading-relaxed">
                 {tour.shortDescription || tour.excerpt}
               </p>
             </section>
@@ -202,17 +202,17 @@ export default async function TourPage({ params, searchParams }: Args) {
             {/* Includes / Excludes */}
             {(tour.pricing?.priceIncludes?.length > 0 || tour.pricing?.priceExcludes?.length > 0) && (
               <section>
-                <h2 className="font-serif text-3xl text-white mb-8">{t.includes}</h2>
+                <h2 className="font-serif text-3xl text-slate-900 dark:text-white mb-8">{t.includes}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {tour.pricing?.priceIncludes?.length > 0 && (
-                    <div className="rounded-2xl p-6 bg-white/5 border border-white/8">
-                      <h3 className="text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <div className="rounded-2xl p-6 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
+                      <h3 className="text-slate-900 dark:text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs">✓</span>
                         {t.included}
                       </h3>
                       <ul className="space-y-2">
                         {tour.pricing.priceIncludes.map((item: any, i: number) => (
-                          <li key={i} className="text-brand-silver text-sm flex items-start gap-2">
+                          <li key={i} className="text-slate-600 dark:text-brand-silver text-sm flex items-start gap-2">
                             <span className="text-green-400 mt-0.5">•</span>
                             {item.item}
                           </li>
@@ -221,14 +221,14 @@ export default async function TourPage({ params, searchParams }: Args) {
                     </div>
                   )}
                   {tour.pricing?.priceExcludes?.length > 0 && (
-                    <div className="rounded-2xl p-6 bg-white/5 border border-white/8">
-                      <h3 className="text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <div className="rounded-2xl p-6 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
+                      <h3 className="text-slate-900 dark:text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-xs">✕</span>
                         {t.notIncluded}
                       </h3>
                       <ul className="space-y-2">
                         {tour.pricing.priceExcludes.map((item: any, i: number) => (
-                          <li key={i} className="text-brand-silver text-sm flex items-start gap-2">
+                          <li key={i} className="text-slate-600 dark:text-brand-silver text-sm flex items-start gap-2">
                             <span className="text-red-400 mt-0.5">•</span>
                             {item.item}
                           </li>
@@ -243,26 +243,26 @@ export default async function TourPage({ params, searchParams }: Args) {
             {/* Departure dates table */}
             {tour.departureDates && tour.departureDates.length > 0 && (
               <section>
-                <h2 className="font-serif text-3xl text-white mb-8">{t.departureDates}</h2>
-                <div className="rounded-2xl border border-white/8 overflow-hidden">
+                <h2 className="font-serif text-3xl text-slate-900 dark:text-white mb-8">{t.departureDates}</h2>
+                <div className="rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm dark:shadow-none">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-white/5">
-                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">{t.date}</th>
-                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">{t.spots}</th>
-                        <th className="text-left px-6 py-3 text-brand-silver uppercase tracking-wider text-xs font-medium">{t.status}</th>
+                      <tr className="bg-slate-100 dark:bg-white/5">
+                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-medium">{t.date}</th>
+                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-medium">{t.spots}</th>
+                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-medium">{t.status}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {tour.departureDates.map((dep: any, i: number) => (
-                        <tr key={i} className="border-t border-white/5">
-                          <td className="px-6 py-4 text-white">{formatDate(dep.date)}</td>
-                          <td className="px-6 py-4 text-brand-silver">{dep.spotsLeft ?? '—'}</td>
+                        <tr key={i} className="border-t border-slate-200 dark:border-white/5 bg-white dark:bg-transparent">
+                          <td className="px-6 py-4 text-slate-900 dark:text-white">{formatDate(dep.date)}</td>
+                          <td className="px-6 py-4 text-slate-600 dark:text-brand-silver">{dep.spotsLeft ?? '—'}</td>
                           <td className="px-6 py-4">
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${dep.status === 'Available' ? 'bg-green-500/20 text-green-400' :
                                 dep.status === 'Limited' ? 'bg-yellow-500/20 text-yellow-400' :
                                   dep.status === 'Full' ? 'bg-red-500/20 text-red-400' :
-                                    'bg-white/10 text-white/60'
+                                    'bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-white/60'
                               }`}>
                               {dep.status}
                             </span>
@@ -302,12 +302,12 @@ export default async function TourPage({ params, searchParams }: Args) {
           <span className="uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md">
             {t.itinerary}
           </span>
-          <h2 className="text-4xl md:text-6xl font-serif text-white mb-6"
+          <h2 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white mb-6"
             style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
           >
             {t.dayByDay}
           </h2>
-          <p className="text-white/50 font-light text-xl max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto">
             {t.swipe}
           </p>
         </div>
@@ -319,7 +319,7 @@ export default async function TourPage({ params, searchParams }: Args) {
             <ItineraryTimeline blocks={tour.itineraryBlocks} />
           </div>
         ) : (
-          <div className="text-center text-white/30 italic py-12 relative z-10">
+          <div className="text-center text-slate-500 dark:text-white/30 italic py-12 relative z-10">
             {t.detailsSoon}
           </div>
         )}
@@ -336,10 +336,10 @@ export default async function TourPage({ params, searchParams }: Args) {
           <span className="uppercase tracking-widest text-brand-blue font-semibold mb-4 text-sm block">
             {t.takeAction}
           </span>
-          <h2 className="text-4xl md:text-5xl font-serif text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-6">
             {t.interested}
           </h2>
-          <p className="text-white/50 text-lg font-light mb-10 max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-white/50 text-lg font-light mb-10 max-w-2xl mx-auto">
             {t.contactExperts}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -353,7 +353,7 @@ export default async function TourPage({ params, searchParams }: Args) {
             </a>
             <Link
               href="/sur-mesure"
-              className="inline-block bg-white/10 border border-white/20 hover:bg-white/20 text-white px-10 py-5 rounded-full font-medium text-lg transition-all"
+              className="inline-block bg-white/80 dark:bg-white/10 border border-slate-200 dark:border-white/20 hover:bg-white/90 dark:hover:bg-white/20 text-slate-900 dark:text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-md dark:shadow-none"
             >
               {t.customize}
             </Link>

@@ -68,7 +68,7 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
   const isVideo = typeof backgroundMedia === 'object' && backgroundMedia?.mimeType?.startsWith('video')
 
   return (
-    <main className="relative w-full min-h-screen bg-[#0B132B] overflow-x-clip">
+    <main className="relative w-full min-h-screen bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-clip">
       {/* ── SUBPAGE HERO ── */}
       <SubpageHero 
         title={heroData.title || t.title}
@@ -89,13 +89,13 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
         <div className="relative z-10 flex justify-center gap-4">
           <Link
             href="/destinations/international"
-            className="px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+            className="px-6 py-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-xl text-slate-700 dark:text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300"
           >
             International
           </Link>
           <Link
             href="/destinations/national"
-            className="px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+            className="px-6 py-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-xl text-slate-700 dark:text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300"
           >
             Maroc
           </Link>
@@ -118,7 +118,7 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
                 <Link
                   key={dest.id}
                   href={`/destinations/${dest.slug}`}
-                  className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-sm shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_60px_rgba(56,163,165,0.15)] hover:border-white/20 transition-all duration-500"
+                  className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-sm shadow-xl dark:shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:shadow-2xl dark:hover:shadow-[0_16px_60px_rgba(56,163,165,0.15)] hover:border-slate-300 dark:hover:border-white/20 transition-all duration-500"
                 >
                   <div className="relative aspect-[4/5] w-full overflow-hidden">
                     {headerUrl && isVideo ? (
@@ -142,12 +142,12 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-brand-blue/8 rounded-full blur-[80px]" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B]/90 via-[#0B132B]/30 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-50/90 via-slate-50/30 dark:from-[#0B132B]/90 dark:via-[#0B132B]/30 to-transparent z-10" />
 
                     {/* Theme Badge */}
                     {dest.theme && (
                       <div className="absolute top-4 left-4 z-20">
-                        <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white/80 text-[10px] uppercase tracking-widest font-medium">
+                        <span className="px-3 py-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 text-slate-700 dark:text-white/80 text-[10px] uppercase tracking-widest font-medium shadow-sm dark:shadow-none">
                           {locale === 'en' ? (themeLabelEn[dest.theme] || dest.theme) : (themeLabel[dest.theme] || dest.theme)}
                         </span>
                       </div>
@@ -165,12 +165,12 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
                     </div>
 
                     <div className="absolute bottom-6 left-6 right-6 z-20">
-                      <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-4 inline-block">
-                        <h3 className="text-2xl md:text-3xl font-serif text-white drop-shadow-md">
+                      <div className="bg-white/70 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/20 rounded-2xl px-5 py-4 inline-block shadow-lg dark:shadow-none">
+                        <h3 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md">
                           {dest.title}
                         </h3>
                         {dest.description && (
-                          <p className="text-white/50 text-xs font-light mt-1 line-clamp-2">{dest.description}</p>
+                          <p className="text-slate-600 dark:text-white/50 text-xs font-light mt-1 line-clamp-2">{dest.description}</p>
                         )}
                       </div>
                     </div>
@@ -181,8 +181,8 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center relative z-10">
-            <h2 className="text-3xl font-serif text-white mb-4">{t.emptyTitle}</h2>
-            <p className="text-white/40">{t.emptySubtitle}</p>
+            <h2 className="text-3xl font-serif text-slate-900 dark:text-white mb-4">{t.emptyTitle}</h2>
+            <p className="text-slate-600 dark:text-white/40">{t.emptySubtitle}</p>
           </div>
         )}
       </section>

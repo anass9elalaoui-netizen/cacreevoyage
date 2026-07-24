@@ -34,7 +34,7 @@ function Stars({ rating }: { rating: number }) {
               ? 'text-yellow-400'
               : i === fullStars && hasHalf
                 ? 'text-yellow-400/50'
-                : 'text-white/10'
+                : 'text-slate-200 dark:text-white/10'
           }`}
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -93,7 +93,7 @@ export default function ReviewBadges({ google, trustpilot }: ReviewBadgesProps) 
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           whileHover={{ scale: 1.02, rotate: 0 }}
-          className="group relative w-full lg:w-72 p-6 rounded-[1.5rem] bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-500 cursor-pointer block"
+          className="group relative w-full lg:w-72 p-6 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-none backdrop-blur-md hover:bg-slate-50 dark:hover:bg-white/[0.06] transition-all duration-500 cursor-pointer block"
         >
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
@@ -101,26 +101,26 @@ export default function ReviewBadges({ google, trustpilot }: ReviewBadgesProps) 
               <GoogleIcon />
             </div>
             <div>
-              <p className="text-white text-sm font-sans font-medium leading-tight">Google Reviews</p>
-              <p className="text-white/30 text-[10px] font-sans">{google?.reviewCount || '120+'} avis</p>
+              <p className="text-slate-900 dark:text-white text-sm font-sans font-medium leading-tight">Google Reviews</p>
+              <p className="text-slate-500 dark:text-white/30 text-[10px] font-sans">{google?.reviewCount || '120+'} avis</p>
             </div>
           </div>
 
           {/* Rating */}
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="text-white text-2xl font-sans font-bold tracking-tight">{google?.rating || '4.9'}</span>
+            <span className="text-slate-900 dark:text-white text-2xl font-sans font-bold tracking-tight">{google?.rating || '4.9'}</span>
             <Stars rating={googleRating} />
           </div>
 
           {/* Quote */}
           {google?.quote && (
-            <p className="text-white/40 text-xs font-sans italic leading-relaxed line-clamp-2">
+            <p className="text-slate-600 dark:text-white/60 text-xs font-sans italic leading-relaxed line-clamp-2">
               &ldquo;{google.quote}&rdquo;
             </p>
           )}
 
           {/* Hover CTA */}
-          <div className="mt-4 flex items-center gap-1.5 text-brand-blue/60 group-hover:text-brand-blue text-[10px] font-sans font-medium uppercase tracking-wider transition-colors">
+          <div className="mt-4 flex items-center gap-1.5 text-brand-blue dark:text-brand-blue/80 hover:text-brand-blue/80 text-[10px] font-sans font-medium uppercase tracking-wider transition-colors">
             <span>Voir tous les avis</span>
             <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -140,7 +140,7 @@ export default function ReviewBadges({ google, trustpilot }: ReviewBadgesProps) 
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           whileHover={{ scale: 1.02, rotate: 0 }}
-          className="group relative w-full lg:w-72 p-6 rounded-[1.5rem] bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-500 cursor-pointer block lg:translate-x-8"
+          className="group relative w-full lg:w-72 p-6 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-none backdrop-blur-md hover:bg-slate-50 dark:hover:bg-white/[0.06] transition-all duration-500 cursor-pointer block lg:translate-x-8"
         >
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
@@ -148,14 +148,14 @@ export default function ReviewBadges({ google, trustpilot }: ReviewBadgesProps) 
               <TrustpilotIcon />
             </div>
             <div>
-              <p className="text-white text-sm font-sans font-medium leading-tight">Trustpilot</p>
-              <p className="text-white/30 text-[10px] font-sans">{trustpilot?.reviewCount || '85+'} avis</p>
+              <p className="text-slate-900 dark:text-white text-sm font-sans font-medium leading-tight">Trustpilot</p>
+              <p className="text-slate-500 dark:text-white/30 text-[10px] font-sans">{trustpilot?.reviewCount || '85+'} avis</p>
             </div>
           </div>
 
           {/* Rating */}
           <div className="flex items-center gap-2.5 mb-4">
-            <span className="text-white text-2xl font-sans font-bold tracking-tight">{trustpilot?.rating || '4.8'}</span>
+            <span className="text-slate-900 dark:text-white text-2xl font-sans font-bold tracking-tight">{trustpilot?.rating || '4.8'}</span>
             <Stars rating={trustpilotRating} />
           </div>
 
@@ -175,13 +175,13 @@ export default function ReviewBadges({ google, trustpilot }: ReviewBadgesProps) 
 
           {/* Quote */}
           {trustpilot?.quote && (
-            <p className="text-white/40 text-xs font-sans italic leading-relaxed line-clamp-2">
+            <p className="text-slate-600 dark:text-white/60 text-xs font-sans italic leading-relaxed line-clamp-2">
               &ldquo;{trustpilot.quote}&rdquo;
             </p>
           )}
 
           {/* Hover CTA */}
-          <div className="mt-4 flex items-center gap-1.5 text-[#00B67A]/60 group-hover:text-[#00B67A] text-[10px] font-sans font-medium uppercase tracking-wider transition-colors">
+          <div className="mt-4 flex items-center gap-1.5 text-[#00B67A] dark:text-[#00B67A]/80 hover:text-[#00B67A]/80 text-[10px] font-sans font-medium uppercase tracking-wider transition-colors">
             <span>Voir sur Trustpilot</span>
             <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

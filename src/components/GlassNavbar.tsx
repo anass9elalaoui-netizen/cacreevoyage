@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getDictionary } from '@/i18n/dictionaries'
+import MagneticButton from '@/components/MagneticButton'
 
 /* ── Animation Configs ──────────────────────────────────────── */
 const EASE_LUXURY = [0.16, 1, 0.3, 1] as const
@@ -52,6 +54,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
   const [lang, setLang] = useState('FR')
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
 
   /* ── Hydration-safe mount ─────────────────────────────────── */
   useEffect(() => {
@@ -60,6 +63,30 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
     const currentLocale = params.get('locale') || 'fr'
     setLang(currentLocale.toUpperCase())
   }, [])
+
+  /* ── Theme logic ────────────────────────────────────────── */
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
 
   /* ── Scroll tracking ──────────────────────────────────────── */
   useEffect(() => {
@@ -118,25 +145,18 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: EASE_LUXURY }}
-        className={`fixed top-4 inset-x-0 mx-auto w-[92%] max-w-6xl h-14 rounded-full z-50 flex items-center px-6 justify-between transition-all duration-500 bg-[#0B132B]/90 backdrop-blur-xl border border-white/[0.06] ${isScrolled
-            ? 'shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
-            : 'shadow-[0_8px_32px_rgba(0,0,0,0.3)]'
-          }`}
+        className="fixed top-4 inset-x-0 mx-auto w-[92%] max-w-6xl h-16 rounded-full z-[100] flex items-center px-6 justify-between transition-all duration-500 liquid-glass bg-white/80 dark:bg-[#0B132B]/90 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group relative z-[60]">
-          {logoImage ? (
-            <img
-              src={logoImage}
-              alt={logoText}
-              style={{ height: `${logoHeight}px`, width: 'auto' }}
-              className="object-contain"
-            />
-          ) : (
-            <span className="font-serif text-xl tracking-wide text-white group-hover:text-brand-blue transition-colors drop-shadow-md">
-              {logoText}
-            </span>
-          )}
+          <Image
+            src="/logo cacreevoyage text right.png"
+            alt="Ça Crée Voyage"
+            width={180}
+            height={45}
+            className="object-contain"
+            priority
+          />
         </Link>
 
         {/* ── Desktop Links (lg+) ────────────────────────────── */}
@@ -148,7 +168,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
             onMouseLeave={() => setIsDesktopDropdownOpen(false)}
           >
             <button
-              className={`flex items-center gap-1.5 transition-colors hover:text-brand-blue drop-shadow-md ${isActive('/destinations') ? 'text-brand-blue' : 'text-white'}`}
+              className={`flex items-center gap-1.5 text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/destinations') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
             >
               {t.destinations}
               <svg
@@ -166,26 +186,26 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.96 }}
                   transition={{ duration: 0.25, ease: EASE_LUXURY }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-[#0B132B]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] overflow-hidden"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] overflow-hidden"
                 >
                   <Link
                     href="/destinations/international"
-                    className="flex items-center gap-3 px-5 py-3.5 text-white/80 hover:bg-white/5 hover:text-white transition-all text-sm group"
+                    className="flex items-center gap-3 px-5 py-3.5 text-slate-600 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-brand-blue dark:hover:text-white transition-all text-sm group"
                   >
-                    <span className="text-brand-blue/60 text-xs">✈</span>
+                    <span className="text-brand-blue text-xs">✈</span>
                     <span>{t.international}</span>
-                    <svg className="w-3 h-3 ml-auto opacity-0 -translate-x-1 group-hover:opacity-50 group-hover:translate-x-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
-                  <div className="mx-4 h-px bg-white/5" />
+                  <div className="mx-4 h-px bg-slate-100 dark:bg-white/5" />
                   <Link
                     href="/destinations/national"
-                    className="flex items-center gap-3 px-5 py-3.5 text-white/80 hover:bg-white/5 hover:text-white transition-all text-sm group"
+                    className="flex items-center gap-3 px-5 py-3.5 text-slate-600 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-brand-blue dark:hover:text-white transition-all text-sm group"
                   >
-                    <span className="text-brand-gold/60 text-xs">◆</span>
+                    <span className="text-brand-blue text-xs">◆</span>
                     <span>{t.national}</span>
-                    <svg className="w-3 h-3 ml-auto opacity-0 -translate-x-1 group-hover:opacity-50 group-hover:translate-x-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
@@ -196,25 +216,27 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
 
           <Link
             href="/tours"
-            className={`transition-colors hover:text-brand-blue drop-shadow-md ${isActive('/tours') ? 'text-brand-blue' : 'text-white'}`}
+            className={`text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/tours') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
           >
             {t.tours}
           </Link>
-          <Link
-            href="/sur-mesure"
-            className="bg-brand-blue hover:bg-brand-blue/80 text-white px-5 py-2 rounded-full text-xs uppercase tracking-wider font-medium transition-all duration-300 shadow-[0_0_20px_rgba(56,163,165,0.2)] hover:shadow-[0_0_30px_rgba(56,163,165,0.3)]"
-          >
-            {t.custom}
-          </Link>
+          <MagneticButton>
+            <Link
+              href="/sur-mesure"
+              className="bg-brand-blue text-white px-5 py-2 rounded-full hover:scale-105 transition-transform shadow-[0_4px_15px_rgba(28,140,201,0.3)] text-sm font-medium"
+            >
+              {t.custom}
+            </Link>
+          </MagneticButton>
           <Link
             href="/blog"
-            className={`transition-colors hover:text-brand-blue drop-shadow-md ${isActive('/blog') ? 'text-brand-blue' : 'text-white'}`}
+            className={`text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/blog') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
           >
             {t.blog}
           </Link>
           <Link
             href="/about"
-            className={`transition-colors hover:text-brand-blue drop-shadow-md ${isActive('/about') ? 'text-brand-blue' : 'text-white'}`}
+            className={`text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/about') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
           >
             {t.about}
           </Link>
@@ -235,20 +257,37 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
             WhatsApp
           </a>
           {isMounted && (
-            <div className="flex items-center gap-1 text-xs font-medium text-white/60">
+            <div className="flex items-center gap-4">
               <button
-                onClick={() => switchLanguage('fr')}
-                className={`transition-colors ${lang === 'FR' ? 'text-white font-bold' : 'hover:text-white'}`}
+                onClick={toggleTheme}
+                className="w-9 h-9 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center transition-all duration-300 liquid-glass hover:bg-white/10 text-slate-800 dark:text-white group"
+                aria-label="Toggle Theme"
               >
-                FR
+                {theme === 'dark' ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
               </button>
-              <span className="opacity-40">|</span>
-              <button
-                onClick={() => switchLanguage('en')}
-                className={`transition-colors ${lang === 'EN' ? 'text-white font-bold' : 'hover:text-white'}`}
-              >
-                EN
-              </button>
+              <div className="flex items-center gap-1 text-xs font-medium text-white/60">
+                <button
+                  onClick={() => switchLanguage('fr')}
+                  className={`transition-colors ${lang === 'FR' ? 'text-slate-800 dark:text-white font-bold' : 'text-slate-500 dark:text-white/60 hover:text-slate-800 dark:hover:text-white'}`}
+                >
+                  FR
+                </button>
+                <span className="opacity-40 text-slate-500 dark:text-white/60">|</span>
+                <button
+                  onClick={() => switchLanguage('en')}
+                  className={`transition-colors ${lang === 'EN' ? 'text-slate-800 dark:text-white font-bold' : 'text-slate-500 dark:text-white/60 hover:text-slate-800 dark:hover:text-white'}`}
+                >
+                  EN
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -256,7 +295,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
         {/* ── Mobile Menu Toggle ─────────────────────────────── */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="lg:hidden text-white hover:text-brand-blue transition-colors flex items-center gap-3 relative z-[60]"
+          className="lg:hidden text-slate-800 dark:text-white hover:text-brand-blue transition-colors flex items-center gap-3 relative z-[60]"
           aria-label="Menu"
         >
           <span className="relative flex h-2 w-2">
@@ -302,7 +341,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-[#040610]/[0.97] backdrop-blur-3xl"
+              className="absolute inset-0 bg-white/80 dark:bg-[#0B132B]/90 backdrop-blur-2xl border border-slate-200/50 dark:border-white/10"
             />
 
             {/* Subtle radial gradient orb */}
@@ -316,7 +355,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ delay: 0.2, duration: 0.4, ease: EASE_LUXURY }}
               onClick={closeMenu}
-              className="absolute top-6 right-6 z-[101] w-12 h-12 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/60 hover:text-white hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 group"
+              className="absolute top-6 right-6 z-[101] w-12 h-12 rounded-full bg-slate-200/50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.08] flex items-center justify-center text-slate-800 dark:text-white/60 hover:text-brand-blue dark:hover:text-white transition-all duration-300 group"
               aria-label="Fermer le menu"
             >
               <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -373,20 +412,20 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                           }}
                         >
                           {/* Number */}
-                          <span className="font-sans text-white/20 text-[11px] tracking-[0.15em] w-10 shrink-0 tabular-nums">
+                          <span className="font-sans text-slate-400 dark:text-white/20 text-[11px] tracking-[0.15em] w-10 shrink-0 tabular-nums">
                             {item.num}
                           </span>
 
                           {/* Label — link or button depending on subLinks */}
                           {hasSubLinks ? (
-                            <span className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-white tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue flex-1">
+                            <span className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-white tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue flex-1">
                               {item.label}
                             </span>
                           ) : (
                             <Link
                               href={item.href}
                               onClick={closeMenu}
-                              className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-white tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue flex-1"
+                              className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-white tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue flex-1"
                             >
                               {item.label}
                             </Link>
@@ -450,7 +489,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                                     ⊞
                                   </span>
                                   <div className="flex-1">
-                                    <span className="text-white/90 text-sm font-sans font-medium group-hover/sub:text-brand-blue transition-colors">
+                                    <span className="text-slate-800 dark:text-white/90 text-sm font-sans font-medium group-hover/sub:text-brand-blue transition-colors">
                                       Toutes les destinations
                                     </span>
                                   </div>
@@ -476,7 +515,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                                         {sub.icon}
                                       </span>
                                       <div className="flex-1">
-                                        <span className="text-white/80 text-sm font-sans font-medium group-hover/sub:text-white transition-colors">
+                                        <span className="text-slate-800 dark:text-white/80 text-sm font-sans font-medium group-hover/sub:text-brand-blue dark:group-hover/sub:text-white transition-colors">
                                           {sub.label}
                                         </span>
                                       </div>
@@ -516,16 +555,18 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                   </p>
 
                   {/* CTA */}
-                  <Link
-                    href="/sur-mesure"
-                    onClick={closeMenu}
-                    className="inline-flex items-center gap-3 bg-brand-blue hover:bg-brand-blue/80 text-white px-7 py-4 rounded-2xl text-sm font-medium transition-all duration-300 shadow-[0_0_30px_rgba(56,163,165,0.2)] hover:shadow-[0_0_40px_rgba(56,163,165,0.35)] group"
-                  >
-                    Créer mon voyage
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </Link>
+                  <MagneticButton>
+                    <Link
+                      href="/sur-mesure"
+                      onClick={closeMenu}
+                      className="inline-flex items-center gap-3 bg-brand-blue hover:bg-brand-blue/80 text-white px-7 py-4 rounded-2xl text-sm font-medium transition-all duration-300 shadow-[0_0_30px_rgba(56,163,165,0.2)] hover:shadow-[0_0_40px_rgba(56,163,165,0.35)] group"
+                    >
+                      Créer mon voyage
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </Link>
+                  </MagneticButton>
                 </div>
 
                 {/* Bottom */}
@@ -579,16 +620,18 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
               >
                 <div className="border-t border-white/[0.06] pt-5 flex flex-col gap-4">
                   {/* CTA */}
-                  <Link
-                    href="/sur-mesure"
-                    onClick={closeMenu}
-                    className="flex items-center justify-center gap-2.5 w-full bg-brand-blue hover:bg-brand-blue/80 text-white py-4 rounded-2xl text-sm font-medium transition-all duration-300 shadow-[0_0_24px_rgba(56,163,165,0.2)]"
-                  >
-                    Créer mon voyage
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </Link>
+                  <MagneticButton className="w-full flex justify-center">
+                    <Link
+                      href="/sur-mesure"
+                      onClick={closeMenu}
+                      className="flex items-center justify-center gap-2.5 w-full bg-brand-blue hover:bg-brand-blue/80 text-white py-4 rounded-2xl text-sm font-medium transition-all duration-300 shadow-[0_0_24px_rgba(56,163,165,0.2)]"
+                    >
+                      Créer mon voyage
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </Link>
+                  </MagneticButton>
 
                   {/* Contact + Lang row */}
                   <div className="flex items-center justify-between">
@@ -609,21 +652,38 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                       </a>
                     </div>
 
-                    {/* Language pills */}
+                    {/* Language pills and Theme Toggle */}
                     {isMounted && (
-                      <div className="flex items-center gap-1.5 text-[10px] font-medium">
+                      <div className="flex items-center gap-3">
                         <button
-                          onClick={() => switchLanguage('fr')}
-                          className={`px-2.5 py-1 rounded-lg border transition-all ${lang === 'FR' ? 'bg-white/[0.06] border-white/[0.12] text-white' : 'border-white/[0.04] text-white/25'}`}
+                          onClick={toggleTheme}
+                          className="w-9 h-9 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center transition-all duration-300 liquid-glass hover:bg-white/10 text-slate-800 dark:text-white group"
+                          aria-label="Toggle Theme"
                         >
-                          FR
+                          {theme === 'dark' ? (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                          )}
                         </button>
-                        <button
-                          onClick={() => switchLanguage('en')}
-                          className={`px-2.5 py-1 rounded-lg border transition-all ${lang === 'EN' ? 'bg-white/[0.06] border-white/[0.12] text-white' : 'border-white/[0.04] text-white/25'}`}
-                        >
-                          EN
-                        </button>
+                        <div className="flex items-center gap-1.5 text-[10px] font-medium">
+                          <button
+                            onClick={() => switchLanguage('fr')}
+                            className={`px-2.5 py-1 rounded-lg border transition-all ${lang === 'FR' ? 'bg-white/[0.06] border-white/[0.12] text-white' : 'border-white/[0.04] text-white/25'}`}
+                          >
+                            FR
+                          </button>
+                          <button
+                            onClick={() => switchLanguage('en')}
+                            className={`px-2.5 py-1 rounded-lg border transition-all ${lang === 'EN' ? 'bg-white/[0.06] border-white/[0.12] text-white' : 'border-white/[0.04] text-white/25'}`}
+                          >
+                            EN
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
