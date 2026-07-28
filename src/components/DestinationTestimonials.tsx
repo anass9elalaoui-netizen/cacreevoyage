@@ -7,6 +7,7 @@ type Testimonial = {
   id: string
   travelerName?: string
   travelerOrigin?: string
+  testimonialText?: string
   rating?: number
   media?: {
     url?: string
@@ -52,7 +53,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
   }
 
   return (
-    <section className="py-24 bg-slate-50 dark:bg-[#0B132B] relative transition-colors duration-700">
+    <section className="py-24 bg-slate-50 dark:bg-transparent relative transition-colors duration-700">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
@@ -82,7 +83,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
           ))}
         </div>
 
-        {/* Video Grid */}
+        {/* Video & Text Grid */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -90,87 +91,94 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 gap-12 max-w-5xl mx-auto"
           >
             {activeTestimonials.map(test => (
               <div
                 key={test.id}
-                className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-black/50 border border-white/10 group shadow-xl"
+                className="flex flex-col md:flex-row bg-white dark:bg-[#111827] rounded-[2rem] overflow-hidden shadow-2xl border border-slate-100 dark:border-white/5"
               >
-                {/* Media */}
-                {test.media?.mimeType?.startsWith('video/') || test.media?.url?.match(/\.(mp4|webm|mov)$/i) ? (
-                  <video
-                    src={test.media.url}
-                    className="w-full h-full object-cover"
-                    loop
-                    playsInline
-                    controls={playingId === test.id}
-                    onClick={() => {
-                      if (playingId === test.id) setPlayingId(null)
-                    }}
-                    onPlay={() => setPlayingId(test.id)}
-                  />
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 p-6 text-center">
-                    <span className="text-4xl mb-4">🎵</span>
-                    <p className="text-brand-silver text-sm italic mb-4">Témoignage Audio</p>
-                    <audio
-                      src={test.media?.url}
-                      controls
-                      className="w-full h-10"
+                {/* Media Container */}
+                <div className="w-full md:w-[400px] shrink-0 relative bg-black min-h-[300px] md:min-h-[500px]">
+                  {test.media?.mimeType?.startsWith('video/') || test.media?.url?.match(/\.(mp4|webm|mov)$/i) ? (
+                    <video
+                      src={test.media.url}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loop
+                      playsInline
+                      controls={playingId === test.id}
+                      onClick={() => {
+                        if (playingId === test.id) setPlayingId(null)
+                      }}
                       onPlay={() => setPlayingId(test.id)}
                     />
-                  </div>
-                )}
-
-                {/* Overlays (hide when playing video) */}
-                {playingId !== test.id && test.media?.mimeType?.startsWith('video/') && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-                )}
-
-                {playingId !== test.id && (
-                  <>
-                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5 pointer-events-none">
-                      <span className="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse" />
-                      <span className="text-[10px] uppercase tracking-wider text-white font-medium">♪ Son</span>
+                  ) : test.media?.mimeType?.startsWith('audio/') ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 p-6 text-center absolute inset-0">
+                      <span className="text-4xl mb-4">🎵</span>
+                      <p className="text-white/70 text-sm italic mb-4">Témoignage Audio</p>
+                      <audio
+                        src={test.media?.url}
+                        controls
+                        className="w-full h-10"
+                        onPlay={() => setPlayingId(test.id)}
+                      />
                     </div>
+                  ) : (
+                    <img 
+                      src={test.media?.url} 
+                      alt="Témoignage média" 
+                      className="absolute inset-0 w-full h-full object-cover" 
+                    />
+                  )}
 
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {test.media?.mimeType?.startsWith('video/') && (
-                        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover:scale-110 group-hover:bg-brand-blue/80 transition-all duration-300 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-                          <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
-                      <div className="flex gap-1 mb-2">
-                        {Array.from({ length: test.rating || 5 }).map((_, i) => (
-                          <span key={i} className="text-brand-gold text-sm">★</span>
-                        ))}
+                  {/* Play Overlay (hide when playing) */}
+                  {playingId !== test.id && test.media?.mimeType?.startsWith('video/') && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/20">
+                      <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                        <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
                       </div>
-                      <h3 className="text-white font-serif text-xl mb-1">{test.travelerName}</h3>
-                      <p className="text-brand-silver text-xs">{test.travelerOrigin}</p>
                     </div>
-                  </>
-                )}
+                  )}
 
-                {/* Invisible button to trigger video play if overlay is clicked */}
-                {playingId !== test.id && test.media?.mimeType?.startsWith('video/') && (
-                  <button
-                    className="absolute inset-0 w-full h-full cursor-pointer z-20"
-                    onClick={(e) => {
-                      const video = e.currentTarget.parentElement?.querySelector('video');
-                      if (video && video.play) {
-                        video.play();
-                        setPlayingId(test.id);
-                      }
-                    }}
-                    aria-label="Play video"
-                  />
-                )}
+                  {/* Invisible button to trigger video play if overlay is clicked */}
+                  {playingId !== test.id && test.media?.mimeType?.startsWith('video/') && (
+                    <button
+                      className="absolute inset-0 w-full h-full cursor-pointer z-20"
+                      onClick={(e) => {
+                        const video = e.currentTarget.parentElement?.querySelector('video');
+                        if (video && video.play) {
+                          video.play();
+                          setPlayingId(test.id);
+                        }
+                      }}
+                      aria-label="Play video"
+                    />
+                  )}
+                </div>
+
+                {/* Content Container */}
+                <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16 flex-1">
+                  <div className="flex gap-1.5 mb-8">
+                    {Array.from({ length: test.rating || 5 }).map((_, i) => (
+                      <span key={i} className="text-yellow-500 text-2xl">★</span>
+                    ))}
+                  </div>
+                  
+                  <p className="font-serif italic text-2xl md:text-3xl text-slate-800 dark:text-slate-200 leading-snug mb-10">
+                    "{test.testimonialText || "Une expérience inoubliable avec Ça Crée Voyage."}"
+                  </p>
+                  
+                  <div className="mt-auto">
+                    <h3 className="text-slate-900 dark:text-white font-medium text-xl uppercase tracking-wider mb-2">
+                      {test.travelerName}
+                    </h3>
+                    <p className="text-slate-500 text-base">
+                      {test.travelerOrigin}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </motion.div>

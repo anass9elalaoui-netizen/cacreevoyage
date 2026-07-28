@@ -5,7 +5,8 @@ import DestinationSwiper from '@/components/DestinationSwiper'
 import ReelsShowcase from '@/components/ReelsShowcase'
 import Footer from '@/components/Footer'
 import HeroGallery from '@/components/HeroGallery'
-import TrustStats from '@/components/TrustStats'
+import CursorTrail from '@/components/CursorTrail'
+import TestimonialsSection from '@/components/TestimonialsSection'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
 import FeaturedToursGrid from '@/components/FeaturedToursGrid'
 import FAQAccordion from '@/components/FAQAccordion'
@@ -126,13 +127,22 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       <HeroGallery />
 
       {/* ──────────────────────────────────────────────────────────
-          TRUST STATS — Animated counter bar
+          DESTINATIONS TRAIL WRAPPER
       ─────────────────────────────────────────────────────────── */}
-      <TrustStats stats={trustStats.length > 0 ? trustStats : undefined} />
-
-      {/* ──────────────────────────────────────────────────────────
-          ROW 1 — ÉVASIONS INTERNATIONALES
-      ─────────────────────────────────────────────────────────── */}
+      <CursorTrail
+        images={
+          Array.from(
+            new Set(
+              [...(internationalDestinations as any[] || []), ...(nationalDestinations as any[] || [])]
+                .map(d => typeof d.image === 'object' ? d.image?.url : d.image)
+                .filter(Boolean)
+            )
+          ) as string[]
+        }
+      >
+        {/* ──────────────────────────────────────────────────────────
+            ROW 1 — ÉVASIONS INTERNATIONALES
+        ─────────────────────────────────────────────────────────── */}
       <div className="relative bg-slate-50 dark:bg-[#0B132B] w-full transition-colors duration-700">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
         <DestinationSwiper
@@ -153,19 +163,13 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           subtitle="L'âme du royaume"
         />
       </div>
+      </CursorTrail>
 
       {/* ──────────────────────────────────────────────────────────
           FEATURED TOURS GRID
       ─────────────────────────────────────────────────────────── */}
       {toursToShow.length > 0 && (
         <FeaturedToursGrid tours={toursToShow as any[]} />
-      )}
-
-      {/* ──────────────────────────────────────────────────────────
-          VIDEO TESTIMONIALS BY DESTINATION
-      ─────────────────────────────────────────────────────────── */}
-      {testimonials && testimonials.length > 0 && (
-        <DestinationTestimonials testimonials={testimonials as any[]} />
       )}
 
 
@@ -264,6 +268,14 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           </div>
         </div>
       </section>
+
+      {/* ──────────────────────────────────────────────────────────
+          CLIENT REVIEWS / TESTIMONIALS
+      ─────────────────────────────────────────────────────────── */}
+      {testimonials && testimonials.length > 0 && (
+        <DestinationTestimonials testimonials={testimonials as any[]} />
+      )}
+      <TestimonialsSection testimonials={testimonials as any[]} />
 
       {/* ── FOOTER ── */}
       <Footer />

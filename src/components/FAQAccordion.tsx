@@ -29,7 +29,7 @@ export default function FAQAccordion() {
   if (faqs.length === 0) return null
 
   return (
-    <section className="relative w-full py-24 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-hidden">
+    <section className="relative w-full py-24 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
       <div className="absolute top-1/2 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none -translate-y-1/2" />
 
       <div className="max-w-3xl mx-auto px-6 relative z-10">

@@ -1,45 +1,165 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useRef, useState, useEffect } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 
-export default function MagneticButton({ children, className = '' }: { children: React.ReactNode, className?: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+export interface MagneticButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactElement
+  strength?: number
+  className?: string
+}
 
-  const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return
-    const { clientX, clientY } = e
-    const { height, width, left, top } = ref.current.getBoundingClientRect()
+export default function MagneticButton({ children, strength = 0.4, className = '', ...props }: MagneticButtonProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  // Motion values for translation
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  // Spring configuration for the rubbery pull
+  const springConfig = { stiffness: 200, damping: 20, mass: 0.8 }
+  const springX = useSpring(x, springConfig)
+  const springY = useSpring(y, springConfig)
+
+  // Inner parallax
+  const innerX = useSpring(useMotionValue(0), springConfig)
+  const innerY = useSpring(useMotionValue(0), springConfig)
+
+  const [isHovered, setIsHovered] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+
+  useEffect(() => {
+    const pointerFine = window.matchMedia('(pointer: fine)').matches
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     
-    // Calculate the distance from the center of the button
-    const middleX = clientX - (left + width / 2)
-    const middleY = clientY - (top + height / 2)
+    setReducedMotion(reduced)
+    // Disable translation effect if not a fine pointer
+    if (!pointerFine) {
+      setIsDisabled(true)
+    }
+  }, [])
 
-    // Move the button slightly towards the mouse
-    setPosition({ x: middleX * 0.2, y: middleY * 0.2 })
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isDisabled || reducedMotion) return
+    if (!containerRef.current) return
+
+    const { clientX, clientY } = e
+    const { width, height, left, top } = containerRef.current.getBoundingClientRect()
+    
+    // Calculate distance from center
+    const centerX = left + width / 2
+    const centerY = top + height / 2
+    
+    const distanceX = clientX - centerX
+    const distanceY = clientY - centerY
+
+    x.set(distanceX * strength)
+    y.set(distanceY * strength)
+    
+    innerX.set(distanceX * (strength * 0.6))
+    innerY.set(distanceY * (strength * 0.6))
   }
 
-  const reset = () => {
-    setPosition({ x: 0, y: 0 })
+  const handleMouseEnter = () => {
+    setIsHovered(true)
   }
 
-  const { x, y } = position
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    if (isDisabled || reducedMotion) return
+    x.set(0)
+    y.set(0)
+    innerX.set(0)
+    innerY.set(0)
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    // Call original onClick if it exists
+    if (children.props.onClick) {
+      children.props.onClick(e)
+    }
+
+    if (reducedMotion) return
+
+    const target = e.currentTarget
+    const rect = target.getBoundingClientRect()
+    
+    // Calculate click coordinates relative to the button
+    const relX = e.clientX - rect.left
+    const relY = e.clientY - rect.top
+
+    // Create ripple element
+    const ripple = document.createElement('span')
+    ripple.style.position = 'absolute'
+    ripple.style.borderRadius = '50%'
+    ripple.style.background = 'rgba(255,255,255,0.25)'
+    ripple.style.pointerEvents = 'none'
+    ripple.style.transform = 'translate(-50%, -50%)'
+    ripple.style.left = `${relX}px`
+    ripple.style.top = `${relY}px`
+    ripple.style.width = '0px'
+    ripple.style.height = '0px'
+    ripple.style.zIndex = '0'
+
+    // Add relative and overflow-hidden if missing
+    if (window.getComputedStyle(target).position === 'static') {
+      target.style.position = 'relative'
+    }
+    target.style.overflow = 'hidden'
+
+    target.appendChild(ripple)
+
+    // Ensure children of the button (like text) sit above the ripple
+    Array.from(target.children).forEach((child) => {
+      if (child !== ripple) {
+        ;(child as HTMLElement).style.position = 'relative'
+        ;(child as HTMLElement).style.zIndex = '1'
+      }
+    })
+
+    const anim = ripple.animate(
+      [
+        { width: '0px', height: '0px', opacity: 1 },
+        { width: '300%', height: '300%', opacity: 0 }
+      ],
+      { duration: 500, easing: 'ease-out' }
+    )
+
+    anim.onfinish = () => ripple.remove()
+  }
+
+  // Clone the child to inject the click handler and base classes
+  const childClassName = `${children.props.className || ''} relative overflow-hidden`.trim()
+  
+  const clonedChild = React.cloneElement(children, {
+    onClick: handleClick,
+    className: childClassName,
+  })
 
   return (
     <motion.div
-      ref={ref}
-      onMouseMove={handleMouse}
-      onMouseLeave={reset}
-      animate={{ x, y }}
-      transition={{ type: 'spring', stiffness: 200, damping: 15, mass: 0.1 }}
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      animate={isHovered ? { scale: 1.04 } : { scale: 1 }}
+      transition={springConfig}
+      style={{
+        x: springX,
+        y: springY,
+      }}
       className={`inline-block ${className}`}
+      {...props}
     >
       <motion.div
-        animate={{ x: x * 0.5, y: y * 0.5 }}
-        transition={{ type: 'spring', stiffness: 200, damping: 15, mass: 0.1 }}
+        style={{
+          x: innerX,
+          y: innerY,
+        }}
+        className="w-full h-full"
       >
-        {children}
+        {clonedChild}
       </motion.div>
     </motion.div>
   )

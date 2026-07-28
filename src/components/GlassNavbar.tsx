@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import { getDictionary } from '@/i18n/dictionaries'
 import MagneticButton from '@/components/MagneticButton'
+import { useWipeTransition } from '@/components/ModeWipeTransition'
 
 /* ── Animation Configs ──────────────────────────────────────── */
 const EASE_LUXURY = [0.16, 1, 0.3, 1] as const
@@ -43,6 +44,49 @@ const menuLinks: MenuLink[] = [
   { num: '05', label: 'À Propos', href: '/about', description: 'Notre histoire, notre passion du voyage' },
 ]
 
+/* ── Lunar Phase Helper ──────────────────────────────────────── */
+function getLunarPhase(): number {
+  // Returns 0–1 where 0=new moon, 0.5=full moon, 1=new moon again
+  const knownNewMoon = new Date('2000-01-06T18:14:00Z').getTime()
+  const synodicMonth = 29.53058867 * 24 * 60 * 60 * 1000
+  return ((Date.now() - knownNewMoon) % synodicMonth) / synodicMonth
+}
+
+function MoonPhaseIcon() {
+  const [phase, setPhase] = useState(0)
+  
+  useEffect(() => {
+    setPhase(getLunarPhase())
+  }, [])
+
+  // Phase is 0 to 1.
+  // 0 = new moon, 0.5 = full moon, 1 = new moon
+  // We'll draw a circle, and a mask that reveals the lit part.
+  const isWaxing = phase <= 0.5;
+  const fraction = isWaxing ? phase * 2 : (1 - phase) * 2; // 0 to 1 (new to full)
+
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" className="text-brand-gold">
+      <defs>
+        <clipPath id="moonClip">
+          {fraction < 0.5 ? (
+            // Crescent: subtract inner circle
+            <path d={`M 7,0 A 7,7 0 0,${isWaxing ? 1 : 0} 7,14 A ${7 - 14 * fraction},7 0 0,${isWaxing ? 0 : 1} 7,0 Z`} />
+          ) : (
+            // Gibbous: add inner circle
+            <path d={`M 7,0 A 7,7 0 0,${isWaxing ? 1 : 0} 7,14 A ${14 * fraction - 7},7 0 0,${isWaxing ? 1 : 0} 7,0 Z`} />
+          )}
+        </clipPath>
+      </defs>
+      {/* Base dark circle */}
+      <circle cx="7" cy="7" r="7" fill="currentColor" fillOpacity="0.2" />
+      {/* Illuminated portion */}
+      <circle cx="7" cy="7" r="7" fill="currentColor" clipPath="url(#moonClip)" />
+    </svg>
+  )
+}
+
+
 /* ── Main Component ──────────────────────────────────────────── */
 
 export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) {
@@ -77,7 +121,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
     }
   }, [])
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
@@ -86,7 +130,43 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }
+  }, [theme])
+
+  /* ── Cinematic wipe transition ──────────────────────────── */
+  const { triggerWipe, WipeOverlay } = useWipeTransition()
+  const desktopToggleRef = useRef<HTMLButtonElement>(null)
+  const mobileToggleRef = useRef<HTMLButtonElement>(null)
+  const desktopControls = useAnimation()
+  const mobileControls = useAnimation()
+
+  const handleThemeToggle = useCallback(
+    (buttonRef: React.RefObject<HTMLButtonElement | null>, controls: ReturnType<typeof useAnimation>) => {
+      if (!buttonRef.current) return
+
+      // Spring scale animation: 0.85 → 1.1 → 1
+      controls.start({
+        scale: [0.85, 1.1, 1],
+        transition: {
+          type: 'spring',
+          stiffness: 400,
+          damping: 15,
+          mass: 0.8,
+          duration: 0.5,
+        },
+      })
+
+      // Get button center for wipe origin
+      const rect = buttonRef.current.getBoundingClientRect()
+      const origin = {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      }
+
+      // Trigger wipe — theme swap happens at the midpoint
+      triggerWipe(origin, theme, toggleTheme)
+    },
+    [theme, toggleTheme, triggerWipe],
+  )
 
   /* ── Scroll tracking ──────────────────────────────────────── */
   useEffect(() => {
@@ -145,7 +225,20 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: EASE_LUXURY }}
-        className="fixed top-4 inset-x-0 mx-auto w-[92%] max-w-6xl h-16 rounded-full z-[100] flex items-center px-6 justify-between transition-all duration-500 liquid-glass bg-white/80 dark:bg-[#0B132B]/90 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+        className="fixed top-4 inset-x-0 mx-auto w-[92%] max-w-6xl h-16 rounded-full z-[100] flex items-center px-6 justify-between transition-all duration-500"
+        style={theme === 'dark' ? {
+          background: isScrolled ? 'rgba(8, 6, 18, 0.85)' : 'rgba(8, 6, 18, 0.65)',
+          backdropFilter: isScrolled ? 'blur(32px) saturate(140%)' : 'blur(24px) saturate(140%)',
+          WebkitBackdropFilter: isScrolled ? 'blur(32px) saturate(140%)' : 'blur(24px) saturate(140%)',
+          borderBottom: '0.5px solid rgba(255, 255, 255, 0.07)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+        } : {
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: 'none',
+          boxShadow: isScrolled ? '0 1px 0 rgba(0,0,0,0.08)' : '0 8px 32px rgba(0,0,0,0.15)',
+        }}
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group relative z-[60]">
@@ -154,7 +247,8 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
             alt="Ça Crée Voyage"
             width={180}
             height={45}
-            className="object-contain"
+            className={`object-contain transition-all duration-500 ${theme === 'dark' ? 'brightness-0 invert sepia-[.1] hue-rotate-[-30deg] saturate-[3] opacity-90' : ''}`}
+            style={theme === 'dark' ? { filter: 'brightness(0) invert(1) sepia(0.2) hue-rotate(-20deg) saturate(2) brightness(1.2)' } : undefined}
             priority
           />
         </Link>
@@ -168,7 +262,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
             onMouseLeave={() => setIsDesktopDropdownOpen(false)}
           >
             <button
-              className={`flex items-center gap-1.5 text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/destinations') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
+              className={`flex items-center gap-1.5 text-sm font-semibold tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue dark:font-medium dark:text-[rgba(240,236,228,0.7)] dark:hover:text-[rgba(240,236,228,1)] dark:hover:[text-shadow:0_0_20px_rgba(255,200,120,0.3)] ${isActive('/destinations') ? 'text-brand-blue dark:text-[rgba(240,236,228,1)] border-b border-[rgba(255,180,80,0.6)]' : 'text-slate-900 border-b border-transparent'}`}
             >
               {t.destinations}
               <svg
@@ -186,7 +280,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.96 }}
                   transition={{ duration: 0.25, ease: EASE_LUXURY }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] overflow-hidden"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-white/95 dark:bg-[rgba(8,6,18,0.85)] backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] overflow-hidden"
                 >
                   <Link
                     href="/destinations/international"
@@ -216,7 +310,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
 
           <Link
             href="/tours"
-            className={`text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/tours') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
+            className={`text-sm font-semibold tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue dark:font-medium dark:text-[rgba(240,236,228,0.7)] dark:hover:text-[rgba(240,236,228,1)] dark:hover:[text-shadow:0_0_20px_rgba(255,200,120,0.3)] ${isActive('/tours') ? 'text-brand-blue dark:text-[rgba(240,236,228,1)] border-b border-[rgba(255,180,80,0.6)]' : 'text-slate-900 border-b border-transparent'}`}
           >
             {t.tours}
           </Link>
@@ -230,13 +324,13 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
           </MagneticButton>
           <Link
             href="/blog"
-            className={`text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/blog') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
+            className={`text-sm font-semibold tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue dark:font-medium dark:text-[rgba(240,236,228,0.7)] dark:hover:text-[rgba(240,236,228,1)] dark:hover:[text-shadow:0_0_20px_rgba(255,200,120,0.3)] ${isActive('/blog') ? 'text-brand-blue dark:text-[rgba(240,236,228,1)] border-b border-[rgba(255,180,80,0.6)]' : 'text-slate-900 border-b border-transparent'}`}
           >
             {t.blog}
           </Link>
           <Link
             href="/about"
-            className={`text-sm font-semibold dark:font-medium tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue ${isActive('/about') ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}
+            className={`text-sm font-semibold tracking-wide transition-colors duration-300 drop-shadow-sm hover:text-brand-blue dark:font-medium dark:text-[rgba(240,236,228,0.7)] dark:hover:text-[rgba(240,236,228,1)] dark:hover:[text-shadow:0_0_20px_rgba(255,200,120,0.3)] ${isActive('/about') ? 'text-brand-blue dark:text-[rgba(240,236,228,1)] border-b border-[rgba(255,180,80,0.6)]' : 'text-slate-900 border-b border-transparent'}`}
           >
             {t.about}
           </Link>
@@ -258,21 +352,34 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
           </a>
           {isMounted && (
             <div className="flex items-center gap-4">
-              <button
-                onClick={toggleTheme}
+              <div className="flex items-center gap-2 mr-1">
+                {theme === 'dark' && <MoonPhaseIcon />}
+              </div>
+              <motion.button
+                ref={desktopToggleRef}
+                onClick={() => handleThemeToggle(desktopToggleRef, desktopControls)}
+                animate={desktopControls}
                 className="w-9 h-9 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center transition-all duration-300 liquid-glass hover:bg-white/10 text-slate-800 dark:text-white group"
-                aria-label="Toggle Theme"
+                aria-label={theme === 'dark' ? 'Passer en mode jour' : 'Passer en mode nuit'}
               >
-                {theme === 'dark' ? (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                  </svg>
-                )}
-              </button>
+                <motion.span
+                  key={theme}
+                  initial={{ rotate: -30, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="flex items-center justify-center"
+                >
+                  {theme === 'dark' ? (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  )}
+                </motion.span>
+              </motion.button>
               <div className="flex items-center gap-1 text-xs font-medium text-white/60">
                 <button
                   onClick={() => switchLanguage('fr')}
@@ -341,7 +448,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-white/80 dark:bg-[#0B132B]/90 backdrop-blur-2xl border border-slate-200/50 dark:border-white/10"
+              className="absolute inset-0 bg-white/80 dark:bg-[rgba(8,6,18,0.95)] backdrop-blur-2xl border border-slate-200/50 dark:border-white/10"
             />
 
             {/* Subtle radial gradient orb */}
@@ -418,14 +525,14 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
 
                           {/* Label — link or button depending on subLinks */}
                           {hasSubLinks ? (
-                            <span className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-white tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue flex-1">
+                            <span className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-[rgba(240,236,228,0.9)] tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue dark:group-hover:text-[rgba(240,236,228,1)] flex-1">
                               {item.label}
                             </span>
                           ) : (
                             <Link
                               href={item.href}
                               onClick={closeMenu}
-                              className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-white tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue flex-1"
+                              className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-[rgba(240,236,228,0.9)] tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue dark:group-hover:text-[rgba(240,236,228,1)] flex-1"
                             >
                               {item.label}
                             </Link>
@@ -655,21 +762,34 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                     {/* Language pills and Theme Toggle */}
                     {isMounted && (
                       <div className="flex items-center gap-3">
-                        <button
-                          onClick={toggleTheme}
+                        <div className="flex items-center gap-2 mr-1">
+                          {theme === 'dark' && <MoonPhaseIcon />}
+                        </div>
+                        <motion.button
+                          ref={mobileToggleRef}
+                          onClick={() => handleThemeToggle(mobileToggleRef, mobileControls)}
+                          animate={mobileControls}
                           className="w-9 h-9 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center transition-all duration-300 liquid-glass hover:bg-white/10 text-slate-800 dark:text-white group"
-                          aria-label="Toggle Theme"
+                          aria-label={theme === 'dark' ? 'Passer en mode jour' : 'Passer en mode nuit'}
                         >
-                          {theme === 'dark' ? (
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                          ) : (
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                            </svg>
-                          )}
-                        </button>
+                          <motion.span
+                            key={`mobile-${theme}`}
+                            initial={{ rotate: -30, opacity: 0, scale: 0.5 }}
+                            animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                            className="flex items-center justify-center"
+                          >
+                            {theme === 'dark' ? (
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                              </svg>
+                            )}
+                          </motion.span>
+                        </motion.button>
                         <div className="flex items-center gap-1.5 text-[10px] font-medium">
                           <button
                             onClick={() => switchLanguage('fr')}
@@ -693,6 +813,9 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Cinematic wipe overlay — rendered via portal */}
+      <WipeOverlay />
     </>
   )
 }
