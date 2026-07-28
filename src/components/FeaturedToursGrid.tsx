@@ -30,7 +30,7 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
   if (!tours || tours.length === 0) return null
 
   return (
-    <section className="relative w-full py-24 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-hidden">
+    <section className="relative w-full py-24 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 

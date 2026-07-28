@@ -39,7 +39,7 @@ function QRCodeIcon() {
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-slate-50 dark:bg-[#0B132B] text-slate-900 dark:text-white transition-colors duration-700 overflow-hidden">
+    <footer className="relative w-full bg-slate-50 dark:bg-transparent text-slate-900 dark:text-white transition-colors duration-700 overflow-hidden">
       {/* ── Top Divider — Ambient glow line ──────────────────── */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-px bg-gradient-to-r from-transparent via-brand-blue/20 dark:via-brand-blue/40 to-transparent" suppressHydrationWarning />
 
@@ -71,7 +71,7 @@ export default function Footer() {
                 <InstagramIcon />
               </a>
               <a
-                href="https://wa.me/212600000000"
+                href="https://wa.me/212661373347"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full liquid-glass flex items-center justify-center text-slate-700 dark:text-white/50 hover:text-brand-blue dark:hover:text-white transition-all duration-300"

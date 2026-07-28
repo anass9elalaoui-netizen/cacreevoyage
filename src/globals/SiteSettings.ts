@@ -164,31 +164,7 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
-    /* ──────────────────────────────────────────────────────────
-       TRUST STATS (Homepage animated counters)
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'trustStats',
-      type: 'array',
-      label: 'Statistiques de Confiance',
-      maxRows: 4,
-      admin: {
-        description: 'Compteurs animés affichés sur la homepage (max 4)',
-      },
-      fields: [
-        {
-          name: 'number',
-          type: 'text',
-          admin: { description: 'Ex: 500+' },
-        },
-        {
-          name: 'label',
-          type: 'text',
-          localized: true,
-          admin: { description: 'Ex: Voyageurs Satisfaits' },
-        },
-      ],
-    },
+
 
     /* ──────────────────────────────────────────────────────────
        LEGACY FIELDS (backward compatibility)

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Play, Compass } from 'lucide-react';
@@ -30,6 +30,17 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
   // Safety check in case empty array is passed
   const currentSlides = slides && slides.length > 0 ? slides : FALLBACK_SLIDES;
 
+  const dustParticles = useMemo(() => {
+    return Array.from({ length: 14 }).map((_, i) => ({
+      id: i,
+      size: Math.random() * 4 + 2, // 2px to 6px
+      left: Math.random() * 100, // 0 to 100vw
+      top: Math.random() * 100, // 0 to 100vh
+      duration: Math.random() * 20 + 20, // 20s to 40s
+      delay: Math.random() * 10, // 0 to 10s
+    }))
+  }, [])
+
   return (
     <section className="relative w-full h-screen overflow-hidden bg-slate-50 dark:bg-[#060D1F] snap-center">
       {/* Z-index 0: Background Video Layer */}
@@ -49,6 +60,24 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
         ))}
         {/* Subtle overlay for text legibility, ensuring premium feel */}
         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+      </div>
+
+      {/* Atmospheric Dust Particles (Light Mode Only) */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden dark:hidden mix-blend-screen opacity-60">
+        {dustParticles.map(particle => (
+          <div
+            key={particle.id}
+            className="absolute rounded-full bg-white blur-[1px]"
+            style={{
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animation: `dustDrift ${particle.duration}s infinite linear`,
+              animationDelay: `${particle.delay}s`,
+            }}
+          />
+        ))}
       </div>
 
       {/* Z-index 10: Transparent PNG Overlay with continuous "train-bob" animation */}

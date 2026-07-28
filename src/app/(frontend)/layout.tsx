@@ -4,6 +4,8 @@ import '../globals.css'
 import GlassNavbar from '@/components/GlassNavbar'
 import FloatingWhatsApp from '@/components/FloatingWhatsApp'
 import CookieBanner from '@/components/CookieBanner'
+import StarfieldCanvas from '@/components/StarfieldCanvas'
+import FilmGrain from '@/components/FilmGrain'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -49,8 +51,10 @@ export default async function FrontendLayout({
         />
       </head>
       <body className="antialiased relative" suppressHydrationWarning>
+        <FilmGrain />
+        <StarfieldCanvas />
         <GlassNavbar brandIdentity={brandIdentity} />
-        <main className="relative flex min-h-screen flex-col">
+        <main className="relative z-[1] flex min-h-screen flex-col">
           {children}
         </main>
         <FloatingWhatsApp />
