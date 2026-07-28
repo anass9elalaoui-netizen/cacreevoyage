@@ -31,7 +31,7 @@ function Word({ word, progress, range }: { word: string, progress: any, range: n
   const opacity = useTransform(progress, range, [0.2, 1])
   
   return (
-    <motion.span style={{ opacity }} className="relative">
+    <motion.span style={{ opacity, willChange: 'opacity' }} className="relative">
       {word}
     </motion.span>
   )

@@ -57,7 +57,7 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
       className="relative flex-shrink-0 w-[280px] md:w-[340px] h-[420px] md:h-[480px] rounded-[2rem] overflow-hidden snap-center cursor-pointer group"
     >
       <motion.div
-        style={{ rotateX, rotateY, transformPerspective: 800 }}
+        style={{ rotateX, rotateY, transformPerspective: 800, willChange: 'transform' }}
         className="absolute inset-0 w-full h-full pointer-events-none"
       >
         {/* Background Media with tactile hover scale */}
@@ -69,11 +69,11 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
               loop
               muted
               playsInline
-              style={{ scale }}
+              style={{ scale, willChange: 'transform' }}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-105"
             />
           ) : headerUrl ? (
-            <motion.div style={{ scale }} className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-105">
+            <motion.div style={{ scale, willChange: 'transform' }} className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-105">
               <Image
                 src={headerUrl}
                 alt={dest.title || 'Destination'}

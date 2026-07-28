@@ -97,7 +97,7 @@ export default function CinematicPanel({
           MEDIA STACK — Poster + Video with DOF scroll effect
       ══════════════════════════════════════════════════════════ */}
       <motion.div
-        style={{ scale, filter: blur }}
+        style={{ scale, filter: blur, willChange: 'transform, filter' }}
         className="absolute inset-0 z-0"
       >
         {/* Poster image (visible before/while video loads) */}

@@ -143,6 +143,7 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
             animation: marquee 40s linear infinite;
             display: flex;
             width: max-content;
+            will-change: transform;
           }
           .animate-marquee:hover {
             animation-play-state: paused;

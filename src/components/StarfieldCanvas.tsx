@@ -264,8 +264,11 @@ export default function StarfieldCanvas() {
       return
     }
 
-    // Apply canvas-level opacity
-    canvas.style.opacity = String(canvasOpacityRef.current)
+    // Apply canvas-level opacity only if changed
+    const newOpacity = String(canvasOpacityRef.current)
+    if (canvas.style.opacity !== newOpacity) {
+      canvas.style.opacity = newOpacity
+    }
 
     // Clear
     ctx.clearRect(0, 0, w, h)
