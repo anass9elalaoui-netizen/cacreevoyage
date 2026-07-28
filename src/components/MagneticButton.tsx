@@ -76,8 +76,8 @@ export default function MagneticButton({ children, strength = 0.4, className = '
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     // Call original onClick if it exists
-    if (children.props.onClick) {
-      children.props.onClick(e)
+    if (React.isValidElement(children) && (children.props as any).onClick) {
+      (children.props as any).onClick(e)
     }
 
     if (reducedMotion) return
@@ -130,12 +130,15 @@ export default function MagneticButton({ children, strength = 0.4, className = '
   }
 
   // Clone the child to inject the click handler and base classes
-  const childClassName = `${children.props.className || ''} relative overflow-hidden`.trim()
+  const childProps = React.isValidElement(children) ? (children.props as any) : {}
+  const childClassName = `${childProps.className || ''} relative overflow-hidden`.trim()
   
-  const clonedChild = React.cloneElement(children, {
-    onClick: handleClick,
-    className: childClassName,
-  })
+  const clonedChild = React.isValidElement(children) 
+    ? React.cloneElement(children, {
+        onClick: handleClick,
+        className: childClassName,
+      } as any) 
+    : children
 
   return (
     <motion.div
@@ -150,7 +153,7 @@ export default function MagneticButton({ children, strength = 0.4, className = '
         y: springY,
       }}
       className={`inline-block ${className}`}
-      {...props}
+      {...(props as any)}
     >
       <motion.div
         style={{
