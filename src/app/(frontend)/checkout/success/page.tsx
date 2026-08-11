@@ -56,56 +56,56 @@ export default async function CheckoutSuccessPage() {
           </svg>
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-serif text-white mb-3">
+        <h1 className="text-3xl md:text-4xl font-heading text-white mb-3 tracking-tight font-bold">
           Réservation confirmée
         </h1>
-        <p className="text-white/60 font-light mb-10 max-w-md mx-auto">
+        <p className="text-white/60 font-light mb-10 max-w-md mx-auto leading-relaxed">
           Votre demande a été enregistrée. Finalisez votre réservation par virement bancaire.
         </p>
 
         {/* Payment Info Card */}
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 md:p-8 mb-8 text-left">
-          <span className="text-brand-blue text-xs uppercase tracking-widest font-semibold mb-4 block">
+          <span className="text-brand-blue text-xs uppercase font-semibold mb-4 block tracking-wider">
             Informations de paiement
           </span>
 
           <div className="space-y-4">
             {paymentSettings?.bankName && (
               <div>
-                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1">
+                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1 font-semibold">
                   Banque
                 </span>
-                <p className="text-white font-medium">
+                <p className="text-white font-medium leading-relaxed">
                   {String(paymentSettings.bankName)}
                 </p>
               </div>
             )}
             {paymentSettings?.accountHolder && (
               <div>
-                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1">
+                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1 font-semibold">
                   Titulaire
                 </span>
-                <p className="text-white font-medium">
+                <p className="text-white font-medium leading-relaxed">
                   {String(paymentSettings.accountHolder)}
                 </p>
               </div>
             )}
             {paymentSettings?.ribNumber && (
               <div>
-                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1">
+                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1 font-semibold">
                   RIB
                 </span>
-                <p className="text-white font-mono text-lg tracking-wider bg-black/20 rounded-lg px-4 py-2">
+                <p className="text-white font-mono text-lg tracking-wider bg-black/20 rounded-lg px-4 py-2 leading-relaxed">
                   {String(paymentSettings.ribNumber)}
                 </p>
               </div>
             )}
             {paymentSettings?.iban && (
               <div>
-                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1">
+                <span className="text-white/40 text-xs uppercase tracking-wider block mb-1 font-semibold">
                   IBAN
                 </span>
-                <p className="text-white font-mono text-sm break-all bg-black/20 rounded-lg px-4 py-2">
+                <p className="text-white font-mono text-sm break-all bg-black/20 rounded-lg px-4 py-2 leading-relaxed">
                   {String(paymentSettings.iban)}
                 </p>
               </div>
@@ -114,7 +114,7 @@ export default async function CheckoutSuccessPage() {
 
           {qrUrl && (
             <div className="mt-6 pt-6 border-t border-white/10">
-              <span className="text-white/40 text-xs uppercase tracking-wider block mb-3">
+              <span className="text-white/40 text-xs uppercase tracking-wider block mb-3 font-semibold">
                 QR Code de paiement
               </span>
               <div className="bg-white rounded-xl p-3 inline-block">

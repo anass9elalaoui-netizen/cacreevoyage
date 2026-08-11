@@ -50,7 +50,7 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="font-serif text-4xl md:text-5xl text-white mb-4"
+          className="font-heading text-4xl md:text-5xl text-white mb-4 tracking-tight font-bold"
         >
           Ce que disent nos Voyageurs
         </motion.h2>
@@ -88,7 +88,7 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
             <StarRating rating={testimonial.rating} />
 
             {/* Quote */}
-            <p className="font-serif text-xl md:text-[22px] italic text-white leading-relaxed mt-4 mb-6 line-clamp-5">
+            <p className="font-heading text-xl md:text-[22px] italic text-white leading-relaxed mt-4 mb-6 line-clamp-5 font-normal">
               &ldquo;{testimonial.testimonialText}&rdquo;
             </p>
 
@@ -110,11 +110,11 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
               )}
 
               <div>
-                <p className="text-white text-sm font-medium">
+                <p className="text-white text-sm font-medium leading-relaxed">
                   {testimonial.travelerName}
                 </p>
                 {testimonial.travelerOrigin && (
-                  <p className="text-brand-silver text-xs">
+                  <p className="text-brand-silver text-xs leading-relaxed font-normal">
                     {testimonial.travelerOrigin}
                   </p>
                 )}

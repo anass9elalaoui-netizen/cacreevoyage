@@ -29,8 +29,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-heading)', 'sans-serif'],
+        body: ['var(--font-body)', 'sans-serif'],
       },
       boxShadow: {
         glass: '0 8px 32px 0 rgba(31, 38, 135, 0.07)',

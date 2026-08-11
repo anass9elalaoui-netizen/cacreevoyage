@@ -41,7 +41,7 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block"
+          className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider"
         >
           Circuits Signature
         </motion.span>
@@ -50,7 +50,7 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-4"
+          className="font-heading text-4xl md:text-6xl text-slate-900 dark:text-white mb-4 font-medium tracking-wide"
         >
           Nos Voyages d&apos;Exception
         </motion.h2>

@@ -11,12 +11,12 @@ export default function MentionsLegalesPage() {
     <>
       <main className="relative min-h-screen bg-slate-50 dark:bg-brand-dark transition-colors duration-700 pt-32 pb-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <h1 className="font-serif text-4xl md:text-5xl text-slate-900 dark:text-white mb-12">
+          <h1 className="font-heading text-4xl md:text-5xl text-slate-900 dark:text-white mb-12 tracking-tight font-bold">
             Mentions Légales
           </h1>
-          <div className="space-y-8 text-slate-600 dark:text-brand-silver text-base leading-relaxed font-sans">
+          <div className="space-y-8 text-slate-600 dark:text-brand-silver text-base leading-relaxed font-body">
             <section>
-              <h2 className="font-serif text-2xl text-slate-900 dark:text-white mb-4">Éditeur du Site</h2>
+              <h2 className="font-heading text-2xl text-slate-900 dark:text-white mb-4">Éditeur du Site</h2>
               <p>
                 Le site <strong className="text-slate-900 dark:text-white">cacreevoyage.com</strong> est édité par 
                 Ça Crée Voyage, agence de voyages sur-mesure immatriculée au Maroc.
@@ -24,14 +24,14 @@ export default function MentionsLegalesPage() {
             </section>
 
             <section>
-              <h2 className="font-serif text-2xl text-slate-900 dark:text-white mb-4">Hébergement</h2>
+              <h2 className="font-heading text-2xl text-slate-900 dark:text-white mb-4">Hébergement</h2>
               <p>
                 Ce site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA.
               </p>
             </section>
 
             <section>
-              <h2 className="font-serif text-2xl text-slate-900 dark:text-white mb-4">Propriété Intellectuelle</h2>
+              <h2 className="font-heading text-2xl text-slate-900 dark:text-white mb-4">Propriété Intellectuelle</h2>
               <p>
                 L&apos;ensemble du contenu du site (textes, images, vidéos, logos, graphismes) est protégé 
                 par les lois relatives à la propriété intellectuelle. Toute reproduction totale ou 
@@ -40,7 +40,7 @@ export default function MentionsLegalesPage() {
             </section>
 
             <section>
-              <h2 className="font-serif text-2xl text-slate-900 dark:text-white mb-4">Contact</h2>
+              <h2 className="font-heading text-2xl text-slate-900 dark:text-white mb-4">Contact</h2>
               <p>
                 Email : <a href="mailto:contact@cacreevoyage.com" className="text-brand-blue hover:underline">contact@cacreevoyage.com</a><br />
                 WhatsApp : +212 661 373 347

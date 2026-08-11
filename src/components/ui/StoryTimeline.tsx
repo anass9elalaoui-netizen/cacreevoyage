@@ -80,7 +80,7 @@ function StoryCard({ day, index }: { day: StoryDay; index: number }) {
         viewport={{ amount: 0.5 }}
         className="absolute top-6 left-6 z-20"
       >
-        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase tracking-[0.2em] drop-shadow-lg">
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase drop-shadow-lg tracking-wider">
           <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
           Jour {String(day.dayNumber).padStart(2, '0')}
         </span>
@@ -94,7 +94,7 @@ function StoryCard({ day, index }: { day: StoryDay; index: number }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ amount: 0.5 }}
-          className="text-3xl md:text-4xl font-serif text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
+          className="text-3xl md:text-4xl font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight font-bold"
           style={{ textShadow: '0 0 40px rgba(56,163,165,0.12)' }}
         >
           {day.title}
@@ -138,7 +138,7 @@ function StoryCard({ day, index }: { day: StoryDay; index: number }) {
 
         {/* Glassmorphism bottom bar */}
         <div className="mt-3 pt-3 border-t border-white/10">
-          <span className="text-white/30 text-[10px] uppercase tracking-[0.2em] font-medium">
+          <span className="text-white/30 text-[10px] uppercase font-semibold tracking-wider">
             {day.activities.length} activité{day.activities.length > 1 ? 's' : ''}
           </span>
         </div>

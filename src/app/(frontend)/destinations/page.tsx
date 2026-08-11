@@ -89,13 +89,13 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
         <div className="relative z-10 flex justify-center gap-4">
           <Link
             href="/destinations/international"
-            className="px-6 py-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-xl text-slate-700 dark:text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300"
+            className="px-6 py-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-xl text-slate-700 dark:text-white/80 text-sm uppercase hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 font-semibold tracking-wider"
           >
             International
           </Link>
           <Link
             href="/destinations/national"
-            className="px-6 py-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-xl text-slate-700 dark:text-white/80 text-sm uppercase tracking-widest font-medium hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300"
+            className="px-6 py-3 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-xl text-slate-700 dark:text-white/80 text-sm uppercase hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 font-semibold tracking-wider"
           >
             Maroc
           </Link>
@@ -147,7 +147,7 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
                     {/* Theme Badge */}
                     {dest.theme && (
                       <div className="absolute top-4 left-4 z-20">
-                        <span className="px-3 py-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 text-slate-700 dark:text-white/80 text-[10px] uppercase tracking-widest font-medium shadow-sm dark:shadow-none">
+                        <span className="px-3 py-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 text-slate-700 dark:text-white/80 text-[10px] uppercase shadow-sm dark:shadow-none font-semibold tracking-wider">
                           {locale === 'en' ? (themeLabelEn[dest.theme] || dest.theme) : (themeLabel[dest.theme] || dest.theme)}
                         </span>
                       </div>
@@ -166,11 +166,11 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
 
                     <div className="absolute bottom-6 left-6 right-6 z-20">
                       <div className="bg-white/70 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/20 rounded-2xl px-5 py-4 inline-block shadow-lg dark:shadow-none">
-                        <h3 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md">
+                        <h3 className="text-2xl md:text-3xl font-heading text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md tracking-tight font-bold">
                           {dest.title}
                         </h3>
                         {dest.description && (
-                          <p className="text-slate-600 dark:text-white/50 text-xs font-light mt-1 line-clamp-2">{dest.description}</p>
+                          <p className="text-slate-600 dark:text-white/50 text-xs font-light mt-1 line-clamp-2 leading-relaxed">{dest.description}</p>
                         )}
                       </div>
                     </div>
@@ -181,8 +181,8 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center relative z-10">
-            <h2 className="text-3xl font-serif text-slate-900 dark:text-white mb-4">{t.emptyTitle}</h2>
-            <p className="text-slate-600 dark:text-white/40">{t.emptySubtitle}</p>
+            <h2 className="text-3xl font-heading text-slate-900 dark:text-white mb-4 tracking-tight font-bold">{t.emptyTitle}</h2>
+            <p className="text-slate-600 dark:text-white/40 leading-relaxed font-normal">{t.emptySubtitle}</p>
           </div>
         )}
       </section>

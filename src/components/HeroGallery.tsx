@@ -100,7 +100,7 @@ export default function HeroGallery() {
                 }`}
               >
                 <span
-                  className="text-slate-900 dark:text-white/80 tracking-widest uppercase font-serif drop-shadow-md dark:drop-shadow-none text-2xl whitespace-nowrap"
+                  className="text-slate-900 dark:text-white/80 uppercase font-heading drop-shadow-md text-2xl whitespace-nowrap font-bold tracking-widest"
                   style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
                 >
                   {dest.title}
@@ -114,10 +114,10 @@ export default function HeroGallery() {
                 }`}
               >
                 <div className="liquid-glass rounded-[2rem] p-8 flex flex-col items-center justify-center text-center max-w-lg w-full mx-8 pointer-events-auto">
-                  <span className="text-brand-cyan tracking-[0.2em] text-xs font-bold uppercase mb-2">
+                  <span className="text-brand-cyan text-xs uppercase mb-2 font-semibold tracking-wider">
                     {dest.subtitle}
                   </span>
-                  <h2 className="text-[clamp(3rem,6vw,6rem)] font-serif leading-[1.05] text-slate-900 dark:text-white mb-4">
+                  <h2 className="text-[clamp(3rem,6vw,6rem)] font-heading leading-[1.05] text-slate-900 dark:text-white mb-4 font-medium tracking-wide">
                     {dest.title}
                   </h2>
                   <Link href={dest.link} className="bg-brand-blue text-white px-8 py-3 rounded-full text-sm mt-4 hover:scale-105 transition-transform">
@@ -157,10 +157,10 @@ export default function HeroGallery() {
             {/* Content */}
             <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-24 px-4 pointer-events-none">
               <div className="liquid-glass rounded-[2rem] p-8 flex flex-col items-center justify-center text-center w-full max-w-[90%] pointer-events-auto">
-                <span className="text-brand-cyan tracking-[0.2em] text-xs font-bold uppercase mb-2">
+                <span className="text-brand-cyan text-xs uppercase mb-2 font-semibold tracking-wider">
                   {dest.subtitle}
                 </span>
-                <h2 className="text-[clamp(2.5rem,8vw,4rem)] font-serif leading-[1.05] text-slate-900 dark:text-white mb-4">
+                <h2 className="text-[clamp(2.5rem,8vw,4rem)] font-heading leading-[1.05] text-slate-900 dark:text-white mb-4 font-medium tracking-wide">
                   {dest.title}
                 </h2>
                 <Link href={dest.link} className="bg-brand-blue text-white px-8 py-3 rounded-full text-sm mt-4 hover:scale-105 transition-transform">

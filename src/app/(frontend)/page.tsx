@@ -187,10 +187,10 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
           {/* Left — Text */}
           <div>
-            <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
+            <span className="uppercase text-brand-gold text-xs font-body mb-4 block font-semibold tracking-wider">
               {t.philosophySubtitle}
             </span>
-            <h2 className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-8 leading-[1.1]">
+            <h2 className="font-heading text-4xl md:text-6xl text-slate-900 dark:text-white mb-8 leading-[1.1] font-medium tracking-wide">
               {t.philosophyTitle}
             </h2>
             <ScrollTextReveal 
@@ -204,7 +204,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
                 t.philosophyBullet3,
                 t.philosophyBullet4,
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 text-slate-800 dark:text-white/80 font-medium dark:font-normal text-sm font-sans">
+                <div key={i} className="flex items-center gap-3 text-slate-800 dark:text-white/80 font-medium dark:font-normal text-sm font-body">
                   <span>{item}</span>
                 </div>
               ))}
@@ -212,7 +212,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
             <MagneticButton>
               <Link
                 href="/sur-mesure"
-                className="inline-block mt-10 bg-brand-gold/10 dark:bg-brand-gold/20 border border-brand-gold/30 hover:bg-brand-gold/20 dark:hover:bg-brand-gold/30 text-yellow-700 dark:text-brand-gold px-8 py-4 rounded-full font-sans text-sm uppercase tracking-[0.1em] font-bold dark:font-medium transition-all duration-300"
+                className="inline-block mt-10 bg-brand-gold/10 dark:bg-brand-gold/20 border border-brand-gold/30 hover:bg-brand-gold/20 dark:hover:bg-brand-gold/30 text-yellow-700 dark:text-brand-gold px-8 py-4 rounded-full font-body text-sm uppercase dark:font-medium transition-all duration-300 font-semibold tracking-wider"
               >
                 {t.philosophyCTA}
               </Link>
@@ -240,10 +240,10 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       <section className="relative w-full py-16 lg:py-24 bg-slate-100 dark:bg-brand-deeper transition-colors duration-700 flex justify-center px-4">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="relative z-20 flex flex-col items-center text-center p-12 rounded-[2.5rem] bg-white dark:bg-white/5 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-none ring-1 ring-black/5 dark:ring-white/10 max-w-4xl w-full">
-          <h2 className="text-5xl md:text-7xl font-serif text-slate-900 dark:text-white mb-6 tracking-tighter drop-shadow-md dark:drop-shadow-none">
+          <h2 className="text-5xl md:text-7xl font-heading text-slate-900 dark:text-white mb-6 drop-shadow-md dark:drop-shadow-none font-medium tracking-wide">
             {t.readyTitle}
           </h2>
-          <p className="text-slate-600 dark:text-white/80 text-xl font-light mb-10 max-w-xl mx-auto">
+          <p className="text-slate-600 dark:text-white/80 text-xl font-light mb-10 max-w-xl mx-auto leading-relaxed">
             {t.readyText}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">

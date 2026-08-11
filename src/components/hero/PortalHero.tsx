@@ -393,10 +393,10 @@ export default function PortalHero({
           opacityValues={[0, 1, 1, 0]}
         >
           <div className="text-center max-w-3xl px-6">
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-white font-light leading-tight drop-shadow-lg">
+            <h1 className="font-heading text-4xl sm:text-5xl md:text-7xl text-white leading-tight drop-shadow-lg font-medium tracking-wide">
               {textPhase1Title}
             </h1>
-            <p className="font-serif italic text-xl sm:text-2xl md:text-3xl text-[#C9A84C] mt-4 drop-shadow-md">
+            <p className="font-heading italic text-xl sm:text-2xl md:text-3xl text-[#C9A84C] mt-4 drop-shadow-md tracking-tight leading-relaxed font-bold">
               {textPhase1Sub}
             </p>
           </div>
@@ -411,10 +411,10 @@ export default function PortalHero({
           opacityValues={[0, 1, 1, 0]}
         >
           <div className="text-center max-w-2xl px-6">
-            <h2 className="font-serif text-4xl md:text-6xl text-white font-light tracking-wide drop-shadow-lg">
+            <h2 className="font-heading text-4xl md:text-6xl text-white drop-shadow-lg font-medium tracking-wide">
               {textPhase2Title}
             </h2>
-            <p className="font-sans text-sm md:text-base text-[#C9A84C] uppercase tracking-[0.3em] mt-4 font-light">
+            <p className="font-body text-sm md:text-base text-[#C9A84C] uppercase mt-4 font-semibold tracking-wider leading-relaxed">
               {textPhase2Sub}
             </p>
           </div>
@@ -429,12 +429,12 @@ export default function PortalHero({
           opacityValues={[0, 1, 1, 0]}
         >
           <div className="text-center flex flex-col items-center">
-            <h2 className="font-serif text-4xl md:text-5xl text-white font-light mb-8 drop-shadow-xl">
+            <h2 className="font-heading text-4xl md:text-5xl text-white mb-8 drop-shadow-xl tracking-tight font-bold">
               {textPhase3Title}
             </h2>
             <a
               href="/sur-mesure"
-              className="pointer-events-auto px-10 py-4 rounded-full border border-[#38A3A5]/50 text-[#38A3A5] font-sans text-xs md:text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-[#38A3A5]/10 hover:border-[#38A3A5] backdrop-blur-md flex items-center gap-3"
+              className="pointer-events-auto px-10 py-4 rounded-full border border-[#38A3A5]/50 text-[#38A3A5] font-body text-xs md:text-sm uppercase transition-all duration-300 hover:bg-[#38A3A5]/10 hover:border-[#38A3A5] backdrop-blur-md flex items-center gap-3 font-semibold tracking-wider"
             >
               {ctaLabel} <span>&rarr;</span>
             </a>
@@ -446,7 +446,7 @@ export default function PortalHero({
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
           style={{ opacity: scrollIndicatorOpacity }}
         >
-          <span className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-sans">
+          <span className="text-white/40 text-[10px] uppercase font-body font-semibold tracking-wider">
             Scroll
           </span>
           <div className="w-[1px] h-8 bg-gradient-to-b from-white/40 to-transparent animate-pulse" />

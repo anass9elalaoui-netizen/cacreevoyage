@@ -89,7 +89,7 @@ function StoryCard({
         animate={isActive ? { y: 0, opacity: 1 } : { y: -20, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 250, damping: 22, delay: isActive ? 0.1 : 0 }}
       >
-        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase tracking-[0.2em] drop-shadow-lg">
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase drop-shadow-lg tracking-wider">
           <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
           Jour {String(day.dayNumber).padStart(2, '0')}
         </span>
@@ -99,7 +99,7 @@ function StoryCard({
       <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
         {/* Title — slides from left */}
         <motion.h3
-          className="text-3xl md:text-4xl font-serif text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
+          className="text-3xl md:text-4xl font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight font-bold"
           style={{ textShadow: '0 0 40px rgba(56,163,165,0.12)' }}
           animate={isActive ? { x: 0, opacity: 1 } : { x: -30, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 20, delay: isActive ? 0.15 : 0 }}
@@ -146,7 +146,7 @@ function StoryCard({
           animate={isActive ? { opacity: 1 } : { opacity: 0 }}
           transition={{ delay: isActive ? 0.5 : 0, duration: 0.3 }}
         >
-          <span className="text-white/30 text-[10px] uppercase tracking-[0.2em] font-medium">
+          <span className="text-white/30 text-[10px] uppercase font-semibold tracking-wider">
             {day.activities.length} activité{day.activities.length > 1 ? 's' : ''}
           </span>
         </motion.div>
@@ -174,13 +174,13 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
       <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/55 to-transparent z-10" />
 
       {/* ── Day Badge ── */}
-      <div className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase tracking-[0.2em] drop-shadow-lg">
+      <div className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase drop-shadow-lg tracking-wider">
         Jour {String(day.dayNumber).padStart(2, '0')}
       </div>
 
       {/* ── Content Block ── */}
       <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
-        <h3 className="text-3xl md:text-4xl font-serif text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+        <h3 className="text-3xl md:text-4xl font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight font-bold">
           {day.title}
         </h3>
         <div className="flex items-center gap-2 text-brand-blue">

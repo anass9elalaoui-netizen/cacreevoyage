@@ -88,7 +88,7 @@ export default function BookingSidebar({
           {pricing?.basePrice && (
             <div className="text-right">
               <span className="text-[11px] text-brand-silver block">{t.from}</span>
-              <span className="text-2xl font-serif text-brand-gold">
+              <span className="text-2xl font-heading text-brand-gold">
                 {pricing.basePrice.toLocaleString()} {pricing.currency || '€'}
               </span>
               <span className="text-brand-silver text-xs">{t.pers}</span>
@@ -177,7 +177,7 @@ export default function BookingSidebar({
 
         {/* No price fallback */}
         {!pricing?.basePrice && (
-          <p className="text-center text-brand-silver text-xs italic">
+          <p className="text-center text-brand-silver text-xs italic leading-relaxed font-normal">
             {t.onRequest}
           </p>
         )}
@@ -193,8 +193,8 @@ export default function BookingSidebar({
             >
               ✕
             </button>
-            <h3 className="text-2xl font-serif text-white mb-2">{t.sendRequest}</h3>
-            <p className="text-white/60 text-sm mb-6">{t.expertReply}</p>
+            <h3 className="text-2xl font-heading text-white mb-2">{t.sendRequest}</h3>
+            <p className="text-white/60 text-sm mb-6 leading-relaxed font-normal">{t.expertReply}</p>
             
             <form onSubmit={handleWhatsAppSubmit} className="space-y-4">
               <div>

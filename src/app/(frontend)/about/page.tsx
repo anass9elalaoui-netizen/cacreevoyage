@@ -45,13 +45,13 @@ export default function AboutPage() {
           <div className="absolute top-20 left-1/4 w-[600px] h-[600px] bg-brand-blue/6 rounded-full blur-[150px] pointer-events-none" />
           <div className="max-w-7xl mx-auto">
             <div className="max-w-3xl">
-              <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
+              <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
                 Notre Histoire
               </span>
-              <h1 className="font-serif text-5xl md:text-7xl text-slate-900 dark:text-white leading-[1.1] mb-8">
+              <h1 className="font-heading text-5xl md:text-7xl text-slate-900 dark:text-white leading-[1.1] mb-8 font-medium tracking-wide">
                 L&apos;Art du Voyage Créé
               </h1>
-              <p className="text-slate-600 dark:text-brand-silver text-lg md:text-xl leading-relaxed max-w-2xl">
+              <p className="text-slate-600 dark:text-brand-silver text-lg md:text-xl leading-relaxed max-w-2xl font-normal">
                 Fondée au cœur du Maroc, Ça Crée Voyage est née d&apos;une passion simple : 
                 transformer le voyage en œuvre d&apos;art. Nous croyons que chaque destination 
                 raconte une histoire, et que chaque voyageur mérite de la vivre pleinement.
@@ -73,10 +73,10 @@ export default function AboutPage() {
                   }}
                 >
                   <div className="mb-6">{pillar.icon}</div>
-                  <h3 className="font-serif text-2xl md:text-3xl text-slate-900 dark:text-white mb-4">
+                  <h3 className="font-heading text-2xl md:text-3xl text-slate-900 dark:text-white mb-4 tracking-tight font-bold">
                     {pillar.title}
                   </h3>
-                  <p className="text-slate-600 dark:text-brand-silver text-sm md:text-base leading-relaxed">
+                  <p className="text-slate-600 dark:text-brand-silver text-sm md:text-base leading-relaxed font-normal">
                     {pillar.description}
                   </p>
                 </div>
@@ -89,15 +89,15 @@ export default function AboutPage() {
         <section className="relative py-24 px-6 bg-slate-100 dark:bg-brand-deeper transition-colors duration-700">
           <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-brand-gold/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
           <div className="max-w-3xl mx-auto text-center relative z-10">
-            <h2 className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-6">
+            <h2 className="font-heading text-4xl md:text-6xl text-slate-900 dark:text-white mb-6 font-medium tracking-wide">
               Prêt à créer votre voyage ?
             </h2>
-            <p className="text-slate-600 dark:text-brand-silver text-lg mb-10">
+            <p className="text-slate-600 dark:text-brand-silver text-lg mb-10 leading-relaxed font-normal">
               Parlez-nous de vos rêves et laissez-nous les transformer en réalité.
             </p>
             <a
               href="/sur-mesure"
-              className="inline-block bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-4 rounded-full font-sans text-sm uppercase tracking-[0.1em] font-medium transition-all duration-300 shadow-[0_4px_20px_rgba(56,163,165,0.3)] hover:shadow-[0_8px_30px_rgba(56,163,165,0.5)]"
+              className="inline-block bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-4 rounded-full font-body text-sm uppercase transition-all duration-300 shadow-[0_4px_20px_rgba(56,163,165,0.3)] hover:shadow-[0_8px_30px_rgba(56,163,165,0.5)] font-semibold tracking-wider"
             >
               Commencer maintenant
             </a>

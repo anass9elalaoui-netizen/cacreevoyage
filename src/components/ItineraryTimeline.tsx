@@ -76,7 +76,7 @@ export default function ItineraryTimeline({ blocks }: { blocks: any[] }) {
                   <DOFImage src={imageUrl} alt={dayTitle} />
                 ) : (
                   <div className="w-full max-w-lg aspect-[4/5] rounded-[2rem] bg-brand-dark/5 flex items-center justify-center">
-                    <span className="text-brand-dark/40 font-serif italic">
+                    <span className="text-brand-dark/40 font-heading italic">
                       Image indisponible
                     </span>
                   </div>
@@ -87,11 +87,11 @@ export default function ItineraryTimeline({ blocks }: { blocks: any[] }) {
               <div className="w-full md:w-1/2 flex flex-col justify-center">
                 <div className="flex items-center gap-4 mb-4">
                   <span className="h-px w-12 bg-brand-blue block" />
-                  <h3 className="text-sm font-semibold tracking-widest text-brand-blue uppercase">
+                  <h3 className="text-sm font-semibold text-brand-blue uppercase tracking-wider">
                     Jour {String(index + 1).padStart(2, '0')}
                   </h3>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-serif text-brand-dark mb-8 leading-tight">
+                <h2 className="text-3xl md:text-5xl font-heading text-brand-dark mb-8 leading-tight tracking-tight font-bold">
                   {block.dayTitle}
                 </h2>
                 <div className="text-brand-dark/70 font-light text-lg leading-relaxed space-y-4">

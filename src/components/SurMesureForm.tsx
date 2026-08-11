@@ -88,9 +88,9 @@ export default function SurMesureForm() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center max-w-md"
         >
-          <span className="text-6xl mb-6 block">✨</span>
-          <h2 className="font-serif text-4xl text-slate-900 dark:text-white mb-4">Merci !</h2>
-          <p className="text-slate-600 dark:text-brand-silver text-lg mb-8">
+          <span className="text-6xl mb-6 block font-medium tracking-wide">✨</span>
+          <h2 className="font-heading text-4xl text-slate-900 dark:text-white mb-4 tracking-tight font-bold">Merci !</h2>
+          <p className="text-slate-600 dark:text-brand-silver text-lg mb-8 leading-relaxed font-normal">
             Votre demande a été envoyée via WhatsApp. Nos experts vous répondront sous 24h.
           </p>
           <a href="/" className="text-brand-blue hover:underline text-sm">← Retour à l&apos;accueil</a>
@@ -136,10 +136,10 @@ export default function SurMesureForm() {
           {/* STEP 1: Destination */}
           {currentStep === 1 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
+              <h2 className="font-heading text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center tracking-tight font-bold">
                 Où souhaitez-vous voyager ?
               </h2>
-              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Choisissez votre destination de rêve</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8 leading-relaxed font-normal">Choisissez votre destination de rêve</p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {destinations.map((dest) => (
                   <button
@@ -170,10 +170,10 @@ export default function SurMesureForm() {
           {/* STEP 2: Dates & Style */}
           {currentStep === 2 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
+              <h2 className="font-heading text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center tracking-tight font-bold">
                 Quand et comment ?
               </h2>
-              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Vos préférences de dates et de style</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8 leading-relaxed font-normal">Vos préférences de dates et de style</p>
               <div className="space-y-6">
                 <div>
                   <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Dates souhaitées</label>
@@ -233,10 +233,10 @@ export default function SurMesureForm() {
           {/* STEP 3: Travelers */}
           {currentStep === 3 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
+              <h2 className="font-heading text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center tracking-tight font-bold">
                 Qui voyage ?
               </h2>
-              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Nombre de voyageurs</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8 leading-relaxed font-normal">Nombre de voyageurs</p>
               <div className="space-y-6 max-w-sm mx-auto">
                 <div>
                   <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Adultes</label>
@@ -245,7 +245,7 @@ export default function SurMesureForm() {
                       onClick={() => update('travelers', String(Math.max(1, parseInt(formData.travelers) - 1)))}
                       className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
                     >−</button>
-                    <span className="text-3xl font-serif text-slate-900 dark:text-white w-12 text-center">{formData.travelers}</span>
+                    <span className="text-3xl font-heading text-slate-900 dark:text-white w-12 text-center tracking-tight font-bold">{formData.travelers}</span>
                     <button
                       onClick={() => update('travelers', String(parseInt(formData.travelers) + 1))}
                       className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
@@ -259,7 +259,7 @@ export default function SurMesureForm() {
                       onClick={() => update('children', String(Math.max(0, parseInt(formData.children) - 1)))}
                       className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
                     >−</button>
-                    <span className="text-3xl font-serif text-slate-900 dark:text-white w-12 text-center">{formData.children}</span>
+                    <span className="text-3xl font-heading text-slate-900 dark:text-white w-12 text-center tracking-tight font-bold">{formData.children}</span>
                     <button
                       onClick={() => update('children', String(parseInt(formData.children) + 1))}
                       className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none"
@@ -273,10 +273,10 @@ export default function SurMesureForm() {
           {/* STEP 4: Contact */}
           {currentStep === 4 && (
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center">
+              <h2 className="font-heading text-3xl md:text-4xl text-slate-900 dark:text-white mb-2 text-center tracking-tight font-bold">
                 Dernière étape
               </h2>
-              <p className="text-slate-600 dark:text-brand-silver text-center mb-8">Vos coordonnées pour recevoir votre devis</p>
+              <p className="text-slate-600 dark:text-brand-silver text-center mb-8 leading-relaxed font-normal">Vos coordonnées pour recevoir votre devis</p>
               <div className="space-y-4">
                 <div>
                   <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2">Prénom & Nom *</label>

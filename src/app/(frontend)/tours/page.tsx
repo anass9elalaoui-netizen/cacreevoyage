@@ -93,9 +93,9 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
               </div>
             ) : (
               <div className="text-center py-20 bg-white dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
-                <span className="text-4xl block mb-4">✨</span>
-                <h3 className="font-serif text-2xl text-slate-900 dark:text-white mb-2">{t.comingSoon}</h3>
-                <p className="text-slate-600 dark:text-brand-silver">{t.expertsPreparing}</p>
+                <span className="text-4xl block mb-4 tracking-tight font-bold">✨</span>
+                <h3 className="font-heading text-2xl text-slate-900 dark:text-white mb-2">{t.comingSoon}</h3>
+                <p className="text-slate-600 dark:text-brand-silver leading-relaxed font-normal">{t.expertsPreparing}</p>
               </div>
             )}
           </div>

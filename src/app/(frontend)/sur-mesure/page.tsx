@@ -29,14 +29,14 @@ export default async function SurMesurePage(props: { searchParams: Promise<{ [ke
           <div className="max-w-4xl mx-auto">
             {/* Hero Text */}
             <div className="text-center mb-16">
-              <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
+              <span className="uppercase text-brand-gold text-xs font-body mb-4 block font-semibold tracking-wider">
                 {t.tag}
               </span>
-              <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-[1.1]">
+              <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-[1.1] font-medium tracking-wide">
                 {t.title1}<br />
                 <span className="text-brand-blue">{t.title2}</span>
               </h1>
-              <p className="text-brand-silver text-lg max-w-xl mx-auto">
+              <p className="text-brand-silver text-lg max-w-xl mx-auto leading-relaxed font-normal">
                 {t.subtitle}
               </p>
             </div>

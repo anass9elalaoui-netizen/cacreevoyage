@@ -102,7 +102,7 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] mb-4 text-white/90 uppercase flex items-center gap-2 md:gap-4 font-sans"
+            className="text-[10px] md:text-xs md:tracking-[0.4em] mb-4 text-white/90 uppercase flex items-center gap-2 md:gap-4 font-body font-semibold tracking-wider"
           >
             <span className="w-8 h-[1px] bg-white/50" />
             {currentSlides[activeIndex].subtitle}
@@ -115,8 +115,7 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-3xl sm:text-4xl md:text-[clamp(4.5rem,8vw,8rem)] leading-none text-white drop-shadow-2xl text-center px-4 w-full max-w-[65vw] md:max-w-4xl mx-auto"
-            style={{ fontFamily: "'Instrument Serif', serif" }}
+            className="text-4xl sm:text-5xl md:text-[clamp(3rem,5vw,5.5rem)] leading-[1.1] text-white drop-shadow-2xl text-center px-4 w-full max-w-4xl mx-auto font-medium tracking-wide font-heading"
           >
             {currentSlides[activeIndex].title}
           </motion.h2>
@@ -130,12 +129,11 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
               <button
                 key={slide.id}
                 onClick={() => setActiveIndex(index)}
-                className={`flex items-center justify-center whitespace-nowrap px-2 py-2 md:px-5 md:py-2.5 text-[10px] md:text-sm rounded-lg md:rounded-full transition-all duration-300 gap-2 ${
+                className={`flex items-center justify-center whitespace-nowrap px-2 py-2 md:px-5 md:py-2.5 text-[10px] md:text-sm rounded-lg md:rounded-full transition-all duration-300 gap-2 font-semibold tracking-wider ${
                   isActive 
                     ? 'bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' 
                     : 'text-slate-800/70 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
-                style={{ fontFamily: "system-ui, sans-serif", fontWeight: 500 }}
               >
                 {isActive && <Play className="w-3 h-3 fill-current" />}
                 {slide.label}

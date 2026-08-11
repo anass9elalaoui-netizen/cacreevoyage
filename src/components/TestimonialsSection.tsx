@@ -94,7 +94,7 @@ const TestimonialCard = ({ data }: { data: Testimonial }) => {
         <StarRating rating={data.rating} />
 
         {/* Quote */}
-        <p className="font-serif italic text-[0.95rem] text-slate-700 dark:text-slate-300 text-center line-clamp-2 leading-relaxed">
+        <p className="font-heading italic text-[0.95rem] text-slate-700 dark:text-slate-300 text-center line-clamp-2 leading-relaxed font-normal">
           &quot;{data.testimonialText}&quot;
         </p>
 
@@ -104,7 +104,7 @@ const TestimonialCard = ({ data }: { data: Testimonial }) => {
               {data.travelerName}
             </span>
             {data.travelerOrigin && (
-              <span className="text-[0.65rem] text-slate-500 uppercase tracking-widest mt-0.5">
+              <span className="text-[0.65rem] text-slate-500 uppercase mt-0.5 font-semibold tracking-wider">
                 {data.travelerOrigin}
               </span>
             )}
@@ -125,10 +125,10 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
   return (
     <section className="w-full py-20 md:py-32 overflow-hidden bg-slate-50/50 dark:bg-transparent">
       <div className="max-w-[1400px] mx-auto px-6 mb-12 flex flex-col items-center text-center">
-        <span className="uppercase tracking-[0.2em] text-brand-orange font-semibold text-xs mb-4 block">
+        <span className="uppercase text-brand-orange font-semibold text-xs mb-4 block tracking-wider">
           Ce que nos voyageurs disent
         </span>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-none tracking-tighter leading-tight max-w-2xl">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-none leading-tight max-w-2xl font-medium tracking-wide">
           120+ aventures. Des sourires qui durent.
         </h2>
       </div>

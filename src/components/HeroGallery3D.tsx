@@ -99,10 +99,10 @@ export default function HeroGallery3D() {
                 if (isRight) handleNext()
               }}
             >
-              <span className="text-brand-cyan tracking-[0.2em] text-xs md:text-sm font-bold uppercase mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <span className="text-brand-cyan text-xs md:text-sm uppercase mb-4 font-body font-semibold tracking-wider">
                 {dest.subtitle}
               </span>
-              <h2 className="text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.95] text-slate-900 dark:text-white mb-6 font-['Instrument_Serif']">
+              <h2 className="text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.95] text-slate-900 dark:text-white mb-6 font-['Instrument_Serif'] font-medium tracking-wide">
                 {dest.title}
               </h2>
               
@@ -114,7 +114,7 @@ export default function HeroGallery3D() {
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ delay: 0.1, duration: 0.3 }}
                   >
-                    <Link href={dest.link} className="inline-block bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-full text-sm font-medium hover:scale-105 transition-transform" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    <Link href={dest.link} className="inline-block bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-full text-sm font-medium hover:scale-105 transition-transform font-body">
                       Explorer la destination
                     </Link>
                   </motion.div>

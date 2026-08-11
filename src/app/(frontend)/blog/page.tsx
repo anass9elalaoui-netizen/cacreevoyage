@@ -28,20 +28,20 @@ export default async function BlogPage() {
 
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
+              <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
                 Blog
               </span>
-              <h1 className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-4">
+              <h1 className="font-heading text-4xl md:text-6xl text-slate-900 dark:text-white mb-4 font-medium tracking-wide">
                 Guides & Récits de Voyage
               </h1>
-              <p className="text-slate-600 dark:text-brand-silver text-lg max-w-xl mx-auto">
+              <p className="text-slate-600 dark:text-brand-silver text-lg max-w-xl mx-auto leading-relaxed font-normal">
                 Inspirations, conseils pratiques et histoires de nos voyageurs.
               </p>
             </div>
 
             {articles.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-slate-600 dark:text-brand-silver text-lg italic">
+                <p className="text-slate-600 dark:text-brand-silver text-lg italic leading-relaxed font-normal">
                   Les articles arrivent bientôt. Restez connectés ! ✈️
                 </p>
               </div>
@@ -75,7 +75,7 @@ export default async function BlogPage() {
                         )}
                         {/* Category badge */}
                         {article.category && (
-                          <span className="absolute top-4 left-4 px-3 py-1 text-[11px] uppercase tracking-wider text-brand-blue bg-white/80 dark:bg-brand-dark/80 backdrop-blur-md rounded-full border border-slate-200 dark:border-white/10">
+                          <span className="absolute top-4 left-4 px-3 py-1 text-[11px] uppercase tracking-wider text-brand-blue bg-white/80 dark:bg-brand-dark/80 backdrop-blur-md rounded-full border border-slate-200 dark:border-white/10 font-semibold">
                             {article.category}
                           </span>
                         )}
@@ -83,11 +83,11 @@ export default async function BlogPage() {
 
                       {/* Content */}
                       <div className="p-6">
-                        <h2 className="font-serif text-xl md:text-2xl text-slate-900 dark:text-white mb-2 group-hover:text-brand-blue transition-colors leading-tight">
+                        <h2 className="font-heading text-xl md:text-2xl text-slate-900 dark:text-white mb-2 group-hover:text-brand-blue transition-colors leading-tight">
                           {article.title}
                         </h2>
                         {article.excerpt && (
-                          <p className="text-slate-600 dark:text-brand-silver text-sm leading-relaxed line-clamp-3 mb-4">
+                          <p className="text-slate-600 dark:text-brand-silver text-sm leading-relaxed line-clamp-3 mb-4 font-normal">
                             {article.excerpt}
                           </p>
                         )}

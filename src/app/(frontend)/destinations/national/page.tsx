@@ -31,16 +31,16 @@ export default async function NationalDestinationsPage() {
         {/* Ambient Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-blue/8 rounded-full blur-[180px] pointer-events-none" />
 
-        <span className="relative z-10 uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md">
+        <span className="relative z-10 uppercase text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md tracking-wider">
           Destinations
         </span>
         <h1
-          className="relative z-10 text-6xl md:text-8xl font-serif text-slate-900 dark:text-white tracking-tighter leading-none mb-6"
+          className="relative z-10 text-6xl md:text-8xl font-heading text-slate-900 dark:text-white leading-none mb-6 font-medium tracking-wide"
           style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
         >
           Trésors du Maroc
         </h1>
-        <p className="relative z-10 text-slate-600 dark:text-white/50 text-lg md:text-xl font-light max-w-2xl mx-auto">
+        <p className="relative z-10 text-slate-600 dark:text-white/50 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
           Découvrez la beauté et la diversité du Maroc à travers nos itinéraires exclusifs.
         </p>
       </section>
@@ -90,7 +90,7 @@ export default async function NationalDestinationsPage() {
                     {/* Theme Badge */}
                     {dest.theme && (
                       <div className="absolute top-4 left-4 z-20">
-                        <span className="px-3 py-1 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 text-slate-700 dark:text-white/80 text-[10px] uppercase tracking-widest font-medium shadow-sm dark:shadow-none">
+                        <span className="px-3 py-1 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 text-slate-700 dark:text-white/80 text-[10px] uppercase shadow-sm dark:shadow-none font-semibold tracking-wider">
                           {themeLabel[dest.theme] || dest.theme}
                         </span>
                       </div>
@@ -98,11 +98,11 @@ export default async function NationalDestinationsPage() {
 
                     <div className="absolute bottom-6 left-6 right-6 z-20">
                       <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/20 rounded-2xl px-5 py-4 inline-block shadow-sm dark:shadow-none">
-                        <h3 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md">
+                        <h3 className="text-2xl md:text-3xl font-heading text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md tracking-tight font-bold">
                           {dest.title}
                         </h3>
                         {dest.description && (
-                          <p className="text-slate-500 dark:text-white/50 text-xs font-light mt-1 line-clamp-2">{dest.description}</p>
+                          <p className="text-slate-500 dark:text-white/50 text-xs font-light mt-1 line-clamp-2 leading-relaxed">{dest.description}</p>
                         )}
                       </div>
                     </div>
@@ -113,8 +113,8 @@ export default async function NationalDestinationsPage() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center relative z-10">
-            <h2 className="text-3xl font-serif text-slate-900 dark:text-white mb-4">Aucune destination pour le moment</h2>
-            <p className="text-slate-600 dark:text-white/40">Nos experts préparent actuellement nos itinéraires nationaux.</p>
+            <h2 className="text-3xl font-heading text-slate-900 dark:text-white mb-4 tracking-tight font-bold">Aucune destination pour le moment</h2>
+            <p className="text-slate-600 dark:text-white/40 leading-relaxed font-normal">Nos experts préparent actuellement nos itinéraires nationaux.</p>
           </div>
         )}
       </section>

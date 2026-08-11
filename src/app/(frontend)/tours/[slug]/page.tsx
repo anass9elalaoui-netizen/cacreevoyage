@@ -117,18 +117,18 @@ export default async function TourPage({ params, searchParams }: Args) {
 
         {/* Glass Card Content */}
         <div className="relative z-20 glass-card p-10 md:p-14 w-[90%] max-w-4xl text-center flex flex-col items-center transform translate-y-16">
-          <span className="uppercase tracking-widest text-brand-blue font-semibold mb-4 text-sm">
+          <span className="uppercase text-brand-blue font-semibold mb-4 text-sm tracking-wider">
             {tour.scope === 'national' ? 'Maroc' : 'International'} • {durationText}
           </span>
 
           <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-serif text-slate-900 dark:text-white mb-6 drop-shadow-sm dark:drop-shadow-md leading-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-heading text-slate-900 dark:text-white mb-6 drop-shadow-sm dark:drop-shadow-md leading-tight font-medium tracking-wide"
             style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
           >
             {tour.title}
           </h1>
 
-          <p className="text-slate-600 dark:text-white/70 text-lg md:text-xl max-w-2xl font-light mb-8">
+          <p className="text-slate-600 dark:text-white/70 text-lg md:text-xl max-w-2xl font-light mb-8 leading-relaxed">
             {tour.excerpt}
           </p>
 
@@ -138,14 +138,14 @@ export default async function TourPage({ params, searchParams }: Args) {
               <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-slate-900 dark:text-white font-serif text-sm md:text-base">
+              <span className="text-slate-900 dark:text-white font-heading text-sm md:text-base">
                 {formatDate(tour.departureDate)} — {formatDate(tour.returnDate)}
               </span>
             </div>
           )}
 
           <div className="w-px h-16 bg-gradient-to-b from-brand-blue to-transparent animate-pulse" />
-          <span className="text-slate-500 dark:text-white/50 text-xs tracking-widest uppercase mt-4">Scroll to discover</span>
+          <span className="text-slate-500 dark:text-white/50 text-xs uppercase mt-4 font-semibold tracking-wider">Scroll to discover</span>
         </div>
       </section>
 
@@ -158,10 +158,10 @@ export default async function TourPage({ params, searchParams }: Args) {
           <div className="lg:col-span-2 space-y-20">
             {/* Tour Overview */}
             <section>
-              <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
+              <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
                 {t.overview}
               </span>
-              <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-white mb-6">
+              <h2 className="font-heading text-3xl md:text-4xl text-slate-900 dark:text-white mb-6 tracking-tight font-bold">
                 {t.about}
               </h2>
 
@@ -194,7 +194,7 @@ export default async function TourPage({ params, searchParams }: Args) {
                 )}
               </div>
 
-              <p className="text-slate-600 dark:text-brand-silver text-base leading-relaxed">
+              <p className="text-slate-600 dark:text-brand-silver text-base leading-relaxed font-normal">
                 {tour.shortDescription || tour.excerpt}
               </p>
             </section>
@@ -202,11 +202,11 @@ export default async function TourPage({ params, searchParams }: Args) {
             {/* Includes / Excludes */}
             {(tour.pricing?.priceIncludes?.length > 0 || tour.pricing?.priceExcludes?.length > 0) && (
               <section>
-                <h2 className="font-serif text-3xl text-slate-900 dark:text-white mb-8">{t.includes}</h2>
+                <h2 className="font-heading text-3xl text-slate-900 dark:text-white mb-8 tracking-tight font-bold">{t.includes}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {tour.pricing?.priceIncludes?.length > 0 && (
                     <div className="rounded-2xl p-6 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
-                      <h3 className="text-slate-900 dark:text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <h3 className="text-slate-900 dark:text-white text-sm uppercase tracking-wider mb-4 flex items-center gap-2 font-semibold">
                         <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs">✓</span>
                         {t.included}
                       </h3>
@@ -222,7 +222,7 @@ export default async function TourPage({ params, searchParams }: Args) {
                   )}
                   {tour.pricing?.priceExcludes?.length > 0 && (
                     <div className="rounded-2xl p-6 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
-                      <h3 className="text-slate-900 dark:text-white font-medium text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <h3 className="text-slate-900 dark:text-white text-sm uppercase tracking-wider mb-4 flex items-center gap-2 font-semibold">
                         <span className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-xs">✕</span>
                         {t.notIncluded}
                       </h3>
@@ -243,14 +243,14 @@ export default async function TourPage({ params, searchParams }: Args) {
             {/* Departure dates table */}
             {tour.departureDates && tour.departureDates.length > 0 && (
               <section>
-                <h2 className="font-serif text-3xl text-slate-900 dark:text-white mb-8">{t.departureDates}</h2>
+                <h2 className="font-heading text-3xl text-slate-900 dark:text-white mb-8 tracking-tight font-bold">{t.departureDates}</h2>
                 <div className="rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm dark:shadow-none">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-slate-100 dark:bg-white/5">
-                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-medium">{t.date}</th>
-                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-medium">{t.spots}</th>
-                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-medium">{t.status}</th>
+                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-semibold">{t.date}</th>
+                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-semibold">{t.spots}</th>
+                        <th className="text-left px-6 py-3 text-slate-600 dark:text-brand-silver uppercase tracking-wider text-xs font-semibold">{t.status}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -299,15 +299,15 @@ export default async function TourPage({ params, searchParams }: Args) {
         <div className="absolute top-0 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center mb-16 md:mb-20 px-4 relative z-10">
-          <span className="uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md">
+          <span className="uppercase text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md tracking-wider">
             {t.itinerary}
           </span>
-          <h2 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white mb-6"
+          <h2 className="text-4xl md:text-6xl font-heading text-slate-900 dark:text-white mb-6 font-medium tracking-wide"
             style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
           >
             {t.dayByDay}
           </h2>
-          <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed">
             {t.swipe}
           </p>
         </div>
@@ -333,13 +333,13 @@ export default async function TourPage({ params, searchParams }: Args) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
         <div className="max-w-3xl mx-auto relative z-10">
-          <span className="uppercase tracking-widest text-brand-blue font-semibold mb-4 text-sm block">
+          <span className="uppercase text-brand-blue font-semibold mb-4 text-sm block tracking-wider">
             {t.takeAction}
           </span>
-          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-heading text-slate-900 dark:text-white mb-6 tracking-tight font-bold">
             {t.interested}
           </h2>
-          <p className="text-slate-600 dark:text-white/50 text-lg font-light mb-10 max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-white/50 text-lg font-light mb-10 max-w-2xl mx-auto leading-relaxed">
             {t.contactExperts}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -56,10 +56,10 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
     <section className="py-24 bg-slate-50 dark:bg-transparent relative transition-colors duration-700">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="uppercase tracking-[0.2em] text-brand-gold text-xs font-sans font-medium mb-4 block">
+          <span className="uppercase text-brand-gold text-xs font-body mb-4 block font-semibold tracking-wider">
             Avis Clients
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl text-slate-900 dark:text-white mb-6">
+          <h2 className="font-heading text-4xl md:text-5xl text-slate-900 dark:text-white mb-6 tracking-tight font-bold">
             Ils Ont Vécu <span className="text-brand-blue">l'Expérience</span>
           </h2>
         </div>
@@ -114,8 +114,8 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     />
                   ) : test.media?.mimeType?.startsWith('audio/') ? (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 p-6 text-center absolute inset-0">
-                      <span className="text-4xl mb-4">🎵</span>
-                      <p className="text-white/70 text-sm italic mb-4">Témoignage Audio</p>
+                      <span className="text-4xl mb-4 tracking-tight font-bold">🎵</span>
+                      <p className="text-white/70 text-sm italic mb-4 leading-relaxed font-normal">Témoignage Audio</p>
                       <audio
                         src={test.media?.url}
                         controls
@@ -166,15 +166,15 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     ))}
                   </div>
                   
-                  <p className="font-serif italic text-2xl md:text-3xl text-slate-800 dark:text-slate-200 leading-snug mb-10">
+                  <p className="font-heading italic text-2xl md:text-3xl text-slate-800 dark:text-slate-200 leading-snug mb-10 tracking-tight font-bold">
                     "{test.testimonialText || "Une expérience inoubliable avec Ça Crée Voyage."}"
                   </p>
                   
                   <div className="mt-auto">
-                    <h3 className="text-slate-900 dark:text-white font-medium text-xl uppercase tracking-wider mb-2">
+                    <h3 className="text-slate-900 dark:text-white text-xl uppercase tracking-wider mb-2 font-semibold">
                       {test.travelerName}
                     </h3>
-                    <p className="text-slate-500 text-base">
+                    <p className="text-slate-500 text-base leading-relaxed font-normal">
                       {test.travelerOrigin}
                     </p>
                   </div>

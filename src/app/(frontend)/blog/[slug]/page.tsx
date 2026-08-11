@@ -44,13 +44,13 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           <div className="max-w-3xl mx-auto relative z-10">
             {/* Category */}
             {article.category && (
-              <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
+              <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
                 {article.category}
               </span>
             )}
 
             {/* Title */}
-            <h1 className="font-serif text-4xl md:text-6xl text-white mb-6 leading-[1.1]">
+            <h1 className="font-heading text-4xl md:text-6xl text-white mb-6 leading-[1.1] font-medium tracking-wide">
               {article.title}
             </h1>
 
@@ -71,7 +71,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             </div>
 
             {/* Content */}
-            <div className="prose prose-invert prose-lg max-w-none [&_h2]:font-serif [&_h2]:text-3xl [&_h2]:text-white [&_h2]:mt-12 [&_h2]:mb-4 [&_h3]:font-serif [&_h3]:text-2xl [&_p]:text-brand-silver [&_p]:leading-relaxed [&_a]:text-brand-blue [&_a]:no-underline hover:[&_a]:underline [&_strong]:text-white [&_blockquote]:border-brand-blue/30 [&_blockquote]:text-brand-silver [&_blockquote]:italic">
+            <div className="prose prose-invert prose-lg max-w-none [&_h2]:font-heading [&_h2]:text-3xl [&_h2]:text-white [&_h2]:mt-12 [&_h2]:mb-4 [&_h3]:font-heading [&_h3]:text-2xl [&_p]:text-brand-silver [&_p]:leading-relaxed [&_a]:text-brand-blue [&_a]:no-underline hover:[&_a]:underline [&_strong]:text-white [&_blockquote]:border-brand-blue/30 [&_blockquote]:text-brand-silver [&_blockquote]:italic tracking-tight font-bold">
               {article.content && (
                 <RichText data={article.content} />
               )}

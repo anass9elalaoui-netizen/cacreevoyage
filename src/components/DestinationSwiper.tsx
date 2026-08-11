@@ -100,11 +100,11 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
         <div className="absolute bottom-5 left-5 right-5 z-20">
           <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 shadow-lg rounded-2xl px-5 py-4 transition-all duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:-translate-y-1 group-hover:border-white/50 dark:group-hover:border-white/30 group-hover:bg-white/30 dark:group-hover:bg-white/10">
             {dest.theme && (
-              <span className="text-white/90 text-[10px] uppercase tracking-[0.2em] font-medium mb-1 block drop-shadow-sm">
+              <span className="text-white/90 text-[10px] uppercase mb-1 block drop-shadow-sm font-semibold tracking-wider">
                 {themeLabel[dest.theme] || dest.theme}
               </span>
             )}
-            <h3 className="text-xl md:text-2xl font-serif text-white leading-tight drop-shadow-md">
+            <h3 className="text-xl md:text-2xl font-heading text-white leading-tight drop-shadow-md">
               {dest.title}
             </h3>
           </div>
@@ -145,10 +145,10 @@ export default function DestinationSwiper({
       {/* Section Header */}
       <div className="px-4 md:px-12 lg:px-20 mb-10 md:mb-14 flex items-end justify-between">
         <div>
-          <span className="uppercase tracking-[0.2em] text-brand-blue font-semibold text-xs mb-3 block">
+          <span className="uppercase text-brand-blue font-semibold text-xs mb-3 block tracking-wider">
             {subtitle || 'Destinations'}
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-none tracking-tighter leading-none">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-none leading-none font-medium tracking-wide">
             {title}
           </h2>
         </div>

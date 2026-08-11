@@ -134,10 +134,10 @@ function CheckoutForm() {
       >
         {/* Tour Badge */}
         <div className="mb-8 text-center">
-          <span className="uppercase tracking-widest text-brand-blue font-semibold text-xs mb-2 block">
+          <span className="uppercase text-brand-blue font-semibold text-xs mb-2 block tracking-wider">
             Réservation
           </span>
-          <h1 className="text-2xl md:text-3xl font-serif text-white mb-2">
+          <h1 className="text-2xl md:text-3xl font-heading text-white mb-2 tracking-tight font-bold">
             {tourTitle}
           </h1>
           {tourDuration && (
@@ -157,11 +157,11 @@ function CheckoutForm() {
               <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="uppercase tracking-[0.15em] text-brand-blue font-semibold text-xs">
+              <span className="uppercase text-brand-blue font-semibold text-xs tracking-wider">
                 Dates confirmées
               </span>
             </div>
-            <p className="text-white font-serif text-lg">
+            <p className="text-white font-heading text-lg leading-relaxed font-normal">
               {formatDate(departureDateParam)} — {formatDate(returnDateParam)}
             </p>
           </motion.div>
@@ -172,7 +172,7 @@ function CheckoutForm() {
             {/* Progress */}
             <div className="mb-10">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-white/50 text-xs font-medium tracking-widest uppercase">
+                <span className="text-white/50 text-xs uppercase font-semibold tracking-wider">
                   Étape {String(currentStep + 1).padStart(2, '0')} / {String(TOTAL_STEPS).padStart(2, '0')}
                 </span>
               </div>
@@ -200,10 +200,10 @@ function CheckoutForm() {
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                   className="space-y-6"
                 >
-                  <h2 className="text-3xl md:text-4xl font-serif text-white mb-2">
+                  <h2 className="text-3xl md:text-4xl font-heading text-white mb-2 tracking-tight font-bold">
                     Vos coordonnées
                   </h2>
-                  <p className="text-white/50 text-sm font-light mb-6">
+                  <p className="text-white/50 text-sm font-light mb-6 leading-relaxed">
                     Comment pouvons-nous vous contacter ?
                   </p>
                   <div className="space-y-5">
@@ -243,17 +243,17 @@ function CheckoutForm() {
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                   className="space-y-6"
                 >
-                  <h2 className="text-3xl md:text-4xl font-serif text-white mb-2">
+                  <h2 className="text-3xl md:text-4xl font-heading text-white mb-2 tracking-tight font-bold">
                     Détails du voyage
                   </h2>
-                  <p className="text-white/50 text-sm font-light mb-6">
+                  <p className="text-white/50 text-sm font-light mb-6 leading-relaxed">
                     {hasFixedDates
                       ? 'Combien de voyageurs participent ?'
                       : 'Combien de voyageurs et quand ?'}
                   </p>
                   <div className="space-y-5">
                     <div>
-                      <label className="text-white/50 text-xs uppercase tracking-widest mb-2 block">
+                      <label className="text-white/50 text-xs uppercase mb-2 block font-semibold tracking-wider">
                         Nombre de passagers
                       </label>
                       <div className="flex items-center gap-4">
@@ -269,7 +269,7 @@ function CheckoutForm() {
                         >
                           −
                         </button>
-                        <span className="text-2xl font-serif text-white w-8 text-center">
+                        <span className="text-2xl font-heading text-white w-8 text-center">
                           {formData.passengers}
                         </span>
                         <button
@@ -290,7 +290,7 @@ function CheckoutForm() {
                     {/* Conditional Date Logic: Show picker ONLY for Sur Mesure */}
                     {!hasFixedDates && (
                       <div>
-                        <label className="text-white/50 text-xs uppercase tracking-widest mb-2 block">
+                        <label className="text-white/50 text-xs uppercase mb-2 block font-semibold tracking-wider">
                           Date de voyage souhaitée
                         </label>
                         <input
@@ -318,10 +318,10 @@ function CheckoutForm() {
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                   className="space-y-6"
                 >
-                  <h2 className="text-3xl md:text-4xl font-serif text-white mb-2">
+                  <h2 className="text-3xl md:text-4xl font-heading text-white mb-2 tracking-tight font-bold">
                     Demandes spéciales
                   </h2>
-                  <p className="text-white/50 text-sm font-light mb-6">
+                  <p className="text-white/50 text-sm font-light mb-6 leading-relaxed">
                     Activités, ambiance, préférences... tout ce qui compte.
                   </p>
                   <textarea

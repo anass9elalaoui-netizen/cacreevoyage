@@ -126,7 +126,7 @@ export default function TourCard({
             />
           ) : (
             <div className="absolute inset-0 liquid-glass animate-pulse flex items-center justify-center z-0">
-              <span className="text-slate-400 dark:text-white/30 font-serif italic text-xs">Visuel en préparation...</span>
+              <span className="text-slate-400 dark:text-white/30 font-heading italic text-xs">Visuel en préparation...</span>
             </div>
           )}
           {/* Gradient overlay */}
@@ -140,13 +140,13 @@ export default function TourCard({
         >
           {/* Scope badge */}
           {scope && (
-            <span className="inline-block px-3 py-1 text-xs uppercase tracking-wider font-medium text-brand-blue liquid-glass border border-brand-blue/30 rounded-full mb-2">
+            <span className="inline-block px-3 py-1 text-xs uppercase tracking-wider text-brand-blue liquid-glass border border-brand-blue/30 rounded-full mb-2 font-semibold">
               {scope === 'national' ? 'Maroc' : 'International'}
             </span>
           )}
 
           {/* Title */}
-          <h3 className="font-serif text-2xl md:text-[26px] text-slate-900 dark:text-white mt-1 leading-tight drop-shadow-md">
+          <h3 className="font-heading text-2xl md:text-[26px] text-slate-900 dark:text-white mt-1 leading-tight drop-shadow-md">
             {title}
           </h3>
 
@@ -182,7 +182,7 @@ export default function TourCard({
                 <span className="text-sm text-slate-500 dark:text-brand-silver italic">Sur devis</span>
               </div>
             )}
-            <span className="text-brand-blue text-sm font-sans font-medium group-hover:translate-x-1 transition-transform duration-300 drop-shadow-sm dark:drop-shadow-none">
+            <span className="text-brand-blue text-sm font-body font-medium group-hover:translate-x-1 transition-transform duration-300 drop-shadow-sm dark:drop-shadow-none">
               Découvrir →
             </span>
           </div>
@@ -191,7 +191,7 @@ export default function TourCard({
         {/* Featured badge - Also popped out */}
         {isFeatured && (
           <motion.div 
-            className="absolute top-4 right-4 px-3 py-1 text-xs font-medium uppercase tracking-wider liquid-glass border border-brand-gold/40 text-slate-800 dark:text-brand-gold rounded-full"
+            className="absolute top-4 right-4 px-3 py-1 text-xs uppercase tracking-wider liquid-glass border border-brand-gold/40 text-slate-800 dark:text-brand-gold rounded-full font-semibold"
             style={{ translateZ: 50 }}
           >
             ⭐ Signature

@@ -17,10 +17,10 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
               {/* Left — Contact Form (3/5) */}
               <div className="lg:col-span-3">
-                <span className="uppercase tracking-[0.2em] text-brand-blue text-xs font-sans font-medium mb-4 block">
+                <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
                   Contact
                 </span>
-                <h1 className="font-serif text-4xl md:text-6xl text-slate-900 dark:text-white mb-8">
+                <h1 className="font-heading text-4xl md:text-6xl text-slate-900 dark:text-white mb-8 font-medium tracking-wide">
                   Parlons de Votre Voyage
                 </h1>
 
@@ -31,7 +31,7 @@ export default function ContactPage() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-sans">Prénom & Nom</label>
+                      <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Prénom & Nom</label>
                       <input
                         type="text"
                         name="fullName"
@@ -41,7 +41,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-sans">Email</label>
+                      <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Email</label>
                       <input
                         type="email"
                         name="email"
@@ -53,7 +53,7 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-sans">Téléphone / WhatsApp</label>
+                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Téléphone / WhatsApp</label>
                     <input
                       type="tel"
                       name="phone"
@@ -63,7 +63,7 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-sans">Sujet</label>
+                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Sujet</label>
                     <select
                       name="subject"
                       className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-brand-blue/50 transition-colors text-sm shadow-sm dark:shadow-none"
@@ -76,7 +76,7 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-sans">Message</label>
+                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Message</label>
                     <textarea
                       name="message"
                       rows={6}
@@ -87,7 +87,7 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    className="w-full md:w-auto bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-4 rounded-full font-sans text-sm uppercase tracking-[0.1em] font-medium transition-all duration-300 shadow-[0_4px_20px_rgba(56,163,165,0.3)] hover:shadow-[0_8px_30px_rgba(56,163,165,0.5)]"
+                    className="w-full md:w-auto bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-4 rounded-full font-body text-sm uppercase transition-all duration-300 shadow-[0_4px_20px_rgba(56,163,165,0.3)] hover:shadow-[0_8px_30px_rgba(56,163,165,0.5)] font-semibold tracking-wider"
                   >
                     Envoyer le message
                   </button>
@@ -102,7 +102,7 @@ export default function ContactPage() {
                     backdropFilter: 'blur(12px)',
                   }}
                 >
-                  <h3 className="font-serif text-2xl text-slate-900 dark:text-white mb-6">
+                  <h3 className="font-heading text-2xl text-slate-900 dark:text-white mb-6">
                     Informations
                   </h3>
 
@@ -115,8 +115,8 @@ export default function ContactPage() {
                     <div className="bg-[#25D366]/10 border border-[#25D366]/20 text-brand-blue px-3 py-3 rounded-2xl mb-4 transition-colors hover:bg-[#25D366]/20 flex items-center gap-3">
                       <span className="text-2xl">💬</span>
                       <div>
-                        <p className="text-slate-900 dark:text-white text-sm font-medium">WhatsApp</p>
-                        <p className="text-slate-600 dark:text-brand-silver text-xs">+212 661 373 347</p>
+                        <p className="text-slate-900 dark:text-white text-sm font-medium leading-relaxed">WhatsApp</p>
+                        <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">+212 661 373 347</p>
                       </div>
                     </div>
                   </a>
@@ -128,8 +128,8 @@ export default function ContactPage() {
                   >
                     <span className="text-2xl">✉️</span>
                     <div>
-                      <p className="text-slate-900 dark:text-white text-sm font-medium">Email</p>
-                      <p className="text-slate-600 dark:text-brand-silver text-xs">contact@cacreevoyage.com</p>
+                      <p className="text-slate-900 dark:text-white text-sm font-medium leading-relaxed">Email</p>
+                      <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">contact@cacreevoyage.com</p>
                     </div>
                   </a>
 
@@ -137,8 +137,8 @@ export default function ContactPage() {
                   <div className="flex items-start gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6 shadow-sm dark:shadow-none">
                     <span className="text-2xl">📍</span>
                     <div>
-                      <p className="text-slate-900 dark:text-white text-sm font-medium">Bureau</p>
-                      <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed">
+                      <p className="text-slate-900 dark:text-white text-sm font-medium leading-relaxed">Bureau</p>
+                      <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">
                         Casablanca, Maroc
                       </p>
                     </div>
@@ -146,7 +146,7 @@ export default function ContactPage() {
 
                   {/* Social Links */}
                   <div className="border-t border-slate-200 dark:border-white/10 pt-6">
-                    <p className="text-slate-600 dark:text-brand-silver text-xs uppercase tracking-widest mb-3">Suivez-nous</p>
+                    <p className="text-slate-600 dark:text-brand-silver text-xs uppercase mb-3 font-semibold tracking-wider leading-relaxed">Suivez-nous</p>
                     <div className="flex gap-3">
                       <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
                         IG

@@ -143,11 +143,11 @@ export default function CinematicPanel({
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-8 lg:pb-16 pointer-events-none">
         <div className="w-[88%] max-w-sm px-6 py-6 lg:p-8 rounded-[1.75rem] lg:rounded-[2rem] bg-white/10 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col items-center text-center gap-1 transition-all duration-500 pointer-events-auto">
           {panel.subtitle && (
-            <span className="uppercase tracking-widest text-brand-blue font-semibold text-[10px] lg:text-xs drop-shadow-sm">
+            <span className="uppercase text-brand-blue font-semibold text-[10px] lg:text-xs drop-shadow-sm tracking-wider">
               {panel.subtitle}
             </span>
           )}
-          <h2 className="text-3xl lg:text-6xl font-serif text-white tracking-tighter leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+          <h2 className="text-3xl lg:text-6xl font-heading text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] font-medium tracking-wide">
             {panel.title}
           </h2>
           <div className="w-10 h-px bg-white/40 my-2 lg:my-4" />

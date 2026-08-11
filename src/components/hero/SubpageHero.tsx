@@ -69,14 +69,14 @@ export default function SubpageHero({
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center mt-16">
         {subtitle && (
           <div className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full mb-6 shadow-[0_0_30px_rgba(56,163,165,0.2)] inline-block">
-            <span className="uppercase tracking-[0.2em] text-[#D4AF37] text-xs font-sans font-medium drop-shadow-md">
+            <span className="uppercase text-[#D4AF37] text-xs font-body drop-shadow-md font-semibold tracking-wider">
               {subtitle}
             </span>
           </div>
         )}
         
         <h1 
-          className="text-5xl md:text-7xl lg:text-[6rem] font-serif text-slate-900 dark:text-white tracking-tight leading-[1.1] mb-6 drop-shadow-2xl"
+          className="text-5xl md:text-7xl lg:text-[6rem] font-heading text-slate-900 dark:text-white leading-[1.1] mb-6 drop-shadow-2xl font-medium tracking-wide"
           style={{ textShadow: '0 4px 40px rgba(0,0,0,0.6)' }}
         >
           {title}
@@ -92,7 +92,7 @@ export default function SubpageHero({
         {ctaLabel && ctaHref && (
           <a
             href={ctaHref}
-            className="inline-flex items-center gap-3 bg-[#D4AF37] hover:bg-[#C5A030] text-[#0B132B] px-8 py-4 rounded-full font-medium text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(212,175,55,0.4)] hover:shadow-[0_6px_25px_rgba(212,175,55,0.6)] hover:-translate-y-1"
+            className="inline-flex items-center gap-3 bg-[#D4AF37] hover:bg-[#C5A030] text-[#0B132B] px-8 py-4 rounded-full text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(212,175,55,0.4)] hover:shadow-[0_6px_25px_rgba(212,175,55,0.6)] hover:-translate-y-1 font-semibold"
           >
             {ctaLabel}
           </a>
@@ -103,14 +103,14 @@ export default function SubpageHero({
            <div className="flex flex-wrap justify-center gap-6 mt-16">
              {badge1Number && badge1Label && (
                <div className="bg-white/70 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/15 rounded-2xl px-6 py-4 text-center min-w-[140px] shadow-sm dark:shadow-none">
-                 <span className="text-[#D4AF37] text-3xl font-serif block leading-none mb-1">{badge1Number}</span>
-                 <span className="text-slate-500 dark:text-white/60 text-[11px] uppercase tracking-widest">{badge1Label}</span>
+                 <span className="text-[#D4AF37] text-3xl font-heading block leading-none mb-1 tracking-tight font-bold">{badge1Number}</span>
+                 <span className="text-slate-500 dark:text-white/60 text-[11px] uppercase font-semibold tracking-wider">{badge1Label}</span>
                </div>
              )}
              {badge2Number && badge2Label && (
                <div className="bg-white/70 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/15 rounded-2xl px-6 py-4 text-center min-w-[140px] shadow-sm dark:shadow-none">
-                 <span className="text-[#38A3A5] text-3xl font-serif block leading-none mb-1">{badge2Number}</span>
-                 <span className="text-slate-500 dark:text-white/60 text-[11px] uppercase tracking-widest">{badge2Label}</span>
+                 <span className="text-[#38A3A5] text-3xl font-heading block leading-none mb-1 tracking-tight font-bold">{badge2Number}</span>
+                 <span className="text-slate-500 dark:text-white/60 text-[11px] uppercase font-semibold tracking-wider">{badge2Label}</span>
                </div>
              )}
            </div>

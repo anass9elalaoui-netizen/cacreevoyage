@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Manrope } from 'next/font/google'
 import '../globals.css'
 import GlassNavbar from '@/components/GlassNavbar'
 import FloatingWhatsApp from '@/components/FloatingWhatsApp'
@@ -7,9 +7,17 @@ import CookieBanner from '@/components/CookieBanner'
 import StarfieldCanvas from '@/components/StarfieldCanvas'
 import FilmGrain from '@/components/FilmGrain'
 
-const inter = Inter({
+const manropeHeading = Manrope({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-heading',
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+})
+
+const manropeBody = Manrope({
+  subsets: ['latin'],
+  variable: '--font-body',
+  weight: ['300', '400', '500', '600'],
   display: 'swap',
 })
 
@@ -43,13 +51,7 @@ export default async function FrontendLayout({
   }
 
   return (
-    <html lang="fr" className={`${inter.variable} lenis lenis-smooth`} suppressHydrationWarning>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="fr" className={`${manropeHeading.variable} ${manropeBody.variable} lenis lenis-smooth`} suppressHydrationWarning>
       <body className="antialiased relative" suppressHydrationWarning>
         <FilmGrain />
         <StarfieldCanvas />

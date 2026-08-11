@@ -101,17 +101,17 @@ export default async function DestinationPage({ params, searchParams }: Args) {
         {/* Centered Text */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-20 px-4 text-center">
           {destination.theme && (
-            <span className="uppercase tracking-[0.3em] text-brand-blue font-semibold text-xs mb-4 drop-shadow-md">
+            <span className="uppercase text-brand-blue font-semibold text-xs mb-4 drop-shadow-md tracking-wider">
               {locale === 'en' ? (themeLabelEn[destination.theme] || destination.theme) : (themeLabel[destination.theme] || destination.theme)}
             </span>
           )}
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif text-slate-900 dark:text-white tracking-tighter leading-none mb-6 drop-shadow-sm dark:drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-heading text-slate-900 dark:text-white leading-none mb-6 drop-shadow-sm dark:drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)] font-medium tracking-wide"
               style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
           >
             {destination.title}
           </h1>
           {destination.description && (
-            <p className="text-slate-700 dark:text-white/60 text-lg md:text-xl font-light max-w-2xl drop-shadow-sm dark:drop-shadow-md mb-8">
+            <p className="text-slate-700 dark:text-white/60 text-lg md:text-xl font-light max-w-2xl drop-shadow-sm dark:drop-shadow-md mb-8 leading-relaxed">
               {destination.description}
             </p>
           )}
@@ -145,13 +145,13 @@ export default async function DestinationPage({ params, searchParams }: Args) {
           <>
             <div className="mb-16 flex items-end justify-between relative z-10">
               <div>
-                <span className="uppercase tracking-[0.2em] text-brand-blue font-semibold text-xs mb-3 block">
+                <span className="uppercase text-brand-blue font-semibold text-xs mb-3 block tracking-wider">
                   {t.toursLabel}
                 </span>
-                <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-2">
+                <h2 className="text-4xl md:text-5xl font-heading text-slate-900 dark:text-white mb-2 tracking-tight font-bold">
                   {t.ourTours}
                 </h2>
-                <p className="text-slate-600 dark:text-white/40 font-light text-lg">
+                <p className="text-slate-600 dark:text-white/40 font-light text-lg leading-relaxed">
                   {tours.length} {t.itinerariesAvailable}
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-200 dark:from-[#0B132B] to-slate-300 dark:to-[#1a2744]">
-                          <span className="text-slate-400 dark:text-white/20 font-serif italic text-sm">{t.imageComingSoon}</span>
+                          <span className="text-slate-400 dark:text-white/20 font-heading italic text-sm">{t.imageComingSoon}</span>
                         </div>
                       )}
 
@@ -206,7 +206,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
 
                     {/* Card Content */}
                     <div className="p-8 flex flex-col gap-3 flex-1">
-                      <h3 className="text-2xl font-serif text-slate-900 dark:text-white group-hover:text-brand-blue transition-colors duration-300 leading-tight">
+                      <h3 className="text-2xl font-heading text-slate-900 dark:text-white group-hover:text-brand-blue transition-colors duration-300 leading-tight">
                         {tour.title}
                       </h3>
                       {tour.excerpt && (
@@ -234,12 +234,12 @@ export default async function DestinationPage({ params, searchParams }: Args) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
               </svg>
             </div>
-            <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-6"
+            <h2 className="text-4xl md:text-5xl font-heading text-slate-900 dark:text-white mb-6 tracking-tight font-bold"
                 style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
             >
               {t.inPreparation}
             </h2>
-            <p className="text-slate-600 dark:text-white/50 font-light text-lg max-w-lg mb-10">
+            <p className="text-slate-600 dark:text-white/50 font-light text-lg max-w-lg mb-10 leading-relaxed">
               {t.expertsPreparing}{' '}
               <strong className="font-medium text-slate-900 dark:text-white">{destination.title}</strong>.
               <br/>{t.contactForCustom}

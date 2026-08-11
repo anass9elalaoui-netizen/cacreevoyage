@@ -69,10 +69,10 @@ const TourCard = ({ tour }: { tour: Tour }) => {
 
       {/* Card Content UI */}
       <div className="absolute bottom-0 left-0 right-0 p-6 z-30 pointer-events-none flex flex-col justify-end h-full">
-        <h3 className="font-serif text-2xl md:text-3xl text-white mb-1 leading-tight drop-shadow-md transition-transform duration-300 group-hover:-translate-y-1">
+        <h3 className="font-heading text-2xl md:text-3xl text-white mb-1 leading-tight drop-shadow-md transition-transform duration-300 group-hover:-translate-y-1 tracking-tight font-bold">
           {tour.title}
         </h3>
-        <p className="text-brand-blue font-medium text-sm md:text-base transition-transform duration-300 group-hover:-translate-y-1">
+        <p className="text-brand-blue font-medium text-sm md:text-base transition-transform duration-300 group-hover:-translate-y-1 leading-relaxed">
           {tour.duration}
         </p>
       </div>

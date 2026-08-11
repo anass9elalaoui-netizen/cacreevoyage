@@ -485,7 +485,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-px bg-brand-gold/40" />
-                    <span className="uppercase tracking-[0.25em] text-brand-gold/80 text-[10px] font-sans font-medium">
+                    <span className="uppercase text-brand-gold/80 text-[10px] font-body font-semibold tracking-wider">
                       Menu
                     </span>
                   </div>
@@ -519,20 +519,20 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                           }}
                         >
                           {/* Number */}
-                          <span className="font-sans text-slate-400 dark:text-white/20 text-[11px] tracking-[0.15em] w-10 shrink-0 tabular-nums">
+                          <span className="font-body text-slate-400 dark:text-white/20 text-[11px] tracking-[0.15em] w-10 shrink-0 tabular-nums">
                             {item.num}
                           </span>
 
                           {/* Label — link or button depending on subLinks */}
                           {hasSubLinks ? (
-                            <span className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-[rgba(240,236,228,0.9)] tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue dark:group-hover:text-[rgba(240,236,228,1)] flex-1">
+                            <span className="font-heading text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-[rgba(240,236,228,0.9)] leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue dark:group-hover:text-[rgba(240,236,228,1)] flex-1 font-medium tracking-wide">
                               {item.label}
                             </span>
                           ) : (
                             <Link
                               href={item.href}
                               onClick={closeMenu}
-                              className="font-serif text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-[rgba(240,236,228,0.9)] tracking-tight leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue dark:group-hover:text-[rgba(240,236,228,1)] flex-1"
+                              className="font-heading text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-slate-900 dark:text-[rgba(240,236,228,0.9)] leading-[1.05] transition-colors duration-300 group-hover:text-brand-blue dark:group-hover:text-[rgba(240,236,228,1)] flex-1 font-medium tracking-wide"
                             >
                               {item.label}
                             </Link>
@@ -596,7 +596,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                                     ⊞
                                   </span>
                                   <div className="flex-1">
-                                    <span className="text-slate-800 dark:text-white/90 text-sm font-sans font-medium group-hover/sub:text-brand-blue transition-colors">
+                                    <span className="text-slate-800 dark:text-white/90 text-sm font-body font-medium group-hover/sub:text-brand-blue transition-colors">
                                       Toutes les destinations
                                     </span>
                                   </div>
@@ -622,7 +622,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                                         {sub.icon}
                                       </span>
                                       <div className="flex-1">
-                                        <span className="text-slate-800 dark:text-white/80 text-sm font-sans font-medium group-hover/sub:text-brand-blue dark:group-hover/sub:text-white transition-colors">
+                                        <span className="text-slate-800 dark:text-white/80 text-sm font-body font-medium group-hover/sub:text-brand-blue dark:group-hover/sub:text-white transition-colors">
                                           {sub.label}
                                         </span>
                                       </div>
@@ -652,12 +652,12 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                 {/* Top */}
                 <div>
                   <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-8">
-                    <span className="font-serif text-2xl text-brand-gold/50">✦</span>
+                    <span className="font-heading text-2xl text-brand-gold/50">✦</span>
                   </div>
-                  <h3 className="font-serif text-2xl xl:text-3xl text-white mb-3 tracking-tight leading-tight">
+                  <h3 className="font-heading text-2xl xl:text-3xl text-white mb-3 tracking-tight leading-tight font-bold">
                     Votre voyage<br />commence ici
                   </h3>
-                  <p className="text-white/30 text-sm font-sans leading-relaxed mb-8">
+                  <p className="text-white/30 text-sm font-body leading-relaxed mb-8 font-normal">
                     Des circuits exclusifs au Maroc et à l&apos;international, conçus avec passion et expertise depuis plus de 10 ans.
                   </p>
 
@@ -680,10 +680,10 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                 <div className="flex flex-col gap-5">
                   <div className="w-full h-px bg-white/[0.05]" />
                   <div className="flex flex-col gap-2.5">
-                    <span className="uppercase tracking-[0.2em] text-brand-gold/60 text-[10px] font-sans font-semibold">
+                    <span className="uppercase text-brand-gold/60 text-[10px] font-body font-semibold tracking-wider">
                       Contact
                     </span>
-                    <div className="flex flex-col gap-1.5 text-white/30 text-sm font-sans">
+                    <div className="flex flex-col gap-1.5 text-white/30 text-sm font-body">
                       <a href="https://wa.me/212661373347" className="hover:text-white/70 transition-colors flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-[#25D366]/10 flex items-center justify-center shrink-0">
                           <svg viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 text-[#25D366]">
@@ -745,7 +745,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                     <div className="flex items-center gap-4">
                       <a
                         href="https://wa.me/212661373347"
-                        className="flex items-center gap-1.5 text-white/30 text-xs font-sans hover:text-white/60 transition-colors"
+                        className="flex items-center gap-1.5 text-white/30 text-xs font-body hover:text-white/60 transition-colors"
                       >
                         <span className="w-5 h-5 rounded-md bg-[#25D366]/10 flex items-center justify-center">
                           <svg viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 text-[#25D366]">
@@ -754,7 +754,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                         </span>
                         <span className="hidden sm:inline">+212 6 61 37 33 47</span>
                       </a>
-                      <a href="mailto:contact@cacreevoyage.com" className="text-white/20 text-[10px] font-sans hover:text-white/50 transition-colors hidden sm:block">
+                      <a href="mailto:contact@cacreevoyage.com" className="text-white/20 text-[10px] font-body hover:text-white/50 transition-colors hidden sm:block">
                         contact@cacreevoyage.com
                       </a>
                     </div>

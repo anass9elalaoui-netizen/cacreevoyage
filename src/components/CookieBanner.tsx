@@ -43,7 +43,7 @@ export default function CookieBanner() {
                 <h3 className="text-white font-medium text-base mb-1">
                   🍪 Ce site utilise des cookies
                 </h3>
-                <p className="text-brand-silver text-sm leading-relaxed">
+                <p className="text-brand-silver text-sm leading-relaxed font-normal">
                   Nous utilisons des cookies pour améliorer votre expérience de navigation, 
                   analyser le trafic du site et personnaliser le contenu. En continuant, 
                   vous acceptez notre{' '}

@@ -52,7 +52,7 @@ export default function Footer() {
           {/* COL 1 — Brand & Bio */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6 group">
-              <span className="font-serif text-3xl tracking-wide text-slate-900 dark:text-white group-hover:text-brand-blue transition-colors dark:drop-shadow-[0_2px_8px_rgba(56,163,165,0.3)]">
+              <span className="font-heading text-3xl tracking-tight text-slate-900 dark:text-white group-hover:text-brand-blue transition-colors dark:drop-shadow-[0_2px_8px_rgba(56,163,165,0.3)] font-bold">
                 Ça Crée Voyage
               </span>
             </Link>
@@ -84,11 +84,11 @@ export default function Footer() {
 
           {/* COL 2 — Destinations */}
           <div>
-            <h4 className="uppercase tracking-[0.2em] text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6">
+            <h4 className="uppercase text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6 tracking-wider">
               Destinations
             </h4>
             <div className="flex flex-col gap-1">
-              <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase tracking-widest mb-1">International</span>
+              <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase mb-1 font-semibold tracking-wider">International</span>
               {['Philippines', 'Turquie', 'Zanzibar', 'Égypte', 'Vietnam'].map((name) => (
                 <Link
                   key={name}
@@ -98,7 +98,7 @@ export default function Footer() {
                   {name}
                 </Link>
               ))}
-              <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase tracking-widest mt-3 mb-1">Maroc</span>
+              <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase mt-3 mb-1 font-semibold tracking-wider">Maroc</span>
               {['Merzouga', 'Dakhla', 'Imlil', 'Imsfrane'].map((name) => (
                 <Link
                   key={name}
@@ -113,7 +113,7 @@ export default function Footer() {
 
           {/* COL 3 — Support */}
           <div>
-            <h4 className="uppercase tracking-[0.2em] text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6">
+            <h4 className="uppercase text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6 tracking-wider">
               Support
             </h4>
             <div className="flex flex-col gap-1">
@@ -137,7 +137,7 @@ export default function Footer() {
 
           {/* COL 4 — Payments */}
           <div>
-            <h4 className="uppercase tracking-[0.2em] text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6">
+            <h4 className="uppercase text-brand-blue dark:text-brand-blue/90 font-semibold text-xs mb-6 tracking-wider">
               Paiement
             </h4>
             <p className="text-slate-600 dark:text-white/50 text-sm font-light leading-relaxed mb-6">
@@ -146,11 +146,11 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl liquid-glass text-slate-600 dark:text-white/50">
                 <BankTransferIcon />
-                <span className="text-[10px] uppercase tracking-wider">Virement</span>
+                <span className="text-[10px] uppercase tracking-wider font-semibold">Virement</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl liquid-glass text-slate-600 dark:text-white/50">
                 <QRCodeIcon />
-                <span className="text-[10px] uppercase tracking-wider">QR Code</span>
+                <span className="text-[10px] uppercase tracking-wider font-semibold">QR Code</span>
               </div>
             </div>
           </div>
