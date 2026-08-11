@@ -40,7 +40,7 @@ function StoryCard({ day, index }: { day: StoryDay; index: number }) {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ amount: 0.5 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="relative flex-shrink-0 min-w-[85vw] md:min-w-[350px] aspect-[9/16] overflow-hidden rounded-3xl snap-center group"
+      className="relative flex-shrink-0 h-[72vh] min-h-[500px] max-h-[680px] aspect-[9/16] mx-auto overflow-hidden rounded-3xl snap-center group"
     >
       {/* ── Background Media ── */}
       {mediaUrl && isVideo ? (
@@ -88,13 +88,13 @@ function StoryCard({ day, index }: { day: StoryDay; index: number }) {
 
       {/* ── Content Block — bottom positioned ── */}
       <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
-        {/* Title — slides from left */}
+        {/* Title — slides from bottom */}
         <motion.h3
           variants={titleVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ amount: 0.5 }}
-          className="text-3xl md:text-4xl font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight font-bold"
+          className="text-xl md:text-2xl font-semibold font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight"
           style={{ textShadow: '0 0 40px rgba(56,163,165,0.12)' }}
         >
           {day.title}
@@ -112,7 +112,7 @@ function StoryCard({ day, index }: { day: StoryDay; index: number }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
           </svg>
-          <span className="text-sm font-medium tracking-wide">{day.location}</span>
+          <span className="text-xs md:text-sm font-medium tracking-wide">{day.location}</span>
         </motion.div>
 
         {/* Activities — staggered slide from bottom */}
@@ -164,12 +164,12 @@ export default function StoryTimeline({ itinerary }: { itinerary: StoryDay[] }) 
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full mt-8 md:mt-12 pb-8">
       {/* ── Navigation Arrows ── */}
       <div className="hidden md:flex items-center justify-end gap-3 mb-6 px-4 md:px-12 lg:px-20">
         <button
           onClick={() => scroll('left')}
-          className="w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+          className="w-12 h-12 rounded-full border border-slate-300 dark:border-white/20 bg-white/80 dark:bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
           aria-label="Previous day"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@ export default function StoryTimeline({ itinerary }: { itinerary: StoryDay[] }) 
         </button>
         <button
           onClick={() => scroll('right')}
-          className="w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+          className="w-12 h-12 rounded-full border border-slate-300 dark:border-white/20 bg-white/80 dark:bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
           aria-label="Next day"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,7 +190,7 @@ export default function StoryTimeline({ itinerary }: { itinerary: StoryDay[] }) 
       {/* ── Horizontal Scroll Track ── */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto snap-x snap-mandatory gap-5 md:gap-6 pb-6 px-4 md:px-12 lg:px-20 hide-scrollbar"
+        className="flex items-center justify-center gap-6 pb-6 overflow-x-auto snap-x snap-mandatory hide-scrollbar w-full min-h-[60vh]"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {sorted.map((day, index) => (
@@ -203,7 +203,7 @@ export default function StoryTimeline({ itinerary }: { itinerary: StoryDay[] }) 
         {sorted.map((day) => (
           <div
             key={day.dayNumber}
-            className="w-1.5 h-1.5 rounded-full bg-white/20"
+            className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-white/20"
           />
         ))}
       </div>

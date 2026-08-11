@@ -97,35 +97,35 @@ export default function BookingSidebar({
         </div>
 
         {/* Quick Info */}
-        <div className="space-y-3 py-4 border-y border-white/8">
+        <div className="space-y-3 py-4 border-y border-slate-200 dark:border-slate-700/50">
           {duration && (
             <div className="flex justify-between text-sm">
-              <span className="text-brand-silver">{t.duration}</span>
-              <span className="text-white font-medium">{duration}</span>
+              <span className="text-slate-500 dark:text-slate-400">{t.duration}</span>
+              <span className="text-slate-800 dark:text-slate-100 font-medium">{duration}</span>
             </div>
           )}
           {logistics?.maxGroupSize && (
             <div className="flex justify-between text-sm">
-              <span className="text-brand-silver">{t.maxGroup}</span>
-              <span className="text-white font-medium">{logistics.maxGroupSize} pers.</span>
+              <span className="text-slate-500 dark:text-slate-400">{t.maxGroup}</span>
+              <span className="text-slate-800 dark:text-slate-100 font-medium">{logistics.maxGroupSize} pers.</span>
             </div>
           )}
           {logistics?.difficulty && (
             <div className="flex justify-between text-sm">
-              <span className="text-brand-silver">{t.difficulty}</span>
-              <span className="text-white font-medium">{logistics.difficulty}</span>
+              <span className="text-slate-500 dark:text-slate-400">{t.difficulty}</span>
+              <span className="text-slate-800 dark:text-slate-100 font-medium">{logistics.difficulty}</span>
             </div>
           )}
           {logistics?.departureCity && (
             <div className="flex justify-between text-sm">
-              <span className="text-brand-silver">{t.departure}</span>
-              <span className="text-white font-medium">{logistics.departureCity}</span>
+              <span className="text-slate-500 dark:text-slate-400">{t.departure}</span>
+              <span className="text-slate-800 dark:text-slate-100 font-medium">{logistics.departureCity}</span>
             </div>
           )}
           {logistics?.languages && logistics.languages.length > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-brand-silver">{t.languages}</span>
-              <span className="text-white font-medium">{logistics.languages.join(', ')}</span>
+              <span className="text-slate-500 dark:text-slate-400">{t.languages}</span>
+              <span className="text-slate-800 dark:text-slate-100 font-medium">{logistics.languages.join(', ')}</span>
             </div>
           )}
         </div>
@@ -136,7 +136,7 @@ export default function BookingSidebar({
             <span className="text-brand-gold text-sm font-medium">
               {t.deposit} {depositAmount.toLocaleString()} {pricing?.currency || '€'}
             </span>
-            <span className="text-brand-silver text-xs block mt-1">
+            <span className="text-slate-500 dark:text-slate-400 text-xs block mt-1">
               ({pricing?.depositPercentage}% {t.toConfirm})
             </span>
           </div>
@@ -153,31 +153,11 @@ export default function BookingSidebar({
           {t.bookWhatsapp}
         </button>
 
-        <Link
-          href="/sur-mesure"
-          className="flex items-center justify-center w-full bg-white/5 border border-white/15 hover:bg-white/10 text-white py-4 rounded-full font-medium text-base transition-all"
-        >
-          {t.customize}
-        </Link>
 
-        {/* Download PDF Program */}
-        {programPDF?.url && (
-          <a
-            href={programPDF.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-full bg-brand-gold/10 border border-brand-gold/30 hover:bg-brand-gold/20 text-brand-gold py-4 rounded-full font-medium text-base transition-all"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            Télécharger le Programme (PDF)
-          </a>
-        )}
 
         {/* No price fallback */}
         {!pricing?.basePrice && (
-          <p className="text-center text-brand-silver text-xs italic leading-relaxed font-normal">
+          <p className="text-center text-slate-500 dark:text-slate-400 italic text-sm leading-relaxed font-normal">
             {t.onRequest}
           </p>
         )}

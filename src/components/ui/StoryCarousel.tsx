@@ -37,11 +37,7 @@ function StoryCard({
 
   return (
     <motion.div
-      className="relative flex-shrink-0 overflow-hidden rounded-[32px]"
-      style={{
-        width: 'min(85vw, 400px)',
-        aspectRatio: '9 / 16',
-      }}
+      className="relative flex-shrink-0 h-[72vh] min-h-[500px] max-h-[680px] aspect-[9/16] mx-auto overflow-hidden rounded-3xl"
       animate={{
         scale: isActive ? 1 : Math.max(0.8, 1 - offset * 0.1),
         opacity: isActive ? 1 : Math.max(0.3, 1 - offset * 0.35),
@@ -99,7 +95,7 @@ function StoryCard({
       <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
         {/* Title — slides from left */}
         <motion.h3
-          className="text-3xl md:text-4xl font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight font-bold"
+          className="text-xl md:text-2xl font-semibold font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight"
           style={{ textShadow: '0 0 40px rgba(56,163,165,0.12)' }}
           animate={isActive ? { x: 0, opacity: 1 } : { x: -30, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 20, delay: isActive ? 0.15 : 0 }}
@@ -117,7 +113,7 @@ function StoryCard({
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
           </svg>
-          <span className="text-sm font-medium tracking-wide">{day.location}</span>
+          <span className="text-xs md:text-sm font-medium tracking-wide">{day.location}</span>
         </motion.div>
 
         {/* Activities — staggered from bottom */}
@@ -160,7 +156,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
   const isVideo = typeof day.media === 'object' && day.media?.mimeType?.startsWith('video')
 
   return (
-    <div className="relative w-full aspect-[9/16] md:aspect-auto md:h-[600px] overflow-hidden rounded-[32px] group">
+    <div className="relative h-[72vh] min-h-[500px] max-h-[680px] aspect-[9/16] mx-auto overflow-hidden rounded-3xl group">
       {/* ── Background Media ── */}
       {mediaUrl && isVideo ? (
         <video src={mediaUrl} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" />
@@ -180,7 +176,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
 
       {/* ── Content Block ── */}
       <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
-        <h3 className="text-3xl md:text-4xl font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight font-bold">
+        <h3 className="text-xl md:text-2xl font-semibold font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight">
           {day.title}
         </h3>
         <div className="flex items-center gap-2 text-brand-blue">
@@ -188,7 +184,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
           </svg>
-          <span className="text-sm font-medium tracking-wide">{day.location}</span>
+          <span className="text-xs md:text-sm font-medium tracking-wide">{day.location}</span>
         </div>
         <div className="flex flex-col gap-1.5 mt-2">
           {day.activities.map((act, actIdx) => (
@@ -224,10 +220,11 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
     )
   }
 
-  // Card width + gap calculation
+  // Card width calculation based on 9:16 aspect ratio
   const getCardWidth = useCallback(() => {
     if (typeof window === 'undefined') return 340
-    return Math.min(window.innerWidth * 0.85, 400)
+    const h = Math.min(Math.max(window.innerHeight * 0.72, 500), 680)
+    return h * (9 / 16)
   }, [])
 
   const getGap = useCallback(() => {
@@ -235,15 +232,12 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
     return window.innerWidth >= 768 ? 24 : 20
   }, [])
 
-  // Calculate drag constraints
+  // Calculate drag constraints for justify-center track
   const getDragConstraints = useCallback(() => {
     if (typeof window === 'undefined') return { left: -2000, right: 0 }
-    const cardW = getCardWidth()
-    const gap = getGap()
-    const totalWidth = count * cardW + (count - 1) * gap
-    const viewportW = window.innerWidth
-    const maxDrag = -(totalWidth - viewportW + 40) // 40px padding
-    return { left: Math.min(maxDrag, 0), right: 0 }
+    const step = getCardWidth() + getGap()
+    const limit = ((count - 1) / 2) * step
+    return { left: -limit, right: limit }
   }, [count, getCardWidth, getGap])
 
   // Snap to card on drag end
@@ -264,9 +258,9 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
       setActiveIndex(newIndex)
 
-      // Center the active card
-      const viewportW = window.innerWidth
-      const targetX = -(newIndex * step) + (viewportW / 2 - cardW / 2)
+      // Center the active card based on a justify-center track
+      const centerIndex = (count - 1) / 2
+      const targetX = (centerIndex - newIndex) * step
 
       animate(x, targetX, {
         type: 'spring',
@@ -281,13 +275,13 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
   // Initial centering
   useEffect(() => {
     const timer = setTimeout(() => {
-      const cardW = getCardWidth()
-      const viewportW = window.innerWidth
-      const targetX = viewportW / 2 - cardW / 2
+      const step = getCardWidth() + getGap()
+      const centerIndex = (count - 1) / 2
+      const targetX = (centerIndex - activeIndex) * step
       animate(x, targetX, { type: 'spring', stiffness: 200, damping: 25 })
     }, 100)
     return () => clearTimeout(timer)
-  }, [getCardWidth, x])
+  }, [getCardWidth, getGap, count, activeIndex, x])
 
   // Navigate via arrow buttons
   const goTo = useCallback(
@@ -297,8 +291,8 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
       const cardW = getCardWidth()
       const gap = getGap()
       const step = cardW + gap
-      const viewportW = window.innerWidth
-      const targetX = -(clamped * step) + (viewportW / 2 - cardW / 2)
+      const centerIndex = (count - 1) / 2
+      const targetX = (centerIndex - clamped) * step
 
       animate(x, targetX, {
         type: 'spring',
@@ -310,14 +304,28 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
     [count, getCardWidth, getGap, x],
   )
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        goTo(activeIndex - 1)
+      } else if (e.key === 'ArrowRight') {
+        goTo(activeIndex + 1)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [activeIndex, goTo])
+
+
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden mt-8 md:mt-12 pb-8">
       {/* ── Navigation Arrows ── */}
       <div className="hidden md:flex items-center justify-end gap-3 mb-6 px-4 md:px-12 lg:px-20">
         <button
           onClick={() => goTo(activeIndex - 1)}
           disabled={activeIndex === 0}
-          className="w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
+          className="w-12 h-12 rounded-full border border-slate-300 dark:border-white/20 bg-white/80 dark:bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
           aria-label="Previous day"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -327,7 +335,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
         <button
           onClick={() => goTo(activeIndex + 1)}
           disabled={activeIndex === count - 1}
-          className="w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
+          className="w-12 h-12 rounded-full border border-slate-300 dark:border-white/20 bg-white/80 dark:bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
           aria-label="Next day"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -339,7 +347,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
       {/* ── Drag Track ── */}
       <motion.div
         ref={containerRef}
-        className="flex gap-5 md:gap-6 cursor-grab active:cursor-grabbing"
+        className="flex items-center justify-center gap-6 cursor-grab active:cursor-grabbing w-full min-h-[60vh]"
         style={{ x }}
         drag="x"
         dragConstraints={getDragConstraints()}
@@ -364,7 +372,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
             <div className="relative w-3 h-3 flex items-center justify-center">
               <div className={`rounded-full transition-all duration-300 ${index === activeIndex
                   ? 'w-8 h-2 bg-brand-blue shadow-[0_0_12px_rgba(56,163,165,0.6)]'
-                  : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+                  : 'w-2 h-2 bg-slate-400 dark:bg-white/20 hover:bg-slate-500 dark:hover:bg-white/40'
                 }`} />
               {index === activeIndex && (
                 <motion.div

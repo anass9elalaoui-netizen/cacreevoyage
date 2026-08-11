@@ -79,6 +79,22 @@ h1, h2, h3, h4, h5, h6 {
   .font-body {
     font-family: var(--font-body), sans-serif;
   }
+
+  /* ─── Swiper Pagination Consistency ─── */
+  .swiper-pagination-bullet {
+    @apply bg-slate-400 dark:bg-white/40 opacity-100 transition-all duration-300;
+  }
+  .swiper-pagination-bullet-active {
+    @apply bg-brand-blue w-6 rounded-full shadow-[0_0_10px_rgba(56,163,165,0.5)];
+  }
+
+  .swiper-slide {
+    transform: scale(0.9);
+    transition: transform 0.4s ease;
+  }
+  .swiper-slide-active {
+    transform: scale(1);
+  }
 }
 
 /* ─── Image Blur-Up Placeholder ────────────────────────── */

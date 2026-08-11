@@ -152,7 +152,7 @@ export default async function TourPage({ params, searchParams }: Args) {
       {/* ──────────────────────────────────────────────────────────
           MAIN CONTENT + SIDEBAR LAYOUT
       ─────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-16 md:pt-24 pb-8 md:pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Left: Main content (2/3) */}
           <div className="lg:col-span-2 space-y-20">
@@ -197,6 +197,18 @@ export default async function TourPage({ params, searchParams }: Args) {
               <p className="text-slate-600 dark:text-brand-silver text-base leading-relaxed font-normal">
                 {tour.shortDescription || tour.excerpt}
               </p>
+
+              {/* Animated Scroll Indicator */}
+              <div className="mt-10 flex flex-col items-start opacity-80 hover:opacity-100 transition-opacity">
+                <a href="#itinerary" className="flex items-center gap-4 text-brand-blue group cursor-pointer">
+                  <span className="text-xs uppercase tracking-widest font-semibold">Découvrir l'itinéraire</span>
+                  <div className="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
+                    <svg className="w-5 h-5 animate-bounce mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                  </div>
+                </a>
+              </div>
             </section>
 
             {/* Includes / Excludes */}
@@ -295,7 +307,7 @@ export default async function TourPage({ params, searchParams }: Args) {
       {/* ──────────────────────────────────────────────────────────
           TRAVEL STORY CAROUSEL — Drag-based 9:16 Cards
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative z-10 py-24 md:py-32">
+      <section id="itinerary" className="relative z-10 pt-12 md:pt-16 pb-24 md:pb-32">
         <div className="absolute top-0 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center mb-16 md:mb-20 px-4 relative z-10">
@@ -321,6 +333,23 @@ export default async function TourPage({ params, searchParams }: Args) {
         ) : (
           <div className="text-center text-slate-500 dark:text-white/30 italic py-12 relative z-10">
             {t.detailsSoon}
+          </div>
+        )}
+
+        {/* Relocated PDF Download Button */}
+        {typeof tour.programPDF === 'object' && tour.programPDF?.url && (
+          <div className="mt-16 flex justify-center px-4 relative z-20">
+            <a
+              href={tour.programPDF.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center bg-brand-gold/10 border border-brand-gold/30 hover:bg-brand-gold/20 text-brand-gold px-8 py-4 rounded-full font-medium text-base transition-all max-w-sm w-full md:w-auto backdrop-blur-sm"
+            >
+              <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Télécharger le Programme (PDF)
+            </a>
           </div>
         )}
       </section>
