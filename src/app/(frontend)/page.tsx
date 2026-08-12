@@ -15,6 +15,7 @@ import MagneticButton from '@/components/MagneticButton'
 import ScrollTextReveal from '@/components/ScrollTextReveal'
 import HeroVideoSwitcher from '@/components/HeroVideoSwitcher'
 import { PartnersSection } from '@/components/sections/partners-section'
+import { InstagramEmbed } from '@/components/sections/InstagramEmbed'
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 
 export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -309,6 +310,11 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           CLIENT REVIEWS / REVIEW GRID
       ─────────────────────────────────────────────────────────── */}
       <TestimonialsSection testimonials={testimonials as any[]} />
+
+      {/* ──────────────────────────────────────────────────────────
+          INSTAGRAM FEED — Auto-updating @cacreevoyage embed
+      ─────────────────────────────────────────────────────────── */}
+      <InstagramEmbed />
 
       {/* ── FOOTER ── */}
       <Footer />
