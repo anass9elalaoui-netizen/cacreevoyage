@@ -14,6 +14,7 @@ import ReviewBadges from '@/components/ReviewBadges'
 import MagneticButton from '@/components/MagneticButton'
 import ScrollTextReveal from '@/components/ScrollTextReveal'
 import HeroVideoSwitcher from '@/components/HeroVideoSwitcher'
+import { PartnersSection } from '@/components/sections/partners-section'
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 
 export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -117,6 +118,21 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     }
   } catch (err) {
     console.error('Error fetching hero-switcher global', err);
+  }
+
+  // Fetch Partners Config
+  let partnersData: { title?: string; description?: string; columnCount?: string; partnersList?: any[] } = {}
+  try {
+    const partnersGlobal = await payload.findGlobal({
+      slug: 'partners-config',
+      depth: 1,
+      locale: locale as any,
+    }) as any
+    if (partnersGlobal) {
+      partnersData = partnersGlobal
+    }
+  } catch {
+    // Fallback to defaults in component
   }
 
   return (
@@ -270,11 +286,28 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       </section>
 
       {/* ──────────────────────────────────────────────────────────
-          CLIENT REVIEWS / TESTIMONIALS
+          CLIENT REVIEWS / VIDEO TESTIMONIALS
       ─────────────────────────────────────────────────────────── */}
       {testimonials && testimonials.length > 0 && (
         <DestinationTestimonials testimonials={testimonials as any[]} />
       )}
+
+      {/* ──────────────────────────────────────────────────────────
+          PARTNER LOGOS CAROUSEL — Social proof between testimonials
+      ─────────────────────────────────────────────────────────── */}
+      <PartnersSection
+        title={partnersData.title}
+        description={partnersData.description}
+        columnCount={Number(partnersData.columnCount) || 3}
+        partners={partnersData.partnersList?.map((p: any) => ({
+          name: p.name,
+          logo: typeof p.logo === 'object' ? p.logo : { url: '' },
+        }))}
+      />
+
+      {/* ──────────────────────────────────────────────────────────
+          CLIENT REVIEWS / REVIEW GRID
+      ─────────────────────────────────────────────────────────── */}
       <TestimonialsSection testimonials={testimonials as any[]} />
 
       {/* ── FOOTER ── */}
