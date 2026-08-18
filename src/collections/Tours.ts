@@ -311,6 +311,17 @@ export const Tours: CollectionConfig = {
        FEATURED & COMMERCIAL FLAGS
     ─────────────────────────────────────────────────────────── */
     {
+      name: 'isAvailable',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Circuit Disponible / Visible au public',
+      admin: {
+        position: 'sidebar',
+        description:
+          'Cochez cette case si le circuit est actuellement ouvert aux réservations. Si décoché, la carte de la destination redirigera uniquement vers la page d\'inspiration.',
+      },
+    },
+    {
       name: 'isFeatured',
       type: 'checkbox',
       defaultValue: false,

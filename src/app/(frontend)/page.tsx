@@ -42,6 +42,27 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     locale: locale as any,
   })
 
+  // Build destination → tour routing map (for dynamic card links)
+  const { docs: availableTours } = await payload.find({
+    collection: 'tours',
+    where: {
+      isAvailable: { equals: true },
+      destination: { exists: true },
+    },
+    depth: 0,
+    limit: 100,
+    locale: locale as any,
+  })
+  const destinationTourMap: Record<string, string> = {}
+  for (const tour of availableTours) {
+    const destId = typeof tour.destination === 'object' && tour.destination !== null
+      ? String((tour.destination as any).id)
+      : tour.destination ? String(tour.destination) : null
+    if (destId && tour.slug && !destinationTourMap[destId]) {
+      destinationTourMap[destId] = tour.slug
+    }
+  }
+
   // Fetch featured tours
   const { docs: featuredTours } = await payload.find({
     collection: 'tours',
@@ -166,6 +187,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           destinations={internationalDestinations as any[]}
           title="Évasions Internationales"
           subtitle="Découvrez le monde"
+          destinationTourMap={destinationTourMap}
         />
       </div>
 
@@ -178,6 +200,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           destinations={nationalDestinations as any[]}
           title="Trésors du Maroc"
           subtitle="L'âme du royaume"
+          destinationTourMap={destinationTourMap}
         />
       </div>
       </CursorTrail>

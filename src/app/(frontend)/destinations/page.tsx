@@ -48,6 +48,27 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
     locale: locale as any,
   })
 
+  // Build destination → tour routing map
+  const { docs: availableTours } = await payload.find({
+    collection: 'tours',
+    where: {
+      isAvailable: { equals: true },
+      destination: { exists: true },
+    },
+    depth: 0,
+    limit: 100,
+    locale: locale as any,
+  })
+  const destinationTourMap: Record<string, string> = {}
+  for (const tour of availableTours) {
+    const destId = typeof tour.destination === 'object' && tour.destination !== null
+      ? String((tour.destination as any).id)
+      : tour.destination ? String(tour.destination) : null
+    if (destId && tour.slug && !destinationTourMap[destId]) {
+      destinationTourMap[destId] = tour.slug
+    }
+  }
+
   // Fetch SubpageHeroes
   let heroData: any = {}
   try {
@@ -113,11 +134,14 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
               const headerMedia = dest.headerMedia
               const headerUrl = typeof headerMedia === 'object' && headerMedia?.url ? headerMedia.url : null
               const isVideo = typeof headerMedia === 'object' && headerMedia?.mimeType?.startsWith('video')
+              const activeTourSlug = destinationTourMap[String(dest.id)]
+              const hasActiveTour = Boolean(activeTourSlug)
+              const targetUrl = hasActiveTour ? `/tours/${activeTourSlug}` : `/destinations/${dest.slug}`
 
               return (
                 <Link
                   key={dest.id}
-                  href={`/destinations/${dest.slug}`}
+                  href={targetUrl}
                   className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-sm shadow-xl dark:shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:shadow-2xl dark:hover:shadow-[0_16px_60px_rgba(56,163,165,0.15)] hover:border-slate-300 dark:hover:border-white/20 transition-all duration-500"
                 >
                   <div className="relative aspect-[4/5] w-full overflow-hidden">
@@ -153,16 +177,29 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
                       </div>
                     )}
 
-                    {/* Scope Badge */}
-                    <div className="absolute top-4 right-4 z-20">
-                      <span className={`px-3 py-1 rounded-full backdrop-blur-xl border text-[10px] uppercase tracking-widest font-medium ${
-                        dest.scope === 'international'
-                          ? 'bg-brand-blue/15 border-brand-blue/30 text-brand-blue'
-                          : 'bg-brand-gold/15 border-brand-gold/30 text-brand-gold'
-                      }`}>
-                        {dest.scope === 'international' ? 'International' : (locale === 'en' ? 'Morocco' : 'Maroc')}
-                      </span>
-                    </div>
+                    {/* "Départ Prévu" Badge — top-right when active tour exists */}
+                    {hasActiveTour ? (
+                      <div className="absolute top-4 right-4 z-20">
+                        <span className="inline-flex items-center gap-1.5 bg-emerald-500/90 dark:bg-emerald-500/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.4)] border border-emerald-400/30">
+                          <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                          </span>
+                          Départ Prévu
+                        </span>
+                      </div>
+                    ) : (
+                      /* Scope Badge — shown when no active tour badge */
+                      <div className="absolute top-4 right-4 z-20">
+                        <span className={`px-3 py-1 rounded-full backdrop-blur-xl border text-[10px] uppercase tracking-widest font-medium ${
+                          dest.scope === 'international'
+                            ? 'bg-brand-blue/15 border-brand-blue/30 text-brand-blue'
+                            : 'bg-brand-gold/15 border-brand-gold/30 text-brand-gold'
+                        }`}>
+                          {dest.scope === 'international' ? 'International' : (locale === 'en' ? 'Morocco' : 'Maroc')}
+                        </span>
+                      </div>
+                    )}
 
                     <div className="absolute bottom-6 left-6 right-6 z-20">
                       <div className="bg-white/70 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/20 rounded-2xl px-5 py-4 inline-block shadow-lg dark:shadow-none">

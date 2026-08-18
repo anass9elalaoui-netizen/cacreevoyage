@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
 import { getDictionary } from '@/i18n/dictionaries'
-
+import { DestinationInspiration } from '@/components/ui/destination-inspiration'
 export const dynamic = 'force-dynamic'
 
 type Args = {
@@ -33,7 +33,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
   if (!destination) return notFound()
 
   // 2. Fetch all Tours belonging to this destination
-  const { docs: tours } = await payload.find({
+  const { docs: allTours } = await payload.find({
     collection: 'tours',
     where: { destination: { equals: destination.id } },
     depth: 2,
@@ -41,10 +41,14 @@ export default async function DestinationPage({ params, searchParams }: Args) {
     locale: locale as any,
   })
 
+  // 3. Filter to only show tours that are open for bookings
+  const activeTours = allTours.filter((tour: any) => tour.isAvailable === true)
+
   // Resolve header media URL
   const headerMedia = destination.headerMedia
   const headerUrl = typeof headerMedia === 'object' && headerMedia?.url ? headerMedia.url : null
   const isVideo = typeof headerMedia === 'object' && headerMedia?.mimeType?.startsWith('video')
+
 
   // Theme label mapping
   const themeLabel: Record<string, string> = {
@@ -64,10 +68,14 @@ export default async function DestinationPage({ params, searchParams }: Args) {
 
   return (
     <main className="relative w-full min-h-screen bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-hidden">
-      {/* ──────────────────────────────────────────────────────────
-          CINEMATIC HEADER BANNER
-      ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full h-[70vh] overflow-hidden bg-slate-100 dark:bg-brand-dark flex-shrink-0 transition-colors duration-700">
+      {activeTours.length === 0 ? (
+        <DestinationInspiration destination={destination} />
+      ) : (
+        <>
+          {/* ──────────────────────────────────────────────────────────
+              CINEMATIC HEADER BANNER
+          ─────────────────────────────────────────────────────────── */}
+          <section className="relative w-full h-[70vh] overflow-hidden bg-slate-100 dark:bg-brand-dark flex-shrink-0 transition-colors duration-700">
         {/* Header Media */}
         {headerUrl && isVideo ? (
           <video
@@ -136,14 +144,12 @@ export default async function DestinationPage({ params, searchParams }: Args) {
       {/* ──────────────────────────────────────────────────────────
           TOURS GRID — Dark Luxury Theme
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative z-10 py-24 px-4 md:px-12 lg:px-20">
+      <section id="circuits" className="relative z-10 py-24 px-4 md:px-12 lg:px-20">
         {/* Ambient Background Glow */}
         <div className="absolute top-0 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-brand-blue/3 rounded-full blur-[120px] pointer-events-none" />
 
-        {tours.length > 0 ? (
-          <>
-            <div className="mb-16 flex items-end justify-between relative z-10">
+        <div className="mb-16 flex items-end justify-between relative z-10">
               <div>
                 <span className="uppercase text-brand-blue font-semibold text-xs mb-3 block tracking-wider">
                   {t.toursLabel}
@@ -152,7 +158,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
                   {t.ourTours}
                 </h2>
                 <p className="text-slate-600 dark:text-white/40 font-light text-lg leading-relaxed">
-                  {tours.length} {t.itinerariesAvailable}
+                  {activeTours.length} {t.itinerariesAvailable}
                 </p>
               </div>
               <Link
@@ -167,7 +173,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 relative z-10">
-              {tours.map((tour) => {
+              {activeTours.map((tour) => {
                 const thumb = typeof tour.thumbnail === 'object' && tour.thumbnail?.url
                   ? tour.thumbnail.url
                   : null
@@ -225,37 +231,9 @@ export default async function DestinationPage({ params, searchParams }: Args) {
                 )
               })}
             </div>
-          </>
-        ) : (
-          /* ── EMPTY STATE — Dark Luxury ── */
-          <div className="flex flex-col items-center justify-center py-32 text-center relative z-10">
-            <div className="w-20 h-20 rounded-full bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center mb-8">
-              <svg className="w-8 h-8 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
-              </svg>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-heading text-slate-900 dark:text-white mb-6 tracking-tight font-bold"
-                style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
-            >
-              {t.inPreparation}
-            </h2>
-            <p className="text-slate-600 dark:text-white/50 font-light text-lg max-w-lg mb-10 leading-relaxed">
-              {t.expertsPreparing}{' '}
-              <strong className="font-medium text-slate-900 dark:text-white">{destination.title}</strong>.
-              <br/>{t.contactForCustom}
-            </p>
-            <Link
-              href={`/sur-mesure?destination=${encodeURIComponent(destination.title)}`}
-              className="inline-flex items-center gap-2 bg-white/80 dark:bg-white/10 border border-slate-200 dark:border-white/20 hover:bg-white/90 dark:hover:bg-white/20 backdrop-blur-md text-slate-900 dark:text-white px-10 py-4 rounded-full font-medium transition-all shadow-md dark:shadow-[0_0_30px_rgba(56,163,165,0.2)] hover:shadow-lg dark:hover:shadow-[0_0_40px_rgba(56,163,165,0.4)] hover:scale-105"
-            >
-              {t.requestCustom}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </Link>
-          </div>
-        )}
       </section>
+      </>
+      )}
 
       {/* ── FOOTER ── */}
       <Footer />

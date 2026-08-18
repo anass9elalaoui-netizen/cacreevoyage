@@ -24,13 +24,18 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
   const t = getDictionary(locale).toursList;
   const payload = await getPayload({ config: configPromise })
 
-  // Fetch all tours (limit to 50 for now)
+  // Fetch only available tours (limit to 50 for now)
   const { docs: tours } = await payload.find({
     collection: 'tours',
     depth: 1,
     limit: 50,
     sort: '-createdAt',
     locale: locale as any,
+    where: {
+      isAvailable: {
+        equals: true,
+      },
+    },
   })
 
   // Fetch SubpageHeroes

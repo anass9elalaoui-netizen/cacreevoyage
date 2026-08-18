@@ -14,7 +14,14 @@ interface Destination {
   theme?: string
 }
 
-function DestinationCard({ dest, index }: { dest: Destination; index: number }) {
+/** Maps destination ID → first available tour slug */
+type DestinationTourMap = Record<string, string>
+
+function DestinationCard({ dest, index, destinationTourMap }: { dest: Destination; index: number; destinationTourMap?: DestinationTourMap }) {
+  // Dynamic routing: if the destination has an active tour, link to it directly
+  const activeTourSlug = destinationTourMap?.[String(dest.id)]
+  const hasActiveTour = Boolean(activeTourSlug)
+  const targetUrl = hasActiveTour ? `/tours/${activeTourSlug}` : `/destinations/${dest.slug}`
   const cardRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: cardRef,
@@ -96,6 +103,19 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
         {/* Ambient Glow behind card */}
         <div className="absolute -inset-2 bg-brand-blue/5 rounded-[2.5rem] blur-[40px] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
+        {/* "Départ Prévu" Badge — shown when an active tour exists */}
+        {hasActiveTour && (
+          <div className="absolute top-4 right-4 z-30">
+            <span className="inline-flex items-center gap-1.5 bg-emerald-500/90 dark:bg-emerald-500/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.4)] border border-emerald-400/30">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+              </span>
+              Départ Prévu
+            </span>
+          </div>
+        )}
+
         {/* Glassmorphism Title Container */}
         <div className="absolute bottom-5 left-5 right-5 z-20">
           <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 shadow-lg rounded-2xl px-5 py-4 transition-all duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:-translate-y-1 group-hover:border-white/50 dark:group-hover:border-white/30 group-hover:bg-white/30 dark:group-hover:bg-white/10">
@@ -113,9 +133,9 @@ function DestinationCard({ dest, index }: { dest: Destination; index: number }) 
 
       {/* Clickable overlay */}
       <Link
-        href={`/destinations/${dest.slug}`}
-        className="absolute inset-0 z-30"
-        aria-label={`Découvrir ${dest.title}`}
+        href={targetUrl}
+        className="absolute inset-0 z-40"
+        aria-label={hasActiveTour ? `Réserver ${dest.title}` : `Découvrir ${dest.title}`}
       />
     </motion.div>
   )
@@ -125,10 +145,12 @@ export default function DestinationSwiper({
   destinations,
   title,
   subtitle,
+  destinationTourMap,
 }: {
   destinations: Destination[]
   title: string
   subtitle?: string
+  destinationTourMap?: DestinationTourMap
 }) {
   if (!destinations || destinations.length === 0) return null
 
@@ -183,7 +205,7 @@ export default function DestinationSwiper({
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {destinations.map((dest, index) => (
-          <DestinationCard key={dest.id} dest={dest} index={index} />
+          <DestinationCard key={dest.id} dest={dest} index={index} destinationTourMap={destinationTourMap} />
         ))}
       </div>
     </section>
