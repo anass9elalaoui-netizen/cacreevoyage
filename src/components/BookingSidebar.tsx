@@ -49,9 +49,9 @@ export default function BookingSidebar({
   const t = getDictionary(currentLocale).bookingSidebar
 
   const statusConfig = {
-    available: { label: t.available, color: 'bg-green-500/20 text-green-400 border-green-500/30' },
-    coming_soon: { label: t.comingSoon, color: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' },
-    sold_out: { label: t.soldOut, color: 'bg-red-500/20 text-red-400 border-red-500/30' },
+    available: { label: t.available, color: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-700/50' },
+    coming_soon: { label: t.comingSoon, color: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-700/50' },
+    sold_out: { label: t.soldOut, color: 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-700/50' },
   }
 
   const status = statusConfig[tourStatus as keyof typeof statusConfig] || statusConfig.available
@@ -82,7 +82,7 @@ export default function BookingSidebar({
       >
         {/* Status Badge */}
         <div className="flex items-center justify-between">
-          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${status.color}`}>
+          <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-normal border shadow-sm ${status.color}`}>
             {status.label}
           </span>
           {pricing?.basePrice && (

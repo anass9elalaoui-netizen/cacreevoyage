@@ -66,16 +66,22 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
   // Fetch featured tours
   const { docs: featuredTours } = await payload.find({
     collection: 'tours',
-    where: { isFeatured: { equals: true } },
+    where: { 
+      and: [
+        { isFeatured: { equals: true } },
+        { isAvailable: { equals: true } }
+      ]
+    },
     depth: 1,
     limit: 6,
     sort: 'featuredOrder',
     locale: locale as any,
   })
 
-  // Fallback: if no featured tours, get latest tours
+  // Fallback: if no featured tours, get latest available tours
   const toursToShow = featuredTours.length > 0 ? featuredTours : (await payload.find({
     collection: 'tours',
+    where: { isAvailable: { equals: true } },
     depth: 1,
     limit: 6,
     sort: '-createdAt',
@@ -165,6 +171,13 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       <HeroGallery />
 
       {/* ──────────────────────────────────────────────────────────
+          FEATURED TOURS GRID — "Nos Voyages d'Exception"
+      ─────────────────────────────────────────────────────────── */}
+      {toursToShow.length > 0 && (
+        <FeaturedToursGrid tours={toursToShow as any[]} />
+      )}
+
+      {/* ──────────────────────────────────────────────────────────
           DESTINATIONS TRAIL WRAPPER
       ─────────────────────────────────────────────────────────── */}
       <CursorTrail
@@ -204,13 +217,6 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
         />
       </div>
       </CursorTrail>
-
-      {/* ──────────────────────────────────────────────────────────
-          FEATURED TOURS GRID
-      ─────────────────────────────────────────────────────────── */}
-      {toursToShow.length > 0 && (
-        <FeaturedToursGrid tours={toursToShow as any[]} />
-      )}
 
 
       {/* ──────────────────────────────────────────────────────────

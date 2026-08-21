@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import TourCard from './TourCard'
 
 interface Tour {
@@ -65,28 +65,52 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
         </motion.p>
       </div>
 
-      {/* Grid */}
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tours.map((tour) => {
-            const thumbnailData = typeof tour.thumbnail === 'object' && tour.thumbnail ? tour.thumbnail : null
-            return (
-              <TourCard
-                key={tour.id}
-                title={tour.title}
-                slug={tour.slug}
-                excerpt={tour.excerpt}
-                shortDescription={tour.shortDescription}
-                scope={tour.scope}
-                duration={tour.duration}
-                thumbnail={thumbnailData}
-                pricing={tour.pricing}
-                logistics={tour.logistics}
-                isFeatured={tour.isFeatured}
-              />
-            )
-          })}
-        </div>
+      {/* Content-Aware Animated Grid */}
+      {/* Content-Aware Animated Flexbox Layout */}
+      <div className="w-full px-4 md:px-6 mt-4 pb-8 flex justify-center">
+        <motion.div
+          layout
+          className="flex flex-wrap justify-center items-start gap-8 w-full max-w-7xl mx-auto"
+        >
+          <AnimatePresence mode="popLayout">
+            {tours.map((tour, index) => {
+              const thumbnailData =
+                typeof tour.thumbnail === 'object' && tour.thumbnail
+                  ? tour.thumbnail
+                  : null
+
+              return (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.1,
+                    type: 'spring',
+                    bounce: 0.3,
+                  }}
+                  key={tour.id}
+                  className="w-full max-w-[380px] flex-shrink-0"
+                >
+                  <TourCard
+                    title={tour.title}
+                    slug={tour.slug}
+                    excerpt={tour.excerpt}
+                    shortDescription={tour.shortDescription}
+                    scope={tour.scope}
+                    duration={tour.duration}
+                    thumbnail={thumbnailData}
+                    pricing={tour.pricing}
+                    logistics={tour.logistics}
+                    isFeatured={tour.isFeatured}
+                  />
+                </motion.div>
+              )
+            })}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   )
