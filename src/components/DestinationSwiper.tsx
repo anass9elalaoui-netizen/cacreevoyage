@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
@@ -62,7 +62,7 @@ function DestinationCard({ dest, index, destinationTourMap }: { dest: Destinatio
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay: index * 0.08, ease: 'easeOut' }}
-      className="relative flex-shrink-0 w-[280px] md:w-[340px] h-[420px] md:h-[480px] rounded-[2rem] overflow-hidden snap-center cursor-pointer group"
+      className="relative flex-shrink-0 w-[82vw] sm:w-[280px] md:w-[340px] h-[420px] md:h-[480px] rounded-[2rem] overflow-hidden snap-center md:snap-start cursor-pointer group"
     >
       <motion.div
         style={{ rotateX, rotateY, transformPerspective: 800, willChange: 'transform' }}
@@ -156,6 +156,19 @@ export default function DestinationSwiper({
   if (!destinations || destinations.length === 0) return null
 
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+    const progress = scrollWidth > clientWidth ? scrollLeft / (scrollWidth - clientWidth) : 0
+    setScrollProgress(progress)
+  }
+
+  useEffect(() => {
+    // Initial check in case it's already scrolled
+    handleScroll()
+  }, [destinations])
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return
@@ -176,24 +189,37 @@ export default function DestinationSwiper({
           </h2>
         </div>
 
-        <CarouselNavPill
-          onPrev={() => scroll('left')}
-          onNext={() => scroll('right')}
-          ariaLabelPrev={`${title} — précédent`}
-          ariaLabelNext={`${title} — suivant`}
-          className="self-end"
-        />
+        <div className="hidden md:block">
+          <CarouselNavPill
+            onPrev={() => scroll('left')}
+            onNext={() => scroll('right')}
+            ariaLabelPrev={`${title} — précédent`}
+            ariaLabelNext={`${title} — suivant`}
+            className="self-end"
+          />
+        </div>
       </div>
 
       {/* Horizontal Scroll Container */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto snap-x snap-mandatory gap-5 md:gap-6 pb-4 px-4 md:px-12 lg:px-20 hide-scrollbar"
+        onScroll={handleScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-4 px-4 md:px-12 lg:px-20 hide-scrollbar"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {destinations.map((dest, index) => (
           <DestinationCard key={dest.id} dest={dest} index={index} destinationTourMap={destinationTourMap} />
         ))}
+      </div>
+
+      {/* Mobile Scroll Progress Bar */}
+      <div className="mt-6 flex justify-center md:hidden px-4">
+        <div className="relative w-24 h-1 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+          <div 
+            className="absolute top-0 left-0 h-full bg-brand-blue rounded-full transition-transform duration-100 ease-out"
+            style={{ width: '40%', transform: `translateX(${scrollProgress * 150}%)` }}
+          />
+        </div>
       </div>
     </section>
   )
