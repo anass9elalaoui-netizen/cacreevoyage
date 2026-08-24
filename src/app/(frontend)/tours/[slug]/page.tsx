@@ -343,7 +343,7 @@ export default async function TourPage({ params, searchParams }: Args) {
               href={tour.programPDF.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-brand-gold/10 border border-brand-gold/30 hover:bg-brand-gold/20 text-brand-gold px-8 py-4 rounded-full font-medium text-base transition-all max-w-sm w-full md:w-auto backdrop-blur-sm"
+              className="inline-flex items-center justify-center bg-brand-blue/10 border border-brand-blue/30 hover:bg-brand-blue/20 text-brand-blue px-8 py-4 rounded-full font-medium text-base transition-all max-w-sm w-full md:w-auto backdrop-blur-sm"
             >
               <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

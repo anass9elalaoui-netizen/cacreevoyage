@@ -56,7 +56,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
     <section className="py-24 bg-slate-50 dark:bg-transparent relative transition-colors duration-700">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="uppercase text-brand-gold text-xs font-body mb-4 block font-semibold tracking-wider">
+          <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
             Avis Clients
           </span>
           <h2 className="font-heading text-4xl md:text-5xl text-slate-900 dark:text-white mb-6 tracking-tight font-bold">

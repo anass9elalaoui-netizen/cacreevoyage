@@ -16,6 +16,7 @@ import ScrollTextReveal from '@/components/ScrollTextReveal'
 import HeroVideoSwitcher from '@/components/HeroVideoSwitcher'
 import { PartnersSection } from '@/components/sections/partners-section'
 import { InstagramEmbed } from '@/components/sections/InstagramEmbed'
+import HomepageActivities from '@/components/HomepageActivities'
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 
 export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -163,6 +164,21 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     // Fallback to defaults in component
   }
 
+  // Fetch Activities Config
+  let activitiesData: { sectionTitle?: string; sectionSubtitle?: string; sectionDescription?: string; activitiesList?: any[] } = {}
+  try {
+    const activitiesGlobal = await payload.findGlobal({
+      slug: 'activities-config',
+      depth: 1,
+      locale: locale as any,
+    }) as any
+    if (activitiesGlobal) {
+      activitiesData = activitiesGlobal
+    }
+  } catch {
+    // Fallback — component handles empty array gracefully
+  }
+
   return (
     <main className="relative w-full min-h-screen flex flex-col overflow-x-clip">
       {/* ──────────────────────────────────────────────────────────
@@ -218,6 +234,21 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       </div>
       </CursorTrail>
 
+      {/* ──────────────────────────────────────────────────────────
+          ACTIVITÉS & AVENTURES — Zig-zag editorial feed
+      ─────────────────────────────────────────────────────────── */}
+      <HomepageActivities
+        sectionTitle={activitiesData.sectionTitle}
+        sectionSubtitle={activitiesData.sectionSubtitle}
+        sectionDescription={activitiesData.sectionDescription}
+        activities={(activitiesData.activitiesList || []).map((a: any) => ({
+          id: a.id,
+          title: a.title,
+          description: a.description,
+          location: a.location,
+          image: typeof a.image === 'object' ? a.image : null,
+        }))}
+      />
 
       {/* ──────────────────────────────────────────────────────────
           MID-PAGE IMMERSIVE BREAK
@@ -228,12 +259,12 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           SUR MESURE PHILOSOPHY BLOCK
       ─────────────────────────────────────────────────────────── */}
       <section className="relative w-full py-16 lg:py-24 bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-clip">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-gold/5 rounded-full blur-[180px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
           {/* Left — Text */}
           <div>
-            <span className="uppercase text-brand-gold text-xs font-body mb-4 block font-semibold tracking-wider">
+            <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
               {t.philosophySubtitle}
             </span>
             <h2 className="font-heading text-4xl md:text-6xl text-slate-900 dark:text-white mb-8 leading-[1.1] font-medium tracking-wide">
@@ -258,7 +289,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
             <MagneticButton>
               <Link
                 href="/sur-mesure"
-                className="inline-block mt-10 bg-brand-gold/10 dark:bg-brand-gold/20 border border-brand-gold/30 hover:bg-brand-gold/20 dark:hover:bg-brand-gold/30 text-yellow-700 dark:text-brand-gold px-8 py-4 rounded-full font-body text-sm uppercase dark:font-medium transition-all duration-300 font-semibold tracking-wider"
+                className="inline-block mt-10 bg-brand-gold dark:bg-brand-gold border border-brand-gold hover:bg-brand-gold-dark dark:hover:bg-brand-gold-dark text-white px-8 py-4 rounded-full font-body text-sm uppercase font-semibold transition-all duration-300 tracking-wider shadow-[0_4px_20px_rgba(29,161,232,0.2)] hover:shadow-[0_4px_28px_rgba(29,161,232,0.35)]"
               >
                 {t.philosophyCTA}
               </Link>

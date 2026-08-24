@@ -66,7 +66,7 @@ function MoonPhaseIcon() {
   const fraction = isWaxing ? phase * 2 : (1 - phase) * 2; // 0 to 1 (new to full)
 
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" className="text-brand-gold">
+    <svg width="14" height="14" viewBox="0 0 14 14" className="text-brand-blue">
       <defs>
         <clipPath id="moonClip">
           {fraction < 0.5 ? (
@@ -453,7 +453,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
 
             {/* Subtle radial gradient orb */}
             <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-brand-blue/[0.03] rounded-full blur-[150px] pointer-events-none" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-brand-gold/[0.02] rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-brand-blue/[0.02] rounded-full blur-[120px] pointer-events-none" />
 
             {/* Close button */}
             <motion.button
@@ -484,8 +484,8 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                   className="mb-6 lg:mb-10"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-px bg-brand-gold/40" />
-                    <span className="uppercase text-brand-gold/80 text-[10px] font-body font-semibold tracking-wider">
+                    <div className="w-8 h-px bg-brand-blue/40" />
+                    <span className="uppercase text-brand-blue/80 text-[10px] font-body font-semibold tracking-wider">
                       Menu
                     </span>
                   </div>
@@ -618,7 +618,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                                       onClick={closeMenu}
                                       className="group/sub flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/[0.03] transition-all duration-300"
                                     >
-                                      <span className={`w-6 h-6 rounded-lg ${subIdx === 0 ? 'bg-brand-blue/10 border-brand-blue/20 text-brand-blue' : 'bg-brand-gold/10 border-brand-gold/20 text-brand-gold'} border flex items-center justify-center text-[10px] shrink-0`}>
+                                      <span className={`w-6 h-6 rounded-lg ${subIdx === 0 ? 'bg-brand-blue/10 border-brand-blue/20 text-brand-blue' : 'bg-brand-blue/10 border-brand-blue/20 text-brand-blue'} border flex items-center justify-center text-[10px] shrink-0`}>
                                         {sub.icon}
                                       </span>
                                       <div className="flex-1">
@@ -652,7 +652,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                 {/* Top */}
                 <div>
                   <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-8">
-                    <span className="font-heading text-2xl text-brand-gold/50">✦</span>
+                    <span className="font-heading text-2xl text-brand-blue/50">✦</span>
                   </div>
                   <h3 className="font-heading text-2xl xl:text-3xl text-white mb-3 tracking-tight leading-tight font-bold">
                     Votre voyage<br />commence ici
@@ -680,7 +680,7 @@ export default function GlassNavbar({ brandIdentity }: { brandIdentity?: any }) 
                 <div className="flex flex-col gap-5">
                   <div className="w-full h-px bg-white/[0.05]" />
                   <div className="flex flex-col gap-2.5">
-                    <span className="uppercase text-brand-gold/60 text-[10px] font-body font-semibold tracking-wider">
+                    <span className="uppercase text-brand-blue/60 text-[10px] font-body font-semibold tracking-wider">
                       Contact
                     </span>
                     <div className="flex flex-col gap-1.5 text-white/30 text-sm font-body">

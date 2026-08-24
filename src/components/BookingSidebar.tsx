@@ -88,7 +88,7 @@ export default function BookingSidebar({
           {pricing?.basePrice && (
             <div className="text-right">
               <span className="text-[11px] text-brand-silver block">{t.from}</span>
-              <span className="text-2xl font-heading text-brand-gold">
+              <span className="text-2xl font-heading text-brand-blue">
                 {pricing.basePrice.toLocaleString()} {pricing.currency || '€'}
               </span>
               <span className="text-brand-silver text-xs">{t.pers}</span>
@@ -132,8 +132,8 @@ export default function BookingSidebar({
 
         {/* Deposit info */}
         {depositAmount && (
-          <div className="text-center py-3 rounded-xl bg-brand-gold/10 border border-brand-gold/20">
-            <span className="text-brand-gold text-sm font-medium">
+          <div className="text-center py-3 rounded-xl bg-brand-blue/10 border border-brand-blue/20">
+            <span className="text-brand-blue text-sm font-medium">
               {t.deposit} {depositAmount.toLocaleString()} {pricing?.currency || '€'}
             </span>
             <span className="text-slate-500 dark:text-slate-400 text-xs block mt-1">

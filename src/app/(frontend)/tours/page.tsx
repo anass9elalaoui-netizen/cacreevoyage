@@ -77,7 +77,7 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
 
         {/* Ambient glows */}
         <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[180px] pointer-events-none" />
-        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-brand-gold/5 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
         {/* Tours Grid */}
         <section className="relative py-20 px-6">

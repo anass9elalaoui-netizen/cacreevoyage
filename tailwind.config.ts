@@ -15,7 +15,9 @@ const config: Config = {
           cyan: '#49C0EA',
           dark: '#0B132B', /* Dark Navy */
           deeper: '#050814',
-          gold: '#C9A84C',
+          gold: '#1DA1E8', /* ← Logo Suitcase Blue (replaces legacy gold) */
+          'gold-light': '#A8D8F0', /* Cloud accent blue */
+          'gold-dark': '#1678B5', /* Deep logo blue for hover states */
           silver: '#A0ABC0',
           white: '#FFFFFF',
           glass: 'rgba(255, 255, 255, 0.05)',

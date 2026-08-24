@@ -175,7 +175,7 @@ export default function TourCard({
               <div>
                 <span className="text-[11px] text-slate-500 dark:text-brand-silver">À partir de</span>
                 <br />
-                <span className="text-lg font-medium text-brand-blue dark:text-brand-gold">{priceText}/pers</span>
+                <span className="text-lg font-medium text-brand-blue dark:text-brand-blue">{priceText}/pers</span>
               </div>
             ) : (
               <div>
@@ -191,7 +191,7 @@ export default function TourCard({
         {/* Featured badge - Also popped out */}
         {isFeatured && (
           <motion.div 
-            className="absolute top-4 right-4 px-3 py-1 text-xs uppercase tracking-wider liquid-glass border border-brand-gold/40 text-slate-800 dark:text-brand-gold rounded-full font-semibold"
+            className="absolute top-4 right-4 px-3 py-1 text-xs uppercase tracking-wider liquid-glass border border-brand-blue/40 text-slate-800 dark:text-brand-blue rounded-full font-semibold"
             style={{ translateZ: 50 }}
           >
             ⭐ Signature

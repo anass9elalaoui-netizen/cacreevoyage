@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useScrollVelocityTilt } from '@/hooks/useScrollVelocityTilt'
+import { CarouselNavPill } from '@/components/ui/carousel-nav-pill'
 
 interface Destination {
   id: string | number
@@ -165,7 +166,7 @@ export default function DestinationSwiper({
   return (
     <section className="relative w-full py-16 md:py-20 overflow-hidden">
       {/* Section Header */}
-      <div className="px-4 md:px-12 lg:px-20 mb-10 md:mb-14 flex items-end justify-between">
+      <div className="px-4 md:px-12 lg:px-20 mb-10 md:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <span className="uppercase text-brand-blue font-semibold text-xs mb-3 block tracking-wider">
             {subtitle || 'Destinations'}
@@ -175,27 +176,13 @@ export default function DestinationSwiper({
           </h2>
         </div>
 
-        {/* Navigation Arrows */}
-        <div className="hidden md:flex items-center gap-3">
-          <button
-            onClick={() => scroll('left')}
-            className="w-12 h-12 rounded-full border border-slate-200 dark:border-white/20 bg-white/50 dark:bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all hover:scale-105"
-            aria-label="Scroll left"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={() => scroll('right')}
-            className="w-12 h-12 rounded-full border border-slate-200 dark:border-white/20 bg-white/50 dark:bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all hover:scale-105"
-            aria-label="Scroll right"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+        <CarouselNavPill
+          onPrev={() => scroll('left')}
+          onNext={() => scroll('right')}
+          ariaLabelPrev={`${title} — précédent`}
+          ariaLabelNext={`${title} — suivant`}
+          className="self-end"
+        />
       </div>
 
       {/* Horizontal Scroll Container */}
