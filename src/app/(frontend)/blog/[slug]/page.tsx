@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { notFound } from 'next/navigation'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -24,6 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function BlogArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const siteSettings = await getSiteSettings()
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
   const { docs } = await payload.find({
@@ -79,7 +81,11 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           </div>
         </article>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

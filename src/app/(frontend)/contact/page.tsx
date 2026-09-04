@@ -1,12 +1,17 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
+import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 export const metadata: Metadata = {
   title: 'Contact — Parlons de Votre Voyage',
   description: 'Contactez Ça Crée Voyage par WhatsApp, email ou formulaire pour planifier votre voyage de luxe sur-mesure.',
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSiteSettings()
+  const cleanNumber = cleanWhatsAppNumber(settings.whatsappNumber)
+  const formattedPhone = settings.whatsappNumber.replace(/(\+\d{3})(\d)(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5 $6')
+
   return (
     <>
       <main className="relative min-h-screen bg-slate-50 dark:bg-brand-dark transition-colors duration-700 overflow-hidden">
@@ -108,7 +113,7 @@ export default function ContactPage() {
 
                   {/* WhatsApp */}
                   <a
-                    href="https://wa.me/212661373347?text=Bonjour, je souhaite en savoir plus sur vos voyages"
+                    href={`https://wa.me/${cleanNumber}?text=Bonjour, je souhaite en savoir plus sur vos voyages`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -116,20 +121,20 @@ export default function ContactPage() {
                       <span className="text-2xl">💬</span>
                       <div>
                         <p className="text-slate-900 dark:text-white text-sm font-medium leading-relaxed">WhatsApp</p>
-                        <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">+212 661 373 347</p>
+                        <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">{formattedPhone || settings.whatsappNumber}</p>
                       </div>
                     </div>
                   </a>
 
                   {/* Email */}
                   <a
-                    href="mailto:contact@cacreevoyage.com"
+                    href={`mailto:${settings.contactEmail}`}
                     className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/8 transition-colors mb-4 shadow-sm dark:shadow-none"
                   >
                     <span className="text-2xl">✉️</span>
                     <div>
                       <p className="text-slate-900 dark:text-white text-sm font-medium leading-relaxed">Email</p>
-                      <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">contact@cacreevoyage.com</p>
+                      <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">{settings.contactEmail}</p>
                     </div>
                   </a>
 
@@ -139,7 +144,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-slate-900 dark:text-white text-sm font-medium leading-relaxed">Bureau</p>
                       <p className="text-slate-600 dark:text-brand-silver text-xs leading-relaxed font-normal">
-                        Casablanca, Maroc
+                        {settings.address || 'Casablanca, Maroc'}
                       </p>
                     </div>
                   </div>
@@ -148,15 +153,21 @@ export default function ContactPage() {
                   <div className="border-t border-slate-200 dark:border-white/10 pt-6">
                     <p className="text-slate-600 dark:text-brand-silver text-xs uppercase mb-3 font-semibold tracking-wider leading-relaxed">Suivez-nous</p>
                     <div className="flex gap-3">
-                      <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
-                        IG
-                      </a>
-                      <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
-                        FB
-                      </a>
-                      <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
-                        TK
-                      </a>
+                      {settings.instagramUrl && (
+                        <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
+                          IG
+                        </a>
+                      )}
+                      {settings.facebookUrl && (
+                        <a href={settings.facebookUrl} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
+                          FB
+                        </a>
+                      )}
+                      {settings.tiktokUrl && (
+                        <a href={settings.tiktokUrl} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-brand-silver hover:text-brand-blue hover:border-brand-blue/30 transition-colors text-sm shadow-sm dark:shadow-none">
+                          TK
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -165,7 +176,11 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={settings.whatsappNumber}
+        contactEmail={settings.contactEmail}
+        instagramUrl={settings.instagramUrl}
+      />
     </>
   )
 }

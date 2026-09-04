@@ -37,7 +37,19 @@ function QRCodeIcon() {
   )
 }
 
-export default function Footer() {
+export interface FooterProps {
+  whatsappNumber?: string
+  contactEmail?: string
+  instagramUrl?: string
+}
+
+export default function Footer({
+  whatsappNumber = '+212661373347',
+  contactEmail,
+  instagramUrl = 'https://instagram.com/cacreevoyage',
+}: FooterProps) {
+  const cleanNumber = whatsappNumber.replace(/\D/g, '')
+
   return (
     <footer className="relative w-full bg-slate-50 dark:bg-transparent text-slate-900 dark:text-white transition-colors duration-700 overflow-hidden">
       {/* ── Top Divider — Ambient glow line ──────────────────── */}
@@ -62,7 +74,7 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex items-center gap-4">
               <a
-                href="https://instagram.com/cacreevoyage"
+                href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full liquid-glass flex items-center justify-center text-slate-700 dark:text-white/50 hover:text-brand-blue dark:hover:text-white transition-all duration-300"
@@ -71,7 +83,7 @@ export default function Footer() {
                 <InstagramIcon />
               </a>
               <a
-                href="https://wa.me/212661373347"
+                href={`https://wa.me/${cleanNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full liquid-glass flex items-center justify-center text-slate-700 dark:text-white/50 hover:text-brand-blue dark:hover:text-white transition-all duration-300"

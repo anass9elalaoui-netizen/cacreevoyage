@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 import { getDictionary } from '@/i18n/dictionaries'
 import { DestinationInspiration } from '@/components/ui/destination-inspiration'
 export const dynamic = 'force-dynamic'
@@ -14,6 +15,7 @@ type Args = {
 }
 
 export default async function DestinationPage({ params, searchParams }: Args) {
+  const siteSettings = await getSiteSettings()
   const { slug } = await params
   const resolvedSearchParams = await searchParams
   const locale = (resolvedSearchParams.locale as string) || 'fr'
@@ -236,7 +238,11 @@ export default async function DestinationPage({ params, searchParams }: Args) {
       )}
 
       {/* ── FOOTER ── */}
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </main>
   )
 }

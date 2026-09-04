@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
 import SurMesureForm from '@/components/SurMesureForm'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 import { getDictionary } from '@/i18n/dictionaries'
 
@@ -18,6 +19,7 @@ export default async function SurMesurePage(props: { searchParams: Promise<{ [ke
   const searchParams = await props.searchParams;
   const locale = (searchParams.locale as string) || 'fr';
   const t = getDictionary(locale).surMesurePage;
+  const siteSettings = await getSiteSettings()
   return (
     <>
       <main className="relative min-h-screen bg-brand-dark overflow-clip">
@@ -42,11 +44,15 @@ export default async function SurMesurePage(props: { searchParams: Promise<{ [ke
             </div>
 
             {/* Multi-Step Form */}
-            <SurMesureForm />
+            <SurMesureForm whatsappNumber={siteSettings.whatsappNumber} />
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

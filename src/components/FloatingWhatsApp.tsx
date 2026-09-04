@@ -3,7 +3,11 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export default function FloatingWhatsApp() {
+interface FloatingWhatsAppProps {
+  whatsappNumber?: string
+}
+
+export default function FloatingWhatsApp({ whatsappNumber = '212661373347' }: FloatingWhatsAppProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -13,9 +17,9 @@ export default function FloatingWhatsApp() {
     return () => clearTimeout(timer)
   }, [])
 
-  const whatsappNumber = '212661373347'
+  const cleanNumber = whatsappNumber.replace(/\D/g, '')
   const defaultMessage = 'Bonjour, je souhaite en savoir plus sur vos voyages ✈️'
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultMessage)}`
+  const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(defaultMessage)}`
 
   if (!isVisible) return null
 

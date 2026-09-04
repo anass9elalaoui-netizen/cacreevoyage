@@ -29,7 +29,7 @@ const travelStyles = [
   { value: 'corporate', label: 'Corporate / Incentive', emoji: '🏢' },
 ]
 
-export default function SurMesureForm() {
+export default function SurMesureForm({ whatsappNumber = '212661373347' }: { whatsappNumber?: string }) {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
@@ -69,7 +69,8 @@ export default function SurMesureForm() {
       `📞 ${formData.phone}\n\n` +
       `💬 ${formData.message || 'Aucun message supplémentaire'}`
 
-    const whatsappUrl = `https://wa.me/212661373347?text=${encodeURIComponent(msg)}`
+    const cleanNumber = whatsappNumber.replace(/\D/g, '')
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(msg)}`
     window.open(whatsappUrl, '_blank')
     setIsSubmitted(true)
   }

@@ -24,6 +24,7 @@ interface BookingSidebarProps {
   tourStatus?: string
   locale?: string
   programPDF?: any
+  whatsappNumber?: string
 }
 
 export default function BookingSidebar({
@@ -35,6 +36,7 @@ export default function BookingSidebar({
   tourStatus,
   locale,
   programPDF,
+  whatsappNumber = '212661373347',
 }: BookingSidebarProps) {
   // Try to use the passed locale, fallback to reading URL, or default to fr.
   const [currentLocale, setCurrentLocale] = useState<Locale>((locale as Locale) || 'fr')
@@ -65,7 +67,8 @@ export default function BookingSidebar({
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const msg = `Bonjour, je souhaite réserver: ${tourTitle} prévu pour le ${duration || 'prochainement'}. Nom: ${formData.name}, Personnes: ${formData.guests}`
-    const whatsappUrl = `https://wa.me/212661373347?text=${encodeURIComponent(msg)}`
+    const cleanNumber = whatsappNumber.replace(/\D/g, '')
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(msg)}`
     window.open(whatsappUrl, '_blank')
     setIsModalOpen(false)
   }

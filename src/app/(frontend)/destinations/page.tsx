@@ -3,6 +3,7 @@ import configPromise from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 import SubpageHero from '@/components/hero/SubpageHero'
 import { getDictionary } from '@/i18n/dictionaries'
 
@@ -38,6 +39,7 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
   const searchParams = await props.searchParams;
   const locale = (searchParams.locale as string) || 'fr';
   const t = getDictionary(locale).destinationsList;
+  const siteSettings = await getSiteSettings()
   const payload = await getPayload({ config: configPromise })
 
   // Fetch all destinations
@@ -224,7 +226,11 @@ export default async function DestinationsPage(props: { searchParams: Promise<{ 
         )}
       </section>
 
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </main>
   )
 }

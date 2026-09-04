@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 export const metadata: Metadata = {
   title: 'Politique de Confidentialité',
   description: 'Politique de confidentialité et de protection des données personnelles de Ça Crée Voyage.',
 }
 
-export default function ConfidentialitePage() {
+export default async function ConfidentialitePage() {
+  const siteSettings = await getSiteSettings()
   return (
     <>
       <main className="relative min-h-screen bg-brand-dark pt-32 pb-24 px-6">
@@ -64,7 +66,11 @@ export default function ConfidentialitePage() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

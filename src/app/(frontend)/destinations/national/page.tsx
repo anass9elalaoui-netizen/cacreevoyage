@@ -3,6 +3,7 @@ import configPromise from '@payload-config'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,7 @@ const themeLabel: Record<string, string> = {
 }
 
 export default async function NationalDestinationsPage() {
+  const siteSettings = await getSiteSettings()
   const payload = await getPayload({ config: configPromise })
 
   const { docs: destinations } = await payload.find({
@@ -119,7 +121,11 @@ export default async function NationalDestinationsPage() {
         )}
       </section>
 
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </main>
   )
 }

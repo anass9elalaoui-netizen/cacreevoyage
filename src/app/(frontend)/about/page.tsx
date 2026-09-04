@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 export const metadata: Metadata = {
   title: 'À Propos — Notre Histoire',
   description: "Découvrez l'histoire de Ça Crée Voyage, agence de voyages de luxe sur-mesure basée au Maroc.",
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const siteSettings = await getSiteSettings()
   const philosophyPillars = [
     {
       icon: (
@@ -104,7 +106,11 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 import TourCard from '@/components/TourCard'
 import SubpageHero from '@/components/hero/SubpageHero'
 import { getDictionary } from '@/i18n/dictionaries'
@@ -23,6 +24,7 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
   const locale = (searchParams.locale as string) || 'fr';
   const t = getDictionary(locale).toursList;
   const payload = await getPayload({ config: configPromise })
+  const siteSettings = await getSiteSettings()
 
   // Fetch only available tours (limit to 50 for now)
   const { docs: tours } = await payload.find({
@@ -106,7 +108,11 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

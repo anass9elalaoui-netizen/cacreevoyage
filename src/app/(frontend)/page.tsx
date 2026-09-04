@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 import DestinationSwiper from '@/components/DestinationSwiper'
 import ReelsShowcase from '@/components/ReelsShowcase'
 import Footer from '@/components/Footer'
@@ -97,20 +98,11 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     locale: locale as any,
   })
 
-  // Fetch trust stats from SiteSettings
-  let trustStats: { number: string; label: string }[] = []
-  let reviewBadges = undefined
-  try {
-    const settings = await payload.findGlobal({ slug: 'site-settings', locale: locale as any }) as any
-    if (settings?.trustStats && settings.trustStats.length > 0) {
-      trustStats = settings.trustStats
-    }
-    if (settings?.reviewBadges) {
-      reviewBadges = settings.reviewBadges
-    }
-  } catch {
-    // Fallback to defaults in component
-  }
+  // Fetch trust stats from SiteSettings (using shared utility)
+  const siteSettings = await getSiteSettings(locale)
+  const trustStats = siteSettings.trustStats && siteSettings.trustStats.length > 0 ? siteSettings.trustStats : []
+  const reviewBadges = siteSettings.reviewBadges || undefined
+  const cleanWaNumber = cleanWhatsAppNumber(siteSettings.whatsappNumber)
 
   // Fetch HeroGallery panels
   let heroPanels: any[] = []
@@ -334,7 +326,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
             </MagneticButton>
             <MagneticButton>
               <a
-                href="https://wa.me/212661373347?text=Bonjour, je souhaite en savoir plus sur vos voyages"
+                href={`https://wa.me/${cleanWaNumber}?text=Bonjour, je souhaite en savoir plus sur vos voyages`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-[#25D366]/20 border border-[#25D366]/30 hover:bg-[#25D366]/30 text-[#25D366] px-10 py-5 rounded-full font-medium text-lg transition-all"
@@ -374,10 +366,14 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           INSTAGRAM FEED — Auto-updating @cacreevoyage embed
       ─────────────────────────────────────────────────────────── */}
-      <InstagramEmbed />
+      <InstagramEmbed instagramUrl={siteSettings.instagramUrl} />
 
       {/* ── FOOTER ── */}
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </main>
   )
 }

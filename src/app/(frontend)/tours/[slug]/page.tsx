@@ -7,6 +7,7 @@ import ItineraryTimeline from '@/components/ItineraryTimeline'
 import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
 import BookingSidebar from '@/components/BookingSidebar'
+import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 
@@ -55,6 +56,9 @@ export default async function TourPage({ params, searchParams }: Args) {
 
   const tour = docs[0] as any
   if (!tour) return <div className="text-slate-900 dark:text-white flex justify-center py-20">{t.notFound}</div>
+
+  const siteSettings = await getSiteSettings(locale)
+  const cleanWaNumber = cleanWhatsAppNumber(siteSettings.whatsappNumber)
 
   const heroVideoUrl = typeof tour.heroVideo === 'object' && tour.heroVideo?.url ? tour.heroVideo.url : null
   const thumbnailUrl = typeof tour.thumbnail === 'object' && tour.thumbnail?.url ? tour.thumbnail.url : null
@@ -299,6 +303,7 @@ export default async function TourPage({ params, searchParams }: Args) {
               tourStatus={tour.tourStatus}
               locale={locale}
               programPDF={typeof tour.programPDF === 'object' ? tour.programPDF : undefined}
+              whatsappNumber={siteSettings.whatsappNumber}
             />
           </div>
         </div>
@@ -373,7 +378,7 @@ export default async function TourPage({ params, searchParams }: Args) {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href={`https://wa.me/212661373347?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par le circuit "${tour.title}". Pouvez-vous me donner plus d'informations ?`)}`}
+              href={`https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par le circuit "${tour.title}". Pouvez-vous me donner plus d'informations ?`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[#25D366] hover:bg-[#25D366]/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_4px_20px_rgba(37,211,102,0.3)]"
@@ -390,7 +395,11 @@ export default async function TourPage({ params, searchParams }: Args) {
         </div>
       </section>
 
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </main>
   )
 }

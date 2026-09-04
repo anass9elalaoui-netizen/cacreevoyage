@@ -18,7 +18,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export function InstagramEmbed() {
+export function InstagramEmbed({ instagramUrl = 'https://www.instagram.com/cacreevoyage/' }: { instagramUrl?: string }) {
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://elfsightcdn.com/platform.js";
@@ -49,7 +49,7 @@ export function InstagramEmbed() {
             </p>
           </div>
           <a
-            href="https://www.instagram.com/cacreevoyage/"
+            href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white rounded-full font-bold hover:scale-105 transition-transform shadow-lg"

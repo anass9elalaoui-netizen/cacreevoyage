@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 export const metadata: Metadata = {
   title: 'Mentions Légales',
   description: 'Mentions légales de Ça Crée Voyage.',
 }
 
-export default function MentionsLegalesPage() {
+export default async function MentionsLegalesPage() {
+  const siteSettings = await getSiteSettings()
   return (
     <>
       <main className="relative min-h-screen bg-slate-50 dark:bg-brand-dark transition-colors duration-700 pt-32 pb-24 px-6">
@@ -49,7 +51,11 @@ export default function MentionsLegalesPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

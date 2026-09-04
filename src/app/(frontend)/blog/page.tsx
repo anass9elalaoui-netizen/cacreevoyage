@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Footer from '@/components/Footer'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 export const metadata: Metadata = {
   title: 'Blog — Guides & Récits de Voyage',
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const payload = await getPayload({ config: configPromise })
+  const siteSettings = await getSiteSettings()
 
   const { docs: articles } = await payload.find({
     collection: 'articles',
@@ -114,7 +116,11 @@ export default async function BlogPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer
+        whatsappNumber={siteSettings.whatsappNumber}
+        contactEmail={siteSettings.contactEmail}
+        instagramUrl={siteSettings.instagramUrl}
+      />
     </>
   )
 }

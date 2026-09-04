@@ -6,6 +6,7 @@ import FloatingWhatsApp from '@/components/FloatingWhatsApp'
 import CookieBanner from '@/components/CookieBanner'
 import StarfieldCanvas from '@/components/StarfieldCanvas'
 import FilmGrain from '@/components/FilmGrain'
+import { getSiteSettings } from '@/lib/getSiteSettings'
 
 const manropeHeading = Manrope({
   subsets: ['latin'],
@@ -30,39 +31,29 @@ export const metadata: Metadata = {
   description: 'Circuits et voyages sur mesure. Laissez-vous inspirer par nos destinations d\'exception.',
 }
 
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
-
 export default async function FrontendLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const payload = await getPayload({ config: configPromise })
-  
-  let brandIdentity = null
-  try {
-    const settings = await payload.findGlobal({ slug: 'site-settings' }) as any
-    if (settings?.brandIdentity) {
-      brandIdentity = settings.brandIdentity
-    }
-  } catch (err) {
-    console.error('Error fetching site settings in layout', err)
-  }
+  const settings = await getSiteSettings()
 
   return (
     <html lang="fr" className={`${manropeHeading.variable} ${manropeBody.variable} lenis lenis-smooth`} suppressHydrationWarning>
       <body className="antialiased relative" suppressHydrationWarning>
         <FilmGrain />
         <StarfieldCanvas />
-        <GlassNavbar brandIdentity={brandIdentity} />
+        <GlassNavbar
+          brandIdentity={settings.brandIdentity}
+          whatsappNumber={settings.whatsappNumber}
+          contactEmail={settings.contactEmail}
+        />
         <main className="relative z-[1] flex min-h-screen flex-col">
           {children}
         </main>
-        <FloatingWhatsApp />
+        <FloatingWhatsApp whatsappNumber={settings.whatsappNumber} />
         <CookieBanner />
       </body>
     </html>
   )
 }
-
