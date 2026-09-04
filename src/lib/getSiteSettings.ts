@@ -26,7 +26,6 @@ const DEFAULTS: SiteSettings = {
 
 /**
  * Fetch the site-settings global from Payload CMS.
- * Uses `next.revalidate = 60` so data refreshes within 60 seconds of a CMS edit.
  */
 export async function getSiteSettings(locale?: string): Promise<SiteSettings> {
   try {
@@ -48,15 +47,14 @@ export async function getSiteSettings(locale?: string): Promise<SiteSettings> {
       brandIdentity: raw?.brandIdentity || null,
       homepageHero: raw?.homepageHero || null,
       seoDefaults: raw?.seoDefaults || null,
-      reviewBadges: raw?.reviewBadges || undefined,
+      reviewBadges: raw?.reviewBadges || null,
       trustStats: raw?.trustStats || [],
     }
-  } catch (err) {
-    console.error('Error fetching site settings:', err)
+  } catch (error) {
+    console.error('Error fetching site settings:', error)
     return DEFAULTS
   }
 }
-
 /**
  * Strip non-digit characters from a phone number for use in wa.me links.
  * e.g. "+212 661-898865" → "212661898865"
