@@ -1,9 +1,13 @@
 import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { getSiteUrl } from '@/lib/siteUrl'
+
+// Rebuilt at most hourly so new tours/destinations appear without a redeploy
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+  const siteUrl = getSiteUrl()
   const payload = await getPayload({ config: configPromise })
 
   // Fetch all destination slugs
@@ -29,6 +33,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${siteUrl}/destinations`,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/tours`,
       changeFrequency: 'weekly',
       priority: 0.9,
     },

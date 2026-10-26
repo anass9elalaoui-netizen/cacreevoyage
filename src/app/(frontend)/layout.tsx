@@ -7,6 +7,7 @@ import CookieBanner from '@/components/CookieBanner'
 import StarfieldCanvas from '@/components/StarfieldCanvas'
 import FilmGrain from '@/components/FilmGrain'
 import { getSiteSettings } from '@/lib/getSiteSettings'
+import { getSiteUrl } from '@/lib/siteUrl'
 
 const manropeHeading = Manrope({
   subsets: ['latin'],
@@ -23,7 +24,7 @@ const manropeBody = Manrope({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: 'Ça Crée Voyage — Voyages Sur Mesure',
     template: '%s | Ça Crée Voyage',
