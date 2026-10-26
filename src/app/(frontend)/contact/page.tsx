@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
+import ContactForm from '@/components/ContactForm'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 export const metadata: Metadata = {
@@ -29,74 +30,7 @@ export default async function ContactPage() {
                   Parlons de Votre Voyage
                 </h1>
 
-                <form
-                  action="/api/inquiries"
-                  method="POST"
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Prénom & Nom</label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        required
-                        className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 transition-colors text-sm shadow-sm dark:shadow-none"
-                        placeholder="Votre nom complet"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 transition-colors text-sm shadow-sm dark:shadow-none"
-                        placeholder="votre@email.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Téléphone / WhatsApp</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 transition-colors text-sm shadow-sm dark:shadow-none"
-                      placeholder="+33 6 XX XX XX XX"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Sujet</label>
-                    <select
-                      name="subject"
-                      className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-brand-blue/50 transition-colors text-sm shadow-sm dark:shadow-none"
-                    >
-                      <option value="voyage" className="bg-slate-50 dark:bg-brand-dark">Demande de voyage</option>
-                      <option value="information" className="bg-slate-50 dark:bg-brand-dark">Informations générales</option>
-                      <option value="partenariat" className="bg-slate-50 dark:bg-brand-dark">Partenariat</option>
-                      <option value="autre" className="bg-slate-50 dark:bg-brand-dark">Autre</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-600 dark:text-brand-silver text-sm mb-2 font-body">Message</label>
-                    <textarea
-                      name="message"
-                      rows={6}
-                      className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-brand-blue/50 transition-colors text-sm resize-none shadow-sm dark:shadow-none"
-                      placeholder="Décrivez votre projet de voyage..."
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full md:w-auto bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-4 rounded-full font-body text-sm uppercase transition-all duration-300 shadow-[0_4px_20px_rgba(56,163,165,0.3)] hover:shadow-[0_8px_30px_rgba(56,163,165,0.5)] font-semibold tracking-wider"
-                  >
-                    Envoyer le message
-                  </button>
-                </form>
+                <ContactForm />
               </div>
 
               {/* Right — Contact Info Card (2/5) */}
