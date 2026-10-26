@@ -9,7 +9,7 @@ interface Testimonial {
   rating?: number
   platform?: string
   // Payload media objects can be objects or strings (IDs)
-  media?: { url?: string } | string | null
+  media?: { url?: string; mimeType?: string } | string | null
   travelerPhoto?: { url?: string } | string | null
 }
 
@@ -61,21 +61,44 @@ const PlatformBadge = ({ platform }: { platform?: string }) => {
 }
 
 const TestimonialCard = ({ data }: { data: Testimonial }) => {
-  const destPhoto = typeof data.media === 'object' ? data.media?.url : '/images/placeholder-desert.jpg'
-  const avatar = typeof data.travelerPhoto === 'object' ? data.travelerPhoto?.url : '/images/default-avatar.png'
+  // `media` is often a testimonial video — never pass a video to next/image
+  const media = data.media && typeof data.media === 'object' ? data.media : null
+  const mediaUrl = media?.url || null
+  const isVideo = Boolean(media?.mimeType?.startsWith('video/') || mediaUrl?.match(/\.(mp4|webm|mov)$/i))
+  const avatar = data.travelerPhoto && typeof data.travelerPhoto === 'object' ? data.travelerPhoto.url : null
+  const initials = (data.travelerName || '?')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
 
   return (
     <div className="flex-shrink-0 w-[340px] h-[380px] bg-white dark:bg-[#111827] rounded-3xl overflow-hidden relative shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-none border border-slate-100 dark:border-white/5 flex flex-col group">
       
       {/* Destination Photo (Top 55%) */}
       <div className="h-[55%] relative w-full overflow-hidden">
-        <Image
-          src={destPhoto || '/placeholder.jpg'}
-          alt="Destination"
-          fill
-          sizes="340px"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+        {mediaUrl && isVideo ? (
+          // First frame only: metadata + a small range request, no autoplay
+          <video
+            src={`${mediaUrl}#t=0.5`}
+            preload="metadata"
+            muted
+            playsInline
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : mediaUrl ? (
+          <Image
+            src={mediaUrl}
+            alt={data.travelerName ? `Voyage de ${data.travelerName}` : 'Destination'}
+            fill
+            sizes="340px"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/30 via-slate-200 to-brand-blue/10 dark:from-[#0B132B] dark:via-[#1a2744] dark:to-[#0B132B]" />
+        )}
         {/* Gradient overlay darkening bottom of image */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
       </div>
@@ -84,13 +107,13 @@ const TestimonialCard = ({ data }: { data: Testimonial }) => {
       <div className="flex-1 relative pt-8 px-6 pb-6 flex flex-col items-center">
         {/* Avatar overlapping boundary */}
         <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-[52px] h-[52px] rounded-full border-2 border-white dark:border-[#111827] overflow-hidden bg-slate-200">
-          <Image
-            src={avatar || '/placeholder.jpg'}
-            alt={data.travelerName || 'Traveler'}
-            fill
-            sizes="52px"
-            className="object-cover"
-          />
+          {avatar ? (
+            <Image src={avatar} alt={data.travelerName || 'Voyageur'} fill sizes="52px" className="object-cover" />
+          ) : (
+            <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold text-brand-blue bg-brand-blue/10">
+              {initials}
+            </span>
+          )}
         </div>
 
         <StarRating rating={data.rating} />

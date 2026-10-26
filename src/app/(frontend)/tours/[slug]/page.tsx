@@ -56,7 +56,7 @@ export default async function TourPage({ params, searchParams }: Args) {
   })
 
   const tour = docs[0] as any
-  if (!tour) return <div className="text-slate-900 dark:text-white flex justify-center py-20">{t.notFound}</div>
+  if (!tour) notFound()
 
   const siteSettings = await getSiteSettings(locale)
   const cleanWaNumber = cleanWhatsAppNumber(siteSettings.whatsappNumber)
