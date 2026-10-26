@@ -65,6 +65,28 @@ export const Testimonials: CollectionConfig = {
       admin: { description: 'Vidéo ou Audio du témoignage client (Vertical 9:16 recommandé)' },
     },
     {
+      name: 'videoPoster',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Image de couverture de la vidéo',
+      admin: {
+        description:
+          'Image affichée sur la carte avant la lecture (idéalement une image tirée de la vidéo du client). La vidéo ne se charge qu\'au clic.',
+        condition: (data) => Boolean(data?.media),
+      },
+    },
+    {
+      name: 'tripYear',
+      type: 'number',
+      label: 'Année du voyage',
+      min: 2000,
+      max: 2100,
+      admin: {
+        position: 'sidebar',
+        description: 'Affichée sur le tampon « carte postale » avec la destination (ex : 2025).',
+      },
+    },
+    {
       name: 'date',
       type: 'date',
       admin: { description: 'Date du voyage ou du témoignage' },

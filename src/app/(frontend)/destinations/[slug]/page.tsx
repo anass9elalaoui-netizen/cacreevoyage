@@ -121,7 +121,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
           )}
 
           {/* Download PDF Program */}
-          {destination.programPDF?.url && (
+          {typeof destination.programPDF === 'object' && destination.programPDF?.url && (
             <a
               href={destination.programPDF.url}
               target="_blank"

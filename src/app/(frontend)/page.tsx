@@ -90,10 +90,10 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     locale: locale as any,
   })).docs
 
-  // Fetch highlighted testimonials
+  // Fetch testimonials (depth 2: destination cover image + video poster for the cards)
   const { docs: testimonials } = await payload.find({
     collection: 'testimonials',
-    depth: 1,
+    depth: 2,
     limit: 10,
     locale: locale as any,
   })

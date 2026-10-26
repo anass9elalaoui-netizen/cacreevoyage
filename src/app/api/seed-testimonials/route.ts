@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { NextResponse } from 'next/server'
+import type { Testimonial } from '@/payload-types'
 
 export async function GET() {
   // ⛔ Production guard — never allow seeding in production
@@ -11,7 +12,7 @@ export async function GET() {
   try {
     const payload = await getPayload({ config: configPromise })
 
-    const testimonialsData = [
+    const testimonialsData: Array<Pick<Testimonial, 'travelerName' | 'travelerOrigin' | 'testimonialText' | 'rating' | 'platform' | 'isHighlighted'>> = [
       {
         travelerName: 'Sophie et Marc',
         travelerOrigin: 'Paris, France',
