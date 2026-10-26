@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { getFooterDestinations } from '@/lib/getFooterDestinations'
 
 /* ─── SVG Icons (inline for zero-dependency) ───────────────── */
 
@@ -43,12 +44,16 @@ export interface FooterProps {
   instagramUrl?: string
 }
 
-export default function Footer({
+export default async function Footer({
   whatsappNumber = '+212661373347',
   contactEmail,
   instagramUrl = 'https://instagram.com/cacreevoyage',
 }: FooterProps) {
   const cleanNumber = whatsappNumber.replace(/\D/g, '')
+  // From the CMS so footer links never point to a deleted destination (was hardcoded → 404s)
+  const destinations = await getFooterDestinations()
+  const international = destinations.filter((d) => d.scope === 'international').slice(0, 8)
+  const national = destinations.filter((d) => d.scope === 'national').slice(0, 8)
 
   return (
     <footer className="relative w-full bg-slate-50 dark:bg-transparent text-slate-900 dark:text-white transition-colors duration-700 overflow-hidden">
@@ -101,23 +106,23 @@ export default function Footer({
             </h4>
             <div className="flex flex-col gap-1">
               <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase mb-1 font-semibold tracking-wider">International</span>
-              {['Philippines', 'Turquie', 'Zanzibar', 'Égypte', 'Vietnam'].map((name) => (
+              {international.map(({ title, slug }) => (
                 <Link
-                  key={name}
-                  href={`/destinations/${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}
+                  key={slug}
+                  href={`/destinations/${slug}`}
                   className="text-slate-600 dark:text-white/60 text-sm font-light hover:text-brand-blue dark:hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
                 >
-                  {name}
+                  {title}
                 </Link>
               ))}
               <span className="text-slate-400 dark:text-white/30 text-[10px] uppercase mt-3 mb-1 font-semibold tracking-wider">Maroc</span>
-              {['Merzouga', 'Dakhla', 'Imlil', 'Imsfrane'].map((name) => (
+              {national.map(({ title, slug }) => (
                 <Link
-                  key={name}
-                  href={`/destinations/${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}
+                  key={slug}
+                  href={`/destinations/${slug}`}
                   className="text-slate-600 dark:text-white/60 text-sm font-light hover:text-brand-blue dark:hover:text-white hover:translate-x-1 transition-all duration-300 py-1"
                 >
-                  {name}
+                  {title}
                 </Link>
               ))}
             </div>
@@ -130,11 +135,11 @@ export default function Footer({
             </h4>
             <div className="flex flex-col gap-1">
               {[
-                { label: 'À propos', href: '/a-propos' },
-                { label: 'Contact', href: '/sur-mesure' },
+                { label: 'À propos', href: '/about' },
+                { label: 'Contact', href: '/contact' },
                 { label: 'Mentions Légales', href: '/mentions-legales' },
-                { label: 'Conditions Générales', href: '/conditions-generales' },
-                { label: 'Politique de Confidentialité', href: '/politique-confidentialite' },
+                { label: 'Conditions Générales', href: '/cgv' },
+                { label: 'Politique de Confidentialité', href: '/confidentialite' },
               ].map(({ label, href }) => (
                 <Link
                   key={href}
