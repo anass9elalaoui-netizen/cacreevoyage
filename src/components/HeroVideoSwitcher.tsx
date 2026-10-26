@@ -32,14 +32,20 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
   // Safety check in case empty array is passed
   const currentSlides = slides && slides.length > 0 ? slides : FALLBACK_SLIDES;
 
+  // Deterministic pseudo-random values: Math.random() rendered different values on the
+  // server and in the browser, which caused a hydration mismatch
   const dustParticles = useMemo(() => {
+    const rand = (i: number, salt: number) => {
+      const x = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453
+      return Math.round((x - Math.floor(x)) * 1000) / 1000
+    }
     return Array.from({ length: 14 }).map((_, i) => ({
       id: i,
-      size: Math.random() * 4 + 2, // 2px to 6px
-      left: Math.random() * 100, // 0 to 100vw
-      top: Math.random() * 100, // 0 to 100vh
-      duration: Math.random() * 20 + 20, // 20s to 40s
-      delay: Math.random() * 10, // 0 to 10s
+      size: rand(i, 1) * 4 + 2, // 2px to 6px
+      left: rand(i, 2) * 100, // 0 to 100vw
+      top: rand(i, 3) * 100, // 0 to 100vh
+      duration: rand(i, 4) * 20 + 20, // 20s to 40s
+      delay: rand(i, 5) * 10, // 0 to 10s
     }))
   }, [])
 

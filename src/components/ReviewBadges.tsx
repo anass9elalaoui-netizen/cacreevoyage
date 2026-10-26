@@ -166,7 +166,8 @@ export default function ReviewBadges({ google, trustpilot }: ReviewBadgesProps) 
                 <div
                   className="h-full rounded-full bg-[#00B67A]"
                   style={{
-                    width: star >= 4 ? `${85 + Math.random() * 15}%` : star === 3 ? '12%' : '3%',
+                    // Fixed values: Math.random() here differed between server and client (hydration mismatch)
+                    width: star === 5 ? '95%' : star === 4 ? '87%' : star === 3 ? '12%' : '3%',
                   }}
                 />
               </div>
