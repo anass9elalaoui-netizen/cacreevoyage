@@ -196,7 +196,8 @@ export default function StarfieldCanvas() {
     let resizeTimer: ReturnType<typeof setTimeout>
 
     const resize = () => {
-      const dpr = window.devicePixelRatio || 1
+      // Cap DPR: stars are tiny dots, 3x buffers only cost GPU memory/fill-rate
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       canvas.style.width = `${window.innerWidth}px`
@@ -257,9 +258,13 @@ export default function StarfieldCanvas() {
       canvasOpacityRef.current = Math.max(0, 1 - elapsed / FADE_OUT_DURATION)
     }
 
-    // Skip drawing if fully transparent
+    // Fully faded out in light mode: stop the loop (restarted when the theme turns dark)
     if (canvasOpacityRef.current <= 0) {
       ctx.clearRect(0, 0, w, h)
+      if (!dark) {
+        rafRef.current = 0
+        return
+      }
       rafRef.current = requestAnimationFrame(drawFrame)
       return
     }
@@ -391,8 +396,16 @@ export default function StarfieldCanvas() {
 
     return () => {
       cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
     }
   }, [drawFrame])
+
+  // ─── Restart the loop when switching back to dark mode ───
+  useEffect(() => {
+    if (isDark && !rafRef.current) {
+      rafRef.current = requestAnimationFrame(drawFrame)
+    }
+  }, [isDark, drawFrame])
 
   return (
     <canvas
