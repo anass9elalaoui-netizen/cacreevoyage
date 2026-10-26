@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobalAfterChange } from '../lib/revalidate'
 
 export const ActivitiesConfig: GlobalConfig = {
   slug: 'activities-config',
@@ -6,6 +7,9 @@ export const ActivitiesConfig: GlobalConfig = {
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
+  },
+  hooks: {
+    afterChange: [revalidateGlobalAfterChange],
   },
   fields: [
     /* ──────────────────────────────────────────────────────────

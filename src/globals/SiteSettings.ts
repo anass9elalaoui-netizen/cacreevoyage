@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
-import { revalidatePath } from 'next/cache'
+import { revalidateGlobalAfterChange } from '../lib/revalidate'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -10,12 +10,7 @@ export const SiteSettings: GlobalConfig = {
     update: ({ req: { user } }) => Boolean(user),
   },
   hooks: {
-    afterChange: [
-      ({ doc }) => {
-        revalidatePath('/', 'layout')
-        return doc
-      }
-    ]
+    afterChange: [revalidateGlobalAfterChange],
   },
   fields: [
     /* ──────────────────────────────────────────────────────────

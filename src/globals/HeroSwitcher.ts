@@ -1,10 +1,14 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobalAfterChange } from '../lib/revalidate'
 
 export const HeroSwitcher: GlobalConfig = {
   slug: 'hero-switcher',
   label: 'Hero Vidéos (Accueil)',
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidateGlobalAfterChange],
   },
   fields: [
     {

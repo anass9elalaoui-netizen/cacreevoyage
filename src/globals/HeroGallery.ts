@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobalAfterChange } from '../lib/revalidate'
 
 export const HeroGallery: GlobalConfig = {
   slug: 'hero-gallery',
@@ -9,6 +10,9 @@ export const HeroGallery: GlobalConfig = {
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
+  },
+  hooks: {
+    afterChange: [revalidateGlobalAfterChange],
   },
   fields: [
     {

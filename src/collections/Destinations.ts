@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollectionHooks } from '../lib/revalidate'
 
 export const Destinations: CollectionConfig = {
   slug: 'destinations',
@@ -10,6 +11,7 @@ export const Destinations: CollectionConfig = {
     read: () => true,
   },
   hooks: {
+    ...revalidateCollectionHooks,
     beforeChange: [
       ({ data }) => {
         if (data.importJSON) {

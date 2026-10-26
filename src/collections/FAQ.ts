@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollectionHooks } from '../lib/revalidate'
 
 export const FAQ: CollectionConfig = {
   slug: 'faq',
@@ -9,6 +10,9 @@ export const FAQ: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    ...revalidateCollectionHooks,
   },
   fields: [
     {
