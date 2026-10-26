@@ -104,6 +104,7 @@ export function DestinationInspiration({ destination }: { destination: any }) {
                         src={img?.url || ''} 
                         alt={img?.alt || `Inspiration ${destination.title || destination.name}`} 
                         fill 
+                        sizes="(max-width: 768px) 70vw, 400px"
                         className="object-cover rounded-2xl shadow-2xl" 
                       />
                       <div className="absolute inset-0 border border-slate-900/10 dark:border-white/10 rounded-2xl pointer-events-none" />

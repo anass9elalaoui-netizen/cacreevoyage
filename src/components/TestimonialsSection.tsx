@@ -73,6 +73,7 @@ const TestimonialCard = ({ data }: { data: Testimonial }) => {
           src={destPhoto || '/placeholder.jpg'}
           alt="Destination"
           fill
+          sizes="340px"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {/* Gradient overlay darkening bottom of image */}
@@ -87,6 +88,7 @@ const TestimonialCard = ({ data }: { data: Testimonial }) => {
             src={avatar || '/placeholder.jpg'}
             alt={data.travelerName || 'Traveler'}
             fill
+            sizes="52px"
             className="object-cover"
           />
         </div>

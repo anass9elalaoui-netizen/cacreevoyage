@@ -52,12 +52,7 @@ export default function CursorTrail({ images, children }: CursorTrailProps) {
       return
     }
 
-    // Preload images
-    images.forEach((src) => {
-      const img = new window.Image()
-      img.src = src
-    })
-
+    // No eager preload: trail images are small optimised thumbnails fetched on first hover
     return () => {
       if (rafId.current !== null) cancelAnimationFrame(rafId.current)
     }
@@ -176,7 +171,6 @@ export default function CursorTrail({ images, children }: CursorTrailProps) {
                   fill
                   className="object-cover"
                   sizes="120px"
-                  unoptimized // Faster rendering for rapid trail
                 />
               </motion.div>
             ))}

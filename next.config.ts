@@ -26,6 +26,17 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    // Keep optimised images 30 days instead of the 60 s default
+    minimumCacheTTL: 2592000,
+  },
+  async headers() {
+    return [
+      {
+        // Files in /public have no hash in their name: cache 7 days, revalidate in background
+        source: '/:all*(mp4|MP4|webm|webp|png|jpg|jpeg|svg|pdf)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' }],
+      },
+    ]
   },
   experimental: {
     reactCompiler: false,

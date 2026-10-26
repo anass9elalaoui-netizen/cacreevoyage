@@ -155,7 +155,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
       {mediaUrl && isVideo ? (
         <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
       ) : mediaUrl ? (
-        <Image src={mediaUrl} alt={day.title} fill className="object-cover z-0" />
+        <Image src={mediaUrl} alt={day.title} fill sizes="(max-width: 768px) 85vw, 400px" className="object-cover z-0" />
       ) : (
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#0B132B] via-[#162040] to-[#0B132B]" />
       )}
