@@ -7,4 +7,4 @@ build
 .next
 
 # audit screenshots (large, local only)
-audit/screenshots/*.png
+audit/screenshots/**/*.png

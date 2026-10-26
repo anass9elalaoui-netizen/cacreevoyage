@@ -1,0 +1,5003 @@
+[
+ {
+  "vp": "desktop",
+  "page": "/",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.3,
+    "heapMB": 8.6,
+    "nodes": 7582
+   },
+   {
+    "y": 0,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.3,
+    "heapMB": 9.3,
+    "nodes": 7582
+   },
+   {
+    "y": 250,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.3,
+    "heapMB": 9.1,
+    "nodes": 7607
+   },
+   {
+    "y": 494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.3,
+    "heapMB": 8.4,
+    "nodes": 7610
+   },
+   {
+    "y": 744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.3,
+    "heapMB": 10.5,
+    "nodes": 7625
+   },
+   {
+    "y": 994,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 4,
+    "decodedMpx": 4.3,
+    "heapMB": 7.6,
+    "nodes": 6743
+   },
+   {
+    "y": 1244,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.6,
+    "heapMB": 7.5,
+    "nodes": 6783
+   },
+   {
+    "y": 1494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.6,
+    "heapMB": 9.1,
+    "nodes": 6799
+   },
+   {
+    "y": 1744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.6,
+    "heapMB": 11,
+    "nodes": 6816
+   },
+   {
+    "y": 1994,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 12,
+    "playing": 6,
+    "playingOffscreen": 4,
+    "decodedMpx": 7.8,
+    "heapMB": 12.6,
+    "nodes": 6844
+   },
+   {
+    "y": 2244,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 12,
+    "playing": 8,
+    "playingOffscreen": 0,
+    "decodedMpx": 9.1,
+    "heapMB": 7,
+    "nodes": 6743
+   },
+   {
+    "y": 2494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 9,
+    "playingOffscreen": 1,
+    "decodedMpx": 11.2,
+    "heapMB": 9,
+    "nodes": 6755
+   },
+   {
+    "y": 2744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 9,
+    "playingOffscreen": 4,
+    "decodedMpx": 11.2,
+    "heapMB": 10.7,
+    "nodes": 6758
+   },
+   {
+    "y": 2994,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 5,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 6.4,
+    "nodes": 6743
+   },
+   {
+    "y": 3244,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 5,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 7.9,
+    "nodes": 6743
+   },
+   {
+    "y": 3494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 5,
+    "playingOffscreen": 4,
+    "decodedMpx": 11.2,
+    "heapMB": 9.6,
+    "nodes": 6743
+   },
+   {
+    "y": 3744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 11.9,
+    "nodes": 6760
+   },
+   {
+    "y": 3994,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 9,
+    "nodes": 6766
+   },
+   {
+    "y": 4244,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 11.5,
+    "nodes": 6780
+   },
+   {
+    "y": 4494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 11.2,
+    "heapMB": 7,
+    "nodes": 6743
+   },
+   {
+    "y": 4744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 13,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 9.2,
+    "nodes": 6744
+   },
+   {
+    "y": 4994,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 14,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 11.2,
+    "heapMB": 11.5,
+    "nodes": 6751
+   },
+   {
+    "y": 5244,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 14,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 13.2,
+    "heapMB": 8.4,
+    "nodes": 6761
+   },
+   {
+    "y": 5494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 14,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 13.2,
+    "heapMB": 10.6,
+    "nodes": 6773
+   },
+   {
+    "y": 5744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 14,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 13.2,
+    "heapMB": 12.7,
+    "nodes": 6773
+   },
+   {
+    "y": 5994,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 14,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 13.2,
+    "heapMB": 6.5,
+    "nodes": 6743
+   },
+   {
+    "y": 6244,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 14,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 13.2,
+    "heapMB": 8.1,
+    "nodes": 6756
+   },
+   {
+    "y": 6494,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 15,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 15.3,
+    "heapMB": 10.6,
+    "nodes": 6774
+   },
+   {
+    "y": 6744,
+    "max": 8014,
+    "videos": 28,
+    "withSrc": 15,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 15.3,
+    "heapMB": 12.9,
+    "nodes": 6789
+   },
+   {
+    "y": 6994,
+    "max": 8366,
+    "videos": 28,
+    "withSrc": 15,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 15.3,
+    "heapMB": 11.3,
+    "nodes": 7034
+   },
+   {
+    "y": 7244,
+    "max": 8366,
+    "videos": 28,
+    "withSrc": 15,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 15.3,
+    "heapMB": 13.4,
+    "nodes": 7034
+   },
+   {
+    "y": 7494,
+    "max": 8366,
+    "videos": 28,
+    "withSrc": 15,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 15.3,
+    "heapMB": 8.7,
+    "nodes": 6841
+   },
+   {
+    "y": 7744,
+    "max": 8366,
+    "videos": 28,
+    "withSrc": 16,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 17.4,
+    "heapMB": 11.1,
+    "nodes": 6855
+   },
+   {
+    "y": 7994,
+    "max": 8458,
+    "videos": 28,
+    "withSrc": 16,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 17.4,
+    "heapMB": 14,
+    "nodes": 8953
+   },
+   {
+    "y": 8244,
+    "max": 8458,
+    "videos": 28,
+    "withSrc": 16,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 17.4,
+    "heapMB": 16.2,
+    "nodes": 8953
+   },
+   {
+    "y": 8458,
+    "max": 8458,
+    "videos": 28,
+    "withSrc": 16,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 17.4,
+    "heapMB": 18.4,
+    "nodes": 8956
+   },
+   {
+    "y": 8458,
+    "max": 8458,
+    "videos": 28,
+    "withSrc": 16,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 17.4,
+    "heapMB": 19.2,
+    "nodes": 8962
+   }
+  ],
+  "shot": "before-desktop-_-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 37,
+   "reachedBottom": true,
+   "maxHeapMB": 19.2,
+   "maxNodes": 8962,
+   "maxWithSrc": 16,
+   "maxPlaying": 9,
+   "maxPlayingOffscreen": 4,
+   "maxDecodedMpx": 17.4
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/tours",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.5,
+    "nodes": 269
+   },
+   {
+    "y": 250,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 286
+   },
+   {
+    "y": 500,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 291
+   },
+   {
+    "y": 750,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 291
+   },
+   {
+    "y": 1000,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 291
+   },
+   {
+    "y": 1250,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 291
+   },
+   {
+    "y": 1323,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 291
+   },
+   {
+    "y": 1323,
+    "max": 1323,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 291
+   }
+  ],
+  "shot": "before-desktop-_tours-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 8,
+   "reachedBottom": true,
+   "maxHeapMB": 5.4,
+   "maxNodes": 291,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/tours/zanzibar-appel-du-paradis-22-septembre-au-05-octobre",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 946
+   },
+   {
+    "y": 250,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 963
+   },
+   {
+    "y": 500,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 968
+   },
+   {
+    "y": 750,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 968
+   },
+   {
+    "y": 1000,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 968
+   },
+   {
+    "y": 1250,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 969
+   },
+   {
+    "y": 1500,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 969
+   },
+   {
+    "y": 1750,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 969
+   },
+   {
+    "y": 2000,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 969
+   },
+   {
+    "y": 2250,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 969
+   },
+   {
+    "y": 2500,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 969
+   },
+   {
+    "y": 2750,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.9,
+    "nodes": 969
+   },
+   {
+    "y": 3000,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 6,
+    "nodes": 969
+   },
+   {
+    "y": 3070,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 968
+   },
+   {
+    "y": 3070,
+    "max": 3070,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 968
+   }
+  ],
+  "shot": "before-desktop-_tours_zanzibar_appel_du_paradis_22_septembre_au_05_octobre-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 15,
+   "reachedBottom": true,
+   "maxHeapMB": 6,
+   "maxNodes": 969,
+   "maxWithSrc": 1,
+   "maxPlaying": 1,
+   "maxPlayingOffscreen": 1,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/destinations",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 3,
+    "decodedMpx": 1.8,
+    "heapMB": 4.9,
+    "nodes": 2134
+   },
+   {
+    "y": 250,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.8,
+    "heapMB": 5.2,
+    "nodes": 2151
+   },
+   {
+    "y": 500,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 6,
+    "playing": 6,
+    "playingOffscreen": 3,
+    "decodedMpx": 3.6,
+    "heapMB": 5.5,
+    "nodes": 2183
+   },
+   {
+    "y": 750,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 6,
+    "playing": 6,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.6,
+    "heapMB": 5.6,
+    "nodes": 2183
+   },
+   {
+    "y": 1000,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 6,
+    "playing": 6,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.6,
+    "heapMB": 5.6,
+    "nodes": 2183
+   },
+   {
+    "y": 1250,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 9,
+    "playing": 9,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.8,
+    "heapMB": 3.8,
+    "nodes": 2080
+   },
+   {
+    "y": 1500,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 9,
+    "playing": 9,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.8,
+    "heapMB": 3.8,
+    "nodes": 2080
+   },
+   {
+    "y": 1750,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 8,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.3,
+    "heapMB": 3.8,
+    "nodes": 2080
+   },
+   {
+    "y": 2000,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 8,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.3,
+    "heapMB": 3.9,
+    "nodes": 2080
+   },
+   {
+    "y": 2250,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 8,
+    "playingOffscreen": 3,
+    "decodedMpx": 6.3,
+    "heapMB": 3.9,
+    "nodes": 2080
+   },
+   {
+    "y": 2500,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 5,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.3,
+    "heapMB": 4.1,
+    "nodes": 2083
+   },
+   {
+    "y": 2750,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 5,
+    "playingOffscreen": 3,
+    "decodedMpx": 6.3,
+    "heapMB": 4.1,
+    "nodes": 2080
+   },
+   {
+    "y": 2995,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.3,
+    "heapMB": 4.2,
+    "nodes": 2083
+   },
+   {
+    "y": 2995,
+    "max": 2995,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 6.3,
+    "heapMB": 4.2,
+    "nodes": 2083
+   }
+  ],
+  "shot": "before-desktop-_destinations-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 14,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 2183,
+   "maxWithSrc": 11,
+   "maxPlaying": 9,
+   "maxPlayingOffscreen": 3,
+   "maxDecodedMpx": 6.3
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/destinations/international",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 6,
+    "playing": 6,
+    "playingOffscreen": 3,
+    "decodedMpx": 2.9,
+    "heapMB": 4.8,
+    "nodes": 1438
+   },
+   {
+    "y": 250,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 6,
+    "playing": 6,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 5.1,
+    "nodes": 1455
+   },
+   {
+    "y": 500,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 7,
+    "playingOffscreen": 1,
+    "decodedMpx": 3.8,
+    "heapMB": 5.4,
+    "nodes": 1469
+   },
+   {
+    "y": 750,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 7,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.8,
+    "heapMB": 5.4,
+    "nodes": 1469
+   },
+   {
+    "y": 1000,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 7,
+    "playingOffscreen": 3,
+    "decodedMpx": 3.8,
+    "heapMB": 5.5,
+    "nodes": 1469
+   },
+   {
+    "y": 1250,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.8,
+    "heapMB": 5.6,
+    "nodes": 1472
+   },
+   {
+    "y": 1500,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 4,
+    "playingOffscreen": 3,
+    "decodedMpx": 3.8,
+    "heapMB": 5,
+    "nodes": 1472
+   },
+   {
+    "y": 1750,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.8,
+    "heapMB": 5.1,
+    "nodes": 1475
+   },
+   {
+    "y": 1850,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.8,
+    "heapMB": 5.2,
+    "nodes": 1475
+   },
+   {
+    "y": 1850,
+    "max": 1850,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.8,
+    "heapMB": 5.2,
+    "nodes": 1475
+   }
+  ],
+  "shot": "before-desktop-_destinations_international-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 10,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 1475,
+   "maxWithSrc": 7,
+   "maxPlaying": 7,
+   "maxPlayingOffscreen": 3,
+   "maxDecodedMpx": 3.8
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/destinations/national",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 3,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.8,
+    "heapMB": 4.7,
+    "nodes": 921
+   },
+   {
+    "y": 250,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.8,
+    "heapMB": 5,
+    "nodes": 938
+   },
+   {
+    "y": 500,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.2,
+    "nodes": 947
+   },
+   {
+    "y": 750,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.3,
+    "nodes": 947
+   },
+   {
+    "y": 1000,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 3,
+    "decodedMpx": 2.4,
+    "heapMB": 5.8,
+    "nodes": 947
+   },
+   {
+    "y": 1250,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 4.8,
+    "nodes": 950
+   },
+   {
+    "y": 1338,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 4.8,
+    "nodes": 950
+   },
+   {
+    "y": 1338,
+    "max": 1338,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 4.9,
+    "nodes": 950
+   }
+  ],
+  "shot": "before-desktop-_destinations_national-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 8,
+   "reachedBottom": true,
+   "maxHeapMB": 5.8,
+   "maxNodes": 950,
+   "maxWithSrc": 4,
+   "maxPlaying": 4,
+   "maxPlayingOffscreen": 3,
+   "maxDecodedMpx": 2.4
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/destinations/zanzibar",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 432
+   },
+   {
+    "y": 250,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 449
+   },
+   {
+    "y": 500,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 454
+   },
+   {
+    "y": 750,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 454
+   },
+   {
+    "y": 1000,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 455
+   },
+   {
+    "y": 1250,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 455
+   },
+   {
+    "y": 1444,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 455
+   },
+   {
+    "y": 1444,
+    "max": 1444,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 455
+   }
+  ],
+  "shot": "before-desktop-_destinations_zanzibar-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 8,
+   "reachedBottom": true,
+   "maxHeapMB": 5.4,
+   "maxNodes": 455,
+   "maxWithSrc": 1,
+   "maxPlaying": 1,
+   "maxPlayingOffscreen": 1,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/destinations/vietnam",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 623,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 4.8,
+    "nodes": 402
+   },
+   {
+    "y": 250,
+    "max": 623,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5.8,
+    "nodes": 424
+   },
+   {
+    "y": 500,
+    "max": 623,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5.9,
+    "nodes": 424
+   },
+   {
+    "y": 623,
+    "max": 623,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5.9,
+    "nodes": 424
+   },
+   {
+    "y": 623,
+    "max": 623,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 4.8,
+    "nodes": 424
+   }
+  ],
+  "shot": "before-desktop-_destinations_vietnam-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 5.9,
+   "maxNodes": 424,
+   "maxWithSrc": 1,
+   "maxPlaying": 1,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0.6
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/sur-mesure",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 890,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.4,
+    "nodes": 293
+   },
+   {
+    "y": 250,
+    "max": 890,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 310
+   },
+   {
+    "y": 500,
+    "max": 890,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 315
+   },
+   {
+    "y": 750,
+    "max": 890,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 315
+   },
+   {
+    "y": 890,
+    "max": 890,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.8,
+    "nodes": 315
+   },
+   {
+    "y": 890,
+    "max": 890,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 315
+   }
+  ],
+  "shot": "before-desktop-_sur_mesure-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 6,
+   "reachedBottom": true,
+   "maxHeapMB": 5.8,
+   "maxNodes": 315,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/contact",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 638,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 351
+   },
+   {
+    "y": 250,
+    "max": 638,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 373
+   },
+   {
+    "y": 500,
+    "max": 638,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 373
+   },
+   {
+    "y": 638,
+    "max": 638,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.8,
+    "nodes": 373
+   },
+   {
+    "y": 638,
+    "max": 638,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.9,
+    "nodes": 373
+   }
+  ],
+  "shot": "before-desktop-_contact-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 5.9,
+   "maxNodes": 373,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/about",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.3,
+    "nodes": 272
+   },
+   {
+    "y": 250,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 289
+   },
+   {
+    "y": 500,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 294
+   },
+   {
+    "y": 750,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 294
+   },
+   {
+    "y": 1000,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 294
+   },
+   {
+    "y": 1122,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 294
+   },
+   {
+    "y": 1122,
+    "max": 1122,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 294
+   }
+  ],
+  "shot": "before-desktop-_about-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 7,
+   "reachedBottom": true,
+   "maxHeapMB": 5.7,
+   "maxNodes": 294,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/blog",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.4,
+    "nodes": 233
+   },
+   {
+    "y": 250,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.3,
+    "nodes": 255
+   },
+   {
+    "y": 500,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 255
+   },
+   {
+    "y": 623,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 255
+   },
+   {
+    "y": 623,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 255
+   }
+  ],
+  "shot": "before-desktop-_blog-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 255,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/cgv",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 907,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.3,
+    "nodes": 260
+   },
+   {
+    "y": 250,
+    "max": 907,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 277
+   },
+   {
+    "y": 500,
+    "max": 907,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 282
+   },
+   {
+    "y": 750,
+    "max": 907,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 282
+   },
+   {
+    "y": 907,
+    "max": 907,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 282
+   },
+   {
+    "y": 907,
+    "max": 907,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 282
+   }
+  ],
+  "shot": "before-desktop-_cgv-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 6,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 282,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/confidentialite",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 749,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.3,
+    "nodes": 254
+   },
+   {
+    "y": 250,
+    "max": 749,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 271
+   },
+   {
+    "y": 500,
+    "max": 749,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 276
+   },
+   {
+    "y": 749,
+    "max": 749,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 276
+   },
+   {
+    "y": 749,
+    "max": 749,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 276
+   }
+  ],
+  "shot": "before-desktop-_confidentialite-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 276,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/mentions-legales",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.4,
+    "nodes": 253
+   },
+   {
+    "y": 250,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.3,
+    "nodes": 275
+   },
+   {
+    "y": 500,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 275
+   },
+   {
+    "y": 623,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 275
+   },
+   {
+    "y": 623,
+    "max": 623,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 275
+   }
+  ],
+  "shot": "before-desktop-_mentions_legales-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 275,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "desktop",
+  "page": "/checkout",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 176
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 176
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 181
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 181
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 181
+   }
+  ],
+  "shot": null,
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 5.1,
+   "maxNodes": 181,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.3,
+    "heapMB": 9.2,
+    "nodes": 7562
+   },
+   {
+    "y": 250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.3,
+    "heapMB": 9.7,
+    "nodes": 7579
+   },
+   {
+    "y": 500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.3,
+    "heapMB": 7.8,
+    "nodes": 6755
+   },
+   {
+    "y": 750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.3,
+    "heapMB": 7.5,
+    "nodes": 6761
+   },
+   {
+    "y": 1000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 2,
+    "decodedMpx": 1.3,
+    "heapMB": 9.6,
+    "nodes": 6761
+   },
+   {
+    "y": 1250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.5,
+    "heapMB": 9.7,
+    "nodes": 6781
+   },
+   {
+    "y": 1500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 4,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.5,
+    "heapMB": 6.2,
+    "nodes": 6741
+   },
+   {
+    "y": 1750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 6,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 3.7,
+    "heapMB": 9,
+    "nodes": 6786
+   },
+   {
+    "y": 2000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 6,
+    "playing": 4,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.7,
+    "heapMB": 11.6,
+    "nodes": 6805
+   },
+   {
+    "y": 2250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 5,
+    "playingOffscreen": 1,
+    "decodedMpx": 5.8,
+    "heapMB": 7.2,
+    "nodes": 6748
+   },
+   {
+    "y": 2500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 5,
+    "playingOffscreen": 2,
+    "decodedMpx": 5.8,
+    "heapMB": 9.1,
+    "nodes": 6748
+   },
+   {
+    "y": 2750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 10.6,
+    "nodes": 6762
+   },
+   {
+    "y": 3000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 12.2,
+    "nodes": 6765
+   },
+   {
+    "y": 3250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 3,
+    "playingOffscreen": 2,
+    "decodedMpx": 5.8,
+    "heapMB": 8.8,
+    "nodes": 6771
+   },
+   {
+    "y": 3500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 11,
+    "nodes": 6773
+   },
+   {
+    "y": 3750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 8.4,
+    "nodes": 6748
+   },
+   {
+    "y": 4000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 10.7,
+    "nodes": 6762
+   },
+   {
+    "y": 4250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 5.8,
+    "heapMB": 7.8,
+    "nodes": 6775
+   },
+   {
+    "y": 4500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 10.1,
+    "nodes": 6795
+   },
+   {
+    "y": 4750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 12.2,
+    "nodes": 6795
+   },
+   {
+    "y": 5000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 9.6,
+    "nodes": 6795
+   },
+   {
+    "y": 5250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 11.8,
+    "nodes": 6798
+   },
+   {
+    "y": 5500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.8,
+    "heapMB": 6.3,
+    "nodes": 6808
+   },
+   {
+    "y": 5750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 8.3,
+    "nodes": 6758
+   },
+   {
+    "y": 6000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 10.3,
+    "nodes": 6758
+   },
+   {
+    "y": 6250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 12.4,
+    "nodes": 6758
+   },
+   {
+    "y": 6500,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 9.2,
+    "nodes": 6772
+   },
+   {
+    "y": 6750,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 11.5,
+    "nodes": 6788
+   },
+   {
+    "y": 7000,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 6.4,
+    "nodes": 6791
+   },
+   {
+    "y": 7250,
+    "max": 9464,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 8.6,
+    "nodes": 6752
+   },
+   {
+    "y": 7500,
+    "max": 9629,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 11.4,
+    "nodes": 6998
+   },
+   {
+    "y": 7750,
+    "max": 9629,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 13.5,
+    "nodes": 7010
+   },
+   {
+    "y": 8000,
+    "max": 9629,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 10.5,
+    "nodes": 7016
+   },
+   {
+    "y": 8250,
+    "max": 9629,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 12.9,
+    "nodes": 7019
+   },
+   {
+    "y": 8500,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 7.8,
+    "nodes": 9593
+   },
+   {
+    "y": 8750,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 9.9,
+    "nodes": 9593
+   },
+   {
+    "y": 9000,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 12.2,
+    "nodes": 9607
+   },
+   {
+    "y": 9250,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 14.5,
+    "nodes": 9624
+   },
+   {
+    "y": 9500,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 17,
+    "nodes": 9640
+   },
+   {
+    "y": 9750,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 19.1,
+    "nodes": 9640
+   },
+   {
+    "y": 9919,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 20.9,
+    "nodes": 9643
+   },
+   {
+    "y": 9919,
+    "max": 9919,
+    "videos": 28,
+    "withSrc": 8,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 7.8,
+    "heapMB": 21.5,
+    "nodes": 9646
+   }
+  ],
+  "shot": "before-mobile-_-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 42,
+   "reachedBottom": true,
+   "maxHeapMB": 21.5,
+   "maxNodes": 9646,
+   "maxWithSrc": 8,
+   "maxPlaying": 5,
+   "maxPlayingOffscreen": 2,
+   "maxDecodedMpx": 7.8
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/tours",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.4,
+    "nodes": 267
+   },
+   {
+    "y": 250,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 284
+   },
+   {
+    "y": 500,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 289
+   },
+   {
+    "y": 750,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 289
+   },
+   {
+    "y": 1000,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.3,
+    "nodes": 289
+   },
+   {
+    "y": 1250,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 289
+   },
+   {
+    "y": 1500,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 289
+   },
+   {
+    "y": 1750,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 289
+   },
+   {
+    "y": 2000,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 289
+   },
+   {
+    "y": 2015,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 289
+   },
+   {
+    "y": 2015,
+    "max": 2015,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 289
+   }
+  ],
+  "shot": "before-mobile-_tours-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 11,
+   "reachedBottom": true,
+   "maxHeapMB": 5.5,
+   "maxNodes": 289,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/tours/zanzibar-appel-du-paradis-22-septembre-au-05-octobre",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 946
+   },
+   {
+    "y": 250,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 963
+   },
+   {
+    "y": 500,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 968
+   },
+   {
+    "y": 750,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 968
+   },
+   {
+    "y": 1000,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 968
+   },
+   {
+    "y": 1250,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 969
+   },
+   {
+    "y": 1500,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 969
+   },
+   {
+    "y": 1750,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 969
+   },
+   {
+    "y": 2000,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 969
+   },
+   {
+    "y": 2250,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 969
+   },
+   {
+    "y": 2500,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 969
+   },
+   {
+    "y": 2750,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.3,
+    "nodes": 969
+   },
+   {
+    "y": 3000,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 969
+   },
+   {
+    "y": 3250,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 969
+   },
+   {
+    "y": 3500,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 968
+   },
+   {
+    "y": 3750,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 969
+   },
+   {
+    "y": 4000,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 968
+   },
+   {
+    "y": 4250,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 968
+   },
+   {
+    "y": 4312,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 968
+   },
+   {
+    "y": 4312,
+    "max": 4312,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 968
+   }
+  ],
+  "shot": "before-mobile-_tours_zanzibar_appel_du_paradis_22_septembre_au_05_octobre-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 20,
+   "reachedBottom": true,
+   "maxHeapMB": 5.5,
+   "maxNodes": 969,
+   "maxWithSrc": 1,
+   "maxPlaying": 1,
+   "maxPlayingOffscreen": 1,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/destinations",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 0.6,
+    "heapMB": 4.6,
+    "nodes": 2114
+   },
+   {
+    "y": 250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5,
+    "nodes": 2131
+   },
+   {
+    "y": 500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.2,
+    "heapMB": 5.3,
+    "nodes": 2145
+   },
+   {
+    "y": 750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.2,
+    "heapMB": 5.3,
+    "nodes": 2145
+   },
+   {
+    "y": 1000,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.8,
+    "heapMB": 5.4,
+    "nodes": 2154
+   },
+   {
+    "y": 1250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.8,
+    "heapMB": 5.5,
+    "nodes": 2154
+   },
+   {
+    "y": 1500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 2.4,
+    "heapMB": 5.6,
+    "nodes": 2163
+   },
+   {
+    "y": 1750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 4,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.6,
+    "nodes": 2164
+   },
+   {
+    "y": 2000,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 5,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 3,
+    "heapMB": 5.7,
+    "nodes": 2173
+   },
+   {
+    "y": 2250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 5,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 3,
+    "heapMB": 5.8,
+    "nodes": 2174
+   },
+   {
+    "y": 2500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 6,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 3.6,
+    "heapMB": 4.7,
+    "nodes": 2183
+   },
+   {
+    "y": 2750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 6,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 3.6,
+    "heapMB": 4.8,
+    "nodes": 2184
+   },
+   {
+    "y": 3000,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 7,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 4.2,
+    "heapMB": 4.8,
+    "nodes": 2193
+   },
+   {
+    "y": 3250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 7,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.2,
+    "heapMB": 4.9,
+    "nodes": 2194
+   },
+   {
+    "y": 3500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 8,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 4.8,
+    "heapMB": 3.8,
+    "nodes": 2080
+   },
+   {
+    "y": 3750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 8,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.8,
+    "heapMB": 3.9,
+    "nodes": 2081
+   },
+   {
+    "y": 4000,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 9,
+    "playing": 3,
+    "playingOffscreen": 2,
+    "decodedMpx": 4.8,
+    "heapMB": 4,
+    "nodes": 2086
+   },
+   {
+    "y": 4250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 9,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.8,
+    "heapMB": 4.1,
+    "nodes": 2091
+   },
+   {
+    "y": 4500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 10,
+    "playing": 3,
+    "playingOffscreen": 2,
+    "decodedMpx": 4.8,
+    "heapMB": 4.2,
+    "nodes": 2096
+   },
+   {
+    "y": 4750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 10,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 4.8,
+    "heapMB": 4.2,
+    "nodes": 2097
+   },
+   {
+    "y": 5000,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 4.8,
+    "heapMB": 4.4,
+    "nodes": 2102
+   },
+   {
+    "y": 5250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.4,
+    "nodes": 2107
+   },
+   {
+    "y": 5500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 5.3,
+    "heapMB": 4.5,
+    "nodes": 2107
+   },
+   {
+    "y": 5750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.6,
+    "nodes": 2108
+   },
+   {
+    "y": 6000,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.7,
+    "nodes": 2109
+   },
+   {
+    "y": 6250,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 3.9,
+    "nodes": 2081
+   },
+   {
+    "y": 6500,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.4,
+    "nodes": 2082
+   },
+   {
+    "y": 6750,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.4,
+    "nodes": 2082
+   },
+   {
+    "y": 6970,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.5,
+    "nodes": 2082
+   },
+   {
+    "y": 6970,
+    "max": 6970,
+    "videos": 11,
+    "withSrc": 11,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 5.3,
+    "heapMB": 4.6,
+    "nodes": 2082
+   }
+  ],
+  "shot": "before-mobile-_destinations-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 30,
+   "reachedBottom": true,
+   "maxHeapMB": 5.8,
+   "maxNodes": 2194,
+   "maxWithSrc": 11,
+   "maxPlaying": 4,
+   "maxPlayingOffscreen": 2,
+   "maxDecodedMpx": 5.3
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/destinations/international",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.2,
+    "heapMB": 4.6,
+    "nodes": 1400
+   },
+   {
+    "y": 250,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.2,
+    "heapMB": 4.9,
+    "nodes": 1417
+   },
+   {
+    "y": 500,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.7,
+    "heapMB": 5.2,
+    "nodes": 1431
+   },
+   {
+    "y": 750,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.7,
+    "heapMB": 5.2,
+    "nodes": 1431
+   },
+   {
+    "y": 1000,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 2.3,
+    "heapMB": 5.3,
+    "nodes": 1440
+   },
+   {
+    "y": 1250,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 4,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.3,
+    "heapMB": 5.4,
+    "nodes": 1441
+   },
+   {
+    "y": 1500,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 5,
+    "playing": 3,
+    "playingOffscreen": 2,
+    "decodedMpx": 2.3,
+    "heapMB": 5.4,
+    "nodes": 1446
+   },
+   {
+    "y": 1750,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 5,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.3,
+    "heapMB": 5.5,
+    "nodes": 1447
+   },
+   {
+    "y": 2000,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 6,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 2.9,
+    "heapMB": 5.6,
+    "nodes": 1460
+   },
+   {
+    "y": 2250,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 6,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 5.7,
+    "nodes": 1461
+   },
+   {
+    "y": 2500,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 3,
+    "playingOffscreen": 2,
+    "decodedMpx": 2.9,
+    "heapMB": 5.8,
+    "nodes": 1466
+   },
+   {
+    "y": 2750,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 4.7,
+    "nodes": 1467
+   },
+   {
+    "y": 3000,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 2.9,
+    "heapMB": 3.8,
+    "nodes": 1370
+   },
+   {
+    "y": 3250,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 3.9,
+    "nodes": 1371
+   },
+   {
+    "y": 3500,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 2.9,
+    "heapMB": 4,
+    "nodes": 1371
+   },
+   {
+    "y": 3750,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 4.1,
+    "nodes": 1372
+   },
+   {
+    "y": 4000,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 1,
+    "decodedMpx": 2.9,
+    "heapMB": 4.7,
+    "nodes": 1373
+   },
+   {
+    "y": 4250,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 4.8,
+    "nodes": 1374
+   },
+   {
+    "y": 4500,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 4.8,
+    "nodes": 1374
+   },
+   {
+    "y": 4526,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 4.2,
+    "nodes": 1374
+   },
+   {
+    "y": 4526,
+    "max": 4526,
+    "videos": 7,
+    "withSrc": 7,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.9,
+    "heapMB": 4.3,
+    "nodes": 1374
+   }
+  ],
+  "shot": "before-mobile-_destinations_international-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 21,
+   "reachedBottom": true,
+   "maxHeapMB": 5.8,
+   "maxNodes": 1467,
+   "maxWithSrc": 7,
+   "maxPlaying": 4,
+   "maxPlayingOffscreen": 2,
+   "maxDecodedMpx": 2.9
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/destinations/national",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.2,
+    "heapMB": 4.5,
+    "nodes": 905
+   },
+   {
+    "y": 250,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 2,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.2,
+    "heapMB": 4.8,
+    "nodes": 922
+   },
+   {
+    "y": 500,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 3,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 1.2,
+    "heapMB": 5.1,
+    "nodes": 936
+   },
+   {
+    "y": 750,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 3,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 1.8,
+    "heapMB": 5.1,
+    "nodes": 936
+   },
+   {
+    "y": 1000,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 4,
+    "playingOffscreen": 2,
+    "decodedMpx": 2.4,
+    "heapMB": 5.2,
+    "nodes": 945
+   },
+   {
+    "y": 1250,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 3,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.3,
+    "nodes": 946
+   },
+   {
+    "y": 1500,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 3,
+    "playingOffscreen": 1,
+    "decodedMpx": 2.4,
+    "heapMB": 5.3,
+    "nodes": 946
+   },
+   {
+    "y": 1750,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 2,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.4,
+    "nodes": 947
+   },
+   {
+    "y": 2000,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 2,
+    "playingOffscreen": 1,
+    "decodedMpx": 2.4,
+    "heapMB": 5.6,
+    "nodes": 947
+   },
+   {
+    "y": 2250,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.7,
+    "nodes": 948
+   },
+   {
+    "y": 2500,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 2.4,
+    "heapMB": 4.6,
+    "nodes": 949
+   },
+   {
+    "y": 2750,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.1,
+    "nodes": 950
+   },
+   {
+    "y": 3000,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.1,
+    "nodes": 950
+   },
+   {
+    "y": 3065,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.2,
+    "nodes": 950
+   },
+   {
+    "y": 3065,
+    "max": 3065,
+    "videos": 4,
+    "withSrc": 4,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 2.4,
+    "heapMB": 5.3,
+    "nodes": 950
+   }
+  ],
+  "shot": "before-mobile-_destinations_national-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 15,
+   "reachedBottom": true,
+   "maxHeapMB": 5.7,
+   "maxNodes": 950,
+   "maxWithSrc": 4,
+   "maxPlaying": 4,
+   "maxPlayingOffscreen": 2,
+   "maxDecodedMpx": 2.4
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/destinations/zanzibar",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 430
+   },
+   {
+    "y": 250,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 447
+   },
+   {
+    "y": 500,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 452
+   },
+   {
+    "y": 750,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 452
+   },
+   {
+    "y": 1000,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.3,
+    "nodes": 453
+   },
+   {
+    "y": 1250,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 453
+   },
+   {
+    "y": 1500,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 454
+   },
+   {
+    "y": 1750,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 454
+   },
+   {
+    "y": 2000,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 454
+   },
+   {
+    "y": 2206,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 454
+   },
+   {
+    "y": 2206,
+    "max": 2206,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 454
+   }
+  ],
+  "shot": "before-mobile-_destinations_zanzibar-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 11,
+   "reachedBottom": true,
+   "maxHeapMB": 5.7,
+   "maxNodes": 454,
+   "maxWithSrc": 1,
+   "maxPlaying": 1,
+   "maxPlayingOffscreen": 1,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/destinations/vietnam",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 4.5,
+    "nodes": 400
+   },
+   {
+    "y": 250,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 4.9,
+    "nodes": 417
+   },
+   {
+    "y": 500,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5.2,
+    "nodes": 422
+   },
+   {
+    "y": 750,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 1,
+    "playingOffscreen": 1,
+    "decodedMpx": 0.6,
+    "heapMB": 5.4,
+    "nodes": 423
+   },
+   {
+    "y": 1000,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5.9,
+    "nodes": 424
+   },
+   {
+    "y": 1250,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 5.9,
+    "nodes": 424
+   },
+   {
+    "y": 1399,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 4.8,
+    "nodes": 424
+   },
+   {
+    "y": 1399,
+    "max": 1399,
+    "videos": 1,
+    "withSrc": 1,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0.6,
+    "heapMB": 4.9,
+    "nodes": 424
+   }
+  ],
+  "shot": "before-mobile-_destinations_vietnam-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 8,
+   "reachedBottom": true,
+   "maxHeapMB": 5.9,
+   "maxNodes": 424,
+   "maxWithSrc": 1,
+   "maxPlaying": 1,
+   "maxPlayingOffscreen": 1,
+   "maxDecodedMpx": 0.6
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/sur-mesure",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.3,
+    "nodes": 291
+   },
+   {
+    "y": 250,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 308
+   },
+   {
+    "y": 500,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 313
+   },
+   {
+    "y": 750,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 313
+   },
+   {
+    "y": 1000,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.3,
+    "nodes": 313
+   },
+   {
+    "y": 1250,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 314
+   },
+   {
+    "y": 1500,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.8,
+    "nodes": 314
+   },
+   {
+    "y": 1750,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 314
+   },
+   {
+    "y": 1835,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 314
+   },
+   {
+    "y": 1835,
+    "max": 1835,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 314
+   }
+  ],
+  "shot": "before-mobile-_sur_mesure-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 10,
+   "reachedBottom": true,
+   "maxHeapMB": 5.8,
+   "maxNodes": 314,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/contact",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.4,
+    "nodes": 349
+   },
+   {
+    "y": 250,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 366
+   },
+   {
+    "y": 500,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 371
+   },
+   {
+    "y": 750,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 371
+   },
+   {
+    "y": 1000,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 371
+   },
+   {
+    "y": 1250,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 371
+   },
+   {
+    "y": 1500,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 372
+   },
+   {
+    "y": 1750,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 372
+   },
+   {
+    "y": 2000,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 372
+   },
+   {
+    "y": 2127,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 372
+   },
+   {
+    "y": 2127,
+    "max": 2127,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 372
+   }
+  ],
+  "shot": "before-mobile-_contact-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 11,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 372,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/about",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.2,
+    "nodes": 271
+   },
+   {
+    "y": 250,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 288
+   },
+   {
+    "y": 500,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 293
+   },
+   {
+    "y": 750,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 293
+   },
+   {
+    "y": 1000,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 293
+   },
+   {
+    "y": 1250,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 293
+   },
+   {
+    "y": 1500,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 293
+   },
+   {
+    "y": 1750,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 293
+   },
+   {
+    "y": 2000,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 293
+   },
+   {
+    "y": 2250,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 293
+   },
+   {
+    "y": 2500,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 293
+   },
+   {
+    "y": 2566,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 293
+   },
+   {
+    "y": 2566,
+    "max": 2566,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 293
+   }
+  ],
+  "shot": "before-mobile-_about-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 13,
+   "reachedBottom": true,
+   "maxHeapMB": 5.6,
+   "maxNodes": 293,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/blog",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.2,
+    "nodes": 232
+   },
+   {
+    "y": 250,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 249
+   },
+   {
+    "y": 500,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 254
+   },
+   {
+    "y": 750,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 255
+   },
+   {
+    "y": 1000,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 255
+   },
+   {
+    "y": 1250,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 255
+   },
+   {
+    "y": 1399,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 255
+   },
+   {
+    "y": 1399,
+    "max": 1399,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 255
+   }
+  ],
+  "shot": "before-mobile-_blog-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 8,
+   "reachedBottom": true,
+   "maxHeapMB": 5.7,
+   "maxNodes": 255,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/cgv",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.3,
+    "nodes": 259
+   },
+   {
+    "y": 250,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 276
+   },
+   {
+    "y": 500,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 281
+   },
+   {
+    "y": 750,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 281
+   },
+   {
+    "y": 1000,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 281
+   },
+   {
+    "y": 1250,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 281
+   },
+   {
+    "y": 1500,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.4,
+    "nodes": 281
+   },
+   {
+    "y": 1750,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.8,
+    "nodes": 281
+   },
+   {
+    "y": 2000,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.8,
+    "nodes": 281
+   },
+   {
+    "y": 2161,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 281
+   },
+   {
+    "y": 2161,
+    "max": 2161,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 281
+   }
+  ],
+  "shot": "before-mobile-_cgv-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 11,
+   "reachedBottom": true,
+   "maxHeapMB": 5.8,
+   "maxNodes": 281,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/confidentialite",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.2,
+    "nodes": 253
+   },
+   {
+    "y": 250,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.5,
+    "nodes": 270
+   },
+   {
+    "y": 500,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 275
+   },
+   {
+    "y": 750,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 275
+   },
+   {
+    "y": 1000,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5,
+    "nodes": 275
+   },
+   {
+    "y": 1250,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.2,
+    "nodes": 275
+   },
+   {
+    "y": 1500,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 275
+   },
+   {
+    "y": 1750,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 275
+   },
+   {
+    "y": 1977,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 275
+   },
+   {
+    "y": 1977,
+    "max": 1977,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.6,
+    "nodes": 275
+   }
+  ],
+  "shot": "before-mobile-_confidentialite-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 10,
+   "reachedBottom": true,
+   "maxHeapMB": 5.7,
+   "maxNodes": 275,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/mentions-legales",
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.2,
+    "nodes": 252
+   },
+   {
+    "y": 250,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.5,
+    "nodes": 269
+   },
+   {
+    "y": 500,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 274
+   },
+   {
+    "y": 750,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.1,
+    "nodes": 274
+   },
+   {
+    "y": 1000,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.5,
+    "nodes": 274
+   },
+   {
+    "y": 1250,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.6,
+    "nodes": 274
+   },
+   {
+    "y": 1493,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 274
+   },
+   {
+    "y": 1493,
+    "max": 1493,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 5.7,
+    "nodes": 274
+   }
+  ],
+  "shot": "before-mobile-_mentions_legales-error.png",
+  "shotReason": "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "summary": {
+   "steps": 8,
+   "reachedBottom": true,
+   "maxHeapMB": 5.7,
+   "maxNodes": 274,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ },
+ {
+  "vp": "mobile",
+  "page": "/checkout",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "crashed": false,
+  "samples": [
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.5,
+    "nodes": 174
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.5,
+    "nodes": 174
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.7,
+    "nodes": 179
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.8,
+    "nodes": 179
+   },
+   {
+    "y": 0,
+    "max": 0,
+    "videos": 0,
+    "withSrc": 0,
+    "playing": 0,
+    "playingOffscreen": 0,
+    "decodedMpx": 0,
+    "heapMB": 4.9,
+    "nodes": 179
+   }
+  ],
+  "shot": null,
+  "summary": {
+   "steps": 5,
+   "reachedBottom": true,
+   "maxHeapMB": 4.9,
+   "maxNodes": 179,
+   "maxWithSrc": 0,
+   "maxPlaying": 0,
+   "maxPlayingOffscreen": 0,
+   "maxDecodedMpx": 0
+  }
+ }
+]

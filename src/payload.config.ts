@@ -61,13 +61,18 @@ export default buildConfig({
     pool: {
       connectionString: String(process.env.DATABASE_URI || ''),
     },
+    // Never auto-push schema changes (dev push would also hit whatever DB .env points to).
+    // Schema changes go through migrations: `npm run migrate:create` → commit → `npm run migrate`.
+    push: false,
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   sharp,
   plugins: [
     s3Storage({
       collections: {
         media: {
-          prefix: 'media',
+          // Separate folder per environment in the shared bucket (local .env: S3_MEDIA_PREFIX=dev-media)
+          prefix: process.env.S3_MEDIA_PREFIX || 'media',
           generateFileURL: ({ filename: fname, prefix }) =>
             `${process.env.S3_PUBLIC_URL || process.env.S3_ENDPOINT}/${prefix}/${fname}`,
         },
