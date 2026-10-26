@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import {
   motion,
@@ -42,7 +42,6 @@ function StoryCard({
       animate={{
         scale: isActive ? 1 : Math.max(0.8, 1 - offset * 0.1),
         opacity: isActive ? 1 : Math.max(0.3, 1 - offset * 0.35),
-        filter: isActive ? 'blur(0px)' : `blur(${Math.min(offset * 4, 8)}px)`,
       }}
       transition={{
         type: 'spring',
@@ -53,7 +52,13 @@ function StoryCard({
     >
       {/* ── Background Media ── */}
       {mediaUrl && isVideo ? (
-        <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
+        // Only the active card plays (and is never unloaded); others show a still first frame
+        <LazyVideo
+          src={mediaUrl}
+          paused={!isActive}
+          priority={isActive}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
       ) : mediaUrl ? (
         <Image
           src={mediaUrl}
@@ -72,6 +77,15 @@ function StoryCard({
 
       {/* ── Cinematic Overlay ── */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/55 to-transparent z-10" />
+
+      {/* ── Focus dimming (replaces a costly blur() filter on inactive cards) ── */}
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[#0B132B] z-[15] pointer-events-none"
+        initial={false}
+        animate={{ opacity: isActive ? 0 : Math.min(0.35 + offset * 0.1, 0.6) }}
+        transition={{ duration: 0.3 }}
+      />
 
       {/* ── Day Badge — drops from top ── */}
       <motion.div
@@ -199,20 +213,12 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
   const containerRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
 
-  if (!itinerary || itinerary.length === 0) return null
-
-  const sorted = [...itinerary].sort((a, b) => a.dayNumber - b.dayNumber)
+  // All hooks run before any early return (Rules of Hooks)
+  const sorted = useMemo(
+    () => [...(itinerary || [])].sort((a, b) => a.dayNumber - b.dayNumber),
+    [itinerary],
+  )
   const count = sorted.length
-
-  if (count <= 5) {
-    return (
-      <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto px-4 md:px-12 lg:px-20">
-        {sorted.map((day, index) => (
-          <VerticalStoryCard key={day.dayNumber} day={day} index={index} />
-        ))}
-      </div>
-    )
-  }
 
   // Card width calculation based on 9:16 aspect ratio
   const getCardWidth = useCallback(() => {
@@ -268,6 +274,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   // Initial centering
   useEffect(() => {
+    if (count <= 5) return
     const timer = setTimeout(() => {
       const step = getCardWidth() + getGap()
       const centerIndex = (count - 1) / 2
@@ -300,6 +307,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   // Keyboard navigation
   useEffect(() => {
+    if (count <= 5) return
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         goTo(activeIndex - 1)
@@ -309,8 +317,19 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeIndex, goTo])
+  }, [activeIndex, goTo, count])
 
+  if (count === 0) return null
+
+  if (count <= 5) {
+    return (
+      <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto px-4 md:px-12 lg:px-20">
+        {sorted.map((day, index) => (
+          <VerticalStoryCard key={day.dayNumber} day={day} index={index} />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full overflow-hidden mt-8 md:mt-12 pb-8">

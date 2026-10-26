@@ -103,6 +103,7 @@ export default function HeroGallery({ panels }: { panels?: HeroPanel[] }) {
                   src={dest.video}
                   poster={index === 0 ? undefined : dest.poster}
                   defer={!isActive}
+                  priority={isActive}
                 />
               </motion.div>
 
@@ -165,6 +166,7 @@ export default function HeroGallery({ panels }: { panels?: HeroPanel[] }) {
               className="absolute inset-0 object-cover w-full h-full z-0"
               src={dest.video}
               poster={index === 0 ? undefined : dest.poster}
+              priority={index === activeIndex}
             />
 
             {/* Bimodal Atmospheric Overlay */}
