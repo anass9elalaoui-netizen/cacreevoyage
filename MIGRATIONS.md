@@ -5,7 +5,7 @@
 | Production (Hostinger) | branch `production` — host `ep-billowing-bar-alz0yc1r…` | Hostinger env vars only |
 | Local development | branch `dev` — host `ep-gentle-dew-alqvkldm-pooler…` | local `.env` (git-ignored) |
 
-Uploads: production stores files under `media/` in the R2 bucket, local dev under `dev-media/` (`S3_MEDIA_PREFIX`).
+Uploads: both environments share the R2 bucket (`media/`). Use a separate bucket for dev if full isolation is needed (do not make the upload prefix env-dependent: it becomes a DB column default).
 
 Payload **never auto-pushes** the schema (`push: false` in `payload.config.ts`). All schema changes are migrations in `src/migrations/`.
 

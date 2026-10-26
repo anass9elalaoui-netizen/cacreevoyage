@@ -71,8 +71,8 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: {
-          // Separate folder per environment in the shared bucket (local .env: S3_MEDIA_PREFIX=dev-media)
-          prefix: process.env.S3_MEDIA_PREFIX || 'media',
+          // Fixed value: the storage plugin turns it into a DB column default, so it must not vary per environment
+          prefix: 'media',
           generateFileURL: ({ filename: fname, prefix }) =>
             `${process.env.S3_PUBLIC_URL || process.env.S3_ENDPOINT}/${prefix}/${fname}`,
         },
