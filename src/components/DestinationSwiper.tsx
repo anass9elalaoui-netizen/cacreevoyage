@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useScrollVelocityTilt } from '@/hooks/useScrollVelocityTilt'
 import { CarouselNavPill } from '@/components/ui/carousel-nav-pill'
+import LazyVideo from '@/components/LazyVideo'
 
 interface Destination {
   id: string | number
@@ -71,15 +72,9 @@ function DestinationCard({ dest, index, destinationTourMap }: { dest: Destinatio
         {/* Background Media with tactile hover scale */}
         <div className="absolute inset-0 overflow-hidden z-0 bg-slate-100 dark:bg-[#0e0a06]">
           {headerUrl && isVideo ? (
-            <motion.video
-              src={headerUrl}
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{ scale, willChange: 'transform' }}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-105"
-            />
+            <motion.div style={{ scale, willChange: 'transform' }} className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-105">
+              <LazyVideo src={headerUrl} className="absolute inset-0 w-full h-full object-cover" />
+            </motion.div>
           ) : headerUrl ? (
             <motion.div style={{ scale, willChange: 'transform' }} className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-105">
               <Image

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import LazyVideo from '@/components/LazyVideo'
 
 interface SubpageHeroProps {
   title: string
@@ -36,14 +37,7 @@ export default function SubpageHero({
       <div className="absolute inset-0 z-0">
         {backgroundUrl ? (
           isVideo ? (
-            <video
-              src={backgroundUrl}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover opacity-80"
-            />
+            <LazyVideo src={backgroundUrl} className="w-full h-full object-cover opacity-80" />
           ) : (
             <Image
               src={backgroundUrl}

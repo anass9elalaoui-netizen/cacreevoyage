@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import { getSiteSettings } from '@/lib/getSiteSettings'
 import { getDictionary } from '@/i18n/dictionaries'
 import { DestinationInspiration } from '@/components/ui/destination-inspiration'
+import LazyVideo from '@/components/LazyVideo'
 export const dynamic = 'force-dynamic'
 
 type Args = {
@@ -80,14 +81,7 @@ export default async function DestinationPage({ params, searchParams }: Args) {
           <section className="relative w-full h-[70vh] overflow-hidden bg-slate-100 dark:bg-brand-dark flex-shrink-0 transition-colors duration-700">
         {/* Header Media */}
         {headerUrl && isVideo ? (
-          <video
-            src={headerUrl}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          />
+          <LazyVideo src={headerUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
         ) : headerUrl ? (
           <Image
             src={headerUrl}

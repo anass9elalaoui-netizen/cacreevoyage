@@ -9,6 +9,7 @@ import Link from "next/link";
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
+import LazyVideo from '@/components/LazyVideo'
 
 export function DestinationInspiration({ destination }: { destination: any }) {
   const images = destination.gallery || [];
@@ -24,14 +25,7 @@ export function DestinationInspiration({ destination }: { destination: any }) {
       {/* 1. CINEMATIC VIDEO BACKGROUND WITH FADE EFFECT */}
       {videoUrl && (
         <div className="absolute inset-0 w-full h-[80vh] z-0">
-          <video 
-            src={videoUrl} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline 
-            className="w-full h-full object-cover opacity-50"
-          />
+          <LazyVideo src={videoUrl} className="w-full h-full object-cover opacity-50" />
           {/* Header Gradient Fade matching the background */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/60 to-slate-50 dark:from-transparent dark:via-[#050B14]/60 dark:to-[#050B14]" />
         </div>

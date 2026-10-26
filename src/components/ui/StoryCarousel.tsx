@@ -9,6 +9,7 @@ import {
   animate,
   PanInfo,
 } from 'framer-motion'
+import LazyVideo from '@/components/LazyVideo'
 
 /* ─── Types ──────────────────────────────────────────────── */
 interface StoryDay {
@@ -52,14 +53,7 @@ function StoryCard({
     >
       {/* ── Background Media ── */}
       {mediaUrl && isVideo ? (
-        <video
-          src={mediaUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
+        <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
       ) : mediaUrl ? (
         <Image
           src={mediaUrl}
@@ -159,7 +153,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
     <div className="relative h-[72vh] min-h-[500px] max-h-[680px] aspect-[9/16] mx-auto overflow-hidden rounded-3xl group">
       {/* ── Background Media ── */}
       {mediaUrl && isVideo ? (
-        <video src={mediaUrl} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" />
+        <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
       ) : mediaUrl ? (
         <Image src={mediaUrl} alt={day.title} fill className="object-cover z-0" />
       ) : (

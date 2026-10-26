@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Play, Compass } from 'lucide-react';
+import LazyVideo from '@/components/LazyVideo';
 
 export interface HeroSlide {
   id: string;
@@ -11,6 +12,7 @@ export interface HeroSlide {
   subtitle: string;
   title: string;
   videoUrl: string;
+  posterUrl?: string;
 }
 
 export interface HeroVideoSwitcherProps {
@@ -18,10 +20,10 @@ export interface HeroVideoSwitcherProps {
 }
 
 const FALLBACK_SLIDES: HeroSlide[] = [
-  { id: 'eden', label: 'Éden Tropical', subtitle: "L'Évasion Parfaite", title: 'Éden Tropical', videoUrl: '/SECTION%20FRAME/Ocean_waves_on_white_sand_202607241712.mp4' },
-  { id: 'desert', label: 'Désert & Étoiles', subtitle: "L'Évasion Parfaite", title: 'Désert & Étoiles', videoUrl: '/SECTION%20FRAME/Orange_sand_dunes_starry_sky_202607241713.mp4' },
-  { id: 'safari', label: 'Safari Signature', subtitle: "L'Évasion Parfaite", title: 'Safari Signature', videoUrl: '/SECTION%20FRAME/Elephants_walking_in_savanna_1080p_202607241712.mp4' },
-  { id: 'asie', label: 'Asie Mystique', subtitle: "L'Évasion Parfaite", title: 'Asie Mystique', videoUrl: '/SECTION%20FRAME/Mist_over_emerald_waters_Ha_202607241712.mp4' },
+  { id: 'eden', label: 'Éden Tropical', subtitle: "L'Évasion Parfaite", title: 'Éden Tropical', videoUrl: '/SECTION%20FRAME/Ocean_waves_on_white_sand_202607241712.mp4', posterUrl: '/posters/switch-ocean.webp' },
+  { id: 'desert', label: 'Désert & Étoiles', subtitle: "L'Évasion Parfaite", title: 'Désert & Étoiles', videoUrl: '/SECTION%20FRAME/Orange_sand_dunes_starry_sky_202607241713.mp4', posterUrl: '/posters/switch-desert.webp' },
+  { id: 'safari', label: 'Safari Signature', subtitle: "L'Évasion Parfaite", title: 'Safari Signature', videoUrl: '/SECTION%20FRAME/Elephants_walking_in_savanna_1080p_202607241712.mp4', posterUrl: '/posters/switch-safari.webp' },
+  { id: 'asie', label: 'Asie Mystique', subtitle: "L'Évasion Parfaite", title: 'Asie Mystique', videoUrl: '/SECTION%20FRAME/Mist_over_emerald_waters_Ha_202607241712.mp4', posterUrl: '/posters/switch-asie.webp' },
 ];
 
 export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVideoSwitcherProps) {
@@ -46,13 +48,12 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
       {/* Z-index 0: Background Video Layer */}
       <div className="absolute inset-0 z-0 bg-black">
         {currentSlides.map((slide, index) => (
-          <video
+          // Only the selected slide downloads/plays; the others load on first selection
+          <LazyVideo
             key={slide.id}
             src={slide.videoUrl}
-            autoPlay
-            muted
-            loop
-            playsInline
+            poster={slide.posterUrl}
+            active={index === activeIndex}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
               index === activeIndex ? 'opacity-100' : 'opacity-0'
             }`}
@@ -87,9 +88,9 @@ export default function HeroVideoSwitcher({ slides = FALLBACK_SLIDES }: HeroVide
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       >
         {/* Desktop Frame (Hidden on Mobile) */}
-        <Image alt="Luxury Window Desktop" className="hidden md:block object-cover object-center scale-[1.02]" fill priority src="/SECTION%20FRAME/cadre-desktop.png"/>
+        <Image alt="Luxury Window Desktop" className="hidden md:block object-cover object-center scale-[1.02]" fill sizes="100vw" src="/SECTION%20FRAME/cadre-desktop.png"/>
         {/* Mobile Frame (Hidden on Desktop) */}
-        <Image alt="Luxury Window Mobile" className="block md:hidden object-cover object-center scale-[1.02]" fill priority src="/SECTION%20FRAME/cadre-mobile.png"/>
+        <Image alt="Luxury Window Mobile" className="block md:hidden object-cover object-center scale-[1.02]" fill sizes="100vw" src="/SECTION%20FRAME/cadre-mobile.png"/>
       </motion.div>
 
       {/* Z-index 20: UI Elements */}

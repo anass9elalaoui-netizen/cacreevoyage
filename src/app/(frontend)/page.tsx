@@ -5,7 +5,7 @@ import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 import DestinationSwiper from '@/components/DestinationSwiper'
 import ReelsShowcase from '@/components/ReelsShowcase'
 import Footer from '@/components/Footer'
-import HeroGallery from '@/components/HeroGallery'
+import HeroGallery, { type HeroPanel } from '@/components/HeroGallery'
 import CursorTrail from '@/components/CursorTrail'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
@@ -104,17 +104,33 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
   const reviewBadges = siteSettings.reviewBadges || undefined
   const cleanWaNumber = cleanWhatsAppNumber(siteSettings.whatsappNumber)
 
-  // Fetch HeroGallery panels
-  let heroPanels: any[] = []
+  // Fetch HeroGallery panels (component falls back to built-in panels when empty)
+  let heroPanels: HeroPanel[] = []
   try {
     const heroGallery = await payload.findGlobal({
       slug: 'hero-gallery',
       depth: 1,
       locale: locale as any,
     }) as any
-    if (heroGallery?.panels && heroGallery.panels.length > 0) {
-      heroPanels = heroGallery.panels
-    }
+    heroPanels = (heroGallery?.panels || [])
+      .map((p: any): HeroPanel | null => {
+        const video = typeof p.backgroundVideo === 'object' ? p.backgroundVideo?.url : null
+        if (!video) return null
+        const link =
+          p.linkType === 'tour' && typeof p.tour === 'object' && p.tour?.slug
+            ? `/tours/${p.tour.slug}`
+            : typeof p.destination === 'object' && p.destination?.slug
+              ? `/destinations/${p.destination.slug}`
+              : '/destinations'
+        return {
+          title: p.title,
+          subtitle: p.subtitle || undefined,
+          video,
+          poster: typeof p.posterImage === 'object' ? p.posterImage?.url : undefined,
+          link,
+        }
+      })
+      .filter(Boolean) as HeroPanel[]
   } catch {
     // Fallback to defaults
   }
@@ -176,7 +192,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION — Cinematic canvas scroll portal
       ─────────────────────────────────────────────────────────── */}
-      <HeroGallery />
+      <HeroGallery panels={heroPanels} />
 
       {/* ──────────────────────────────────────────────────────────
           FEATURED TOURS GRID — "Nos Voyages d'Exception"

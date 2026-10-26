@@ -10,6 +10,7 @@ import BookingSidebar from '@/components/BookingSidebar'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 import { getDictionary, Locale } from '@/i18n/dictionaries'
+import LazyVideo from '@/components/LazyVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -95,14 +96,7 @@ export default async function TourPage({ params, searchParams }: Args) {
       <section className="relative w-full h-[100vh] flex flex-col items-center justify-end pb-24 shrink-0">
         {/* Background Media */}
         {heroVideoUrl ? (
-          <video
-            src={heroVideoUrl}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          />
+          <LazyVideo src={heroVideoUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
         ) : thumbnailUrl ? (
           <img
             src={thumbnailUrl}

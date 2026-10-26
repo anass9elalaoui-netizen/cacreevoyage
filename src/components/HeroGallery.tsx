@@ -3,15 +3,26 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Link from 'next/link'
+import LazyVideo from '@/components/LazyVideo'
 
-const destinations = [
-  { title: "Zanzibar", subtitle: "Éden Tropical", video: "/zanzibar video.MP4", link: "/destinations/zanzibar" },
-  { title: "Vietnam", subtitle: "L'Asie Authentique", video: "/vitnam.mp4", link: "/destinations/vietnam" },
-  { title: "Tanzanie", subtitle: "Safari Sauvage", video: "/tanzanie zanzibar safari.mp4", link: "/destinations/tanzanie" },
-  { title: "Merzouga", subtitle: "Magie du Désert", video: "/marzougua maroc.MP4", link: "/destinations/national" },
+export interface HeroPanel {
+  title: string
+  subtitle?: string
+  video: string
+  poster?: string
+  link: string
+}
+
+// Used until the "Hero Gallery" global is filled in the CMS
+const FALLBACK_PANELS: HeroPanel[] = [
+  { title: "Zanzibar", subtitle: "Éden Tropical", video: "/zanzibar video.MP4", poster: "/posters/hero-zanzibar.webp", link: "/destinations/zanzibar" },
+  { title: "Vietnam", subtitle: "L'Asie Authentique", video: "/vitnam.mp4", poster: "/posters/hero-vietnam.webp", link: "/destinations/vietnam" },
+  { title: "Tanzanie", subtitle: "Safari Sauvage", video: "/tanzanie zanzibar safari.mp4", poster: "/posters/hero-tanzanie.webp", link: "/destinations/zanzibar" },
+  { title: "Merzouga", subtitle: "Magie du Désert", video: "/marzougua maroc.MP4", poster: "/posters/hero-merzouga.webp", link: "/destinations/national" },
 ]
 
-export default function HeroGallery() {
+export default function HeroGallery({ panels }: { panels?: HeroPanel[] }) {
+  const destinations = panels && panels.length > 0 ? panels : FALLBACK_PANELS
   const [activeIndex, setActiveIndex] = useState(0)
   
   // Mobile tracking
@@ -29,7 +40,7 @@ export default function HeroGallery() {
     }
     container.addEventListener('scroll', handleScroll, { passive: true })
     return () => container.removeEventListener('scroll', handleScroll)
-  }, [activeIndex])
+  }, [activeIndex, destinations.length])
 
   // Mouse tracking for parallax
   const mouseX = useMotionValue(0)
@@ -80,13 +91,12 @@ export default function HeroGallery() {
                 className="absolute inset-[-4%] w-[108%] h-[108%] z-0 pointer-events-none"
                 style={{ x: isActive ? x : 0, y: isActive ? y : 0 }}
               >
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
+                {/* Active panel loads first (LCP); the others wait until the page is idle */}
+                <LazyVideo
                   className="object-cover w-full h-full"
                   src={dest.video}
+                  poster={dest.poster}
+                  defer={!isActive}
                 />
               </motion.div>
 
@@ -142,13 +152,10 @@ export default function HeroGallery() {
             key={index}
             className="relative w-full min-w-full h-full flex-shrink-0 snap-center overflow-hidden"
           >
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
+            <LazyVideo
               className="absolute inset-0 object-cover w-full h-full z-0"
               src={dest.video}
+              poster={dest.poster}
             />
 
             {/* Bimodal Atmospheric Overlay */}
