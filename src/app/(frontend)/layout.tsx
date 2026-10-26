@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     template: '%s | Ça Crée Voyage',
   },
   description: 'Circuits et voyages sur mesure. Laissez-vous inspirer par nos destinations d\'exception.',
+  icons: { icon: '/logo.jpeg', apple: '/logo.jpeg' },
 }
 
 export default async function FrontendLayout({

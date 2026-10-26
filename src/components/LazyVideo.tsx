@@ -9,6 +9,8 @@ type LazyVideoProps = Omit<React.VideoHTMLAttributes<HTMLVideoElement>, 'src' | 
   active?: boolean
   /** Wait for the page `load` event + idle time before downloading (secondary, non-LCP videos). */
   defer?: boolean
+  /** Thumbnail / click-to-play mode: load metadata when near the viewport, never autoplay. */
+  paused?: boolean
 }
 
 /**
@@ -16,7 +18,7 @@ type LazyVideoProps = Omit<React.VideoHTMLAttributes<HTMLVideoElement>, 'src' | 
  * pauses when off-screen, and shows `poster` until the first frame is ready.
  * Hidden elements (display:none) never intersect, so they never download.
  */
-export default function LazyVideo({ src, poster, active = true, defer = false, ...rest }: LazyVideoProps) {
+export default function LazyVideo({ src, poster, active = true, defer = false, paused = false, ...rest }: LazyVideoProps) {
   const ref = useRef<HTMLVideoElement>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [isIdle, setIsIdle] = useState(false)
@@ -60,10 +62,10 @@ export default function LazyVideo({ src, poster, active = true, defer = false, .
   // Play / pause
   useEffect(() => {
     const el = ref.current
-    if (!el || !shouldLoad) return
+    if (!el || !shouldLoad || paused) return
     if (isVisible && active) el.play().catch(() => {})
     else el.pause()
-  }, [isVisible, active, shouldLoad])
+  }, [isVisible, active, shouldLoad, paused])
 
   return (
     <video
@@ -73,8 +75,8 @@ export default function LazyVideo({ src, poster, active = true, defer = false, .
       muted
       loop
       playsInline
-      autoPlay={shouldLoad}
-      preload={shouldLoad ? 'auto' : 'none'}
+      autoPlay={shouldLoad && !paused}
+      preload={!shouldLoad ? 'none' : paused ? 'metadata' : 'auto'}
       {...rest}
     />
   )

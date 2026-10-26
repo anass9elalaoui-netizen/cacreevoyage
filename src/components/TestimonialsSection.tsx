@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import LazyVideo from '@/components/LazyVideo'
 
 interface Testimonial {
   id: string | number
@@ -79,12 +80,10 @@ const TestimonialCard = ({ data }: { data: Testimonial }) => {
       {/* Destination Photo (Top 55%) */}
       <div className="h-[55%] relative w-full overflow-hidden">
         {mediaUrl && isVideo ? (
-          // First frame only: metadata + a small range request, no autoplay
-          <video
+          // First frame only, loaded when the card nears the viewport, no autoplay
+          <LazyVideo
             src={`${mediaUrl}#t=0.5`}
-            preload="metadata"
-            muted
-            playsInline
+            paused
             aria-hidden="true"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />

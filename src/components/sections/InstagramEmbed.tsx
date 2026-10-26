@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg
@@ -19,21 +19,36 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 );
 
 export function InstagramEmbed({ instagramUrl = 'https://www.instagram.com/cacreevoyage/' }: { instagramUrl?: string }) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Load the Elfsight widget (script + third-party cookies) only when the section nears the viewport
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://elfsightcdn.com/platform.js";
-    script.async = true;
-    document.body.appendChild(script);
+    const section = sectionRef.current;
+    if (!section) return;
+    let script: HTMLScriptElement | null = null;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        script = document.createElement("script");
+        script.src = "https://elfsightcdn.com/platform.js";
+        script.async = true;
+        document.body.appendChild(script);
+      },
+      { rootMargin: "600px" }
+    );
+    io.observe(section);
 
     return () => {
-      if (document.body.contains(script)) {
+      io.disconnect();
+      if (script && document.body.contains(script)) {
         document.body.removeChild(script);
       }
     };
   }, []);
 
   return (
-    <section className="w-full py-16 lg:py-24 bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-hidden">
+    <section ref={sectionRef} className="w-full py-16 lg:py-24 bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-hidden">
       <div className="max-w-screen-xl mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-6">

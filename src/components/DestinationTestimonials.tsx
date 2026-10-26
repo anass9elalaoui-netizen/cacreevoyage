@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import LazyVideo from '@/components/LazyVideo'
 
 type Testimonial = {
   id: string
@@ -101,11 +102,11 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                 {/* Media Container */}
                 <div className="w-full md:w-[400px] shrink-0 relative bg-black min-h-[300px] md:min-h-[500px]">
                   {test.media?.mimeType?.startsWith('video/') || test.media?.url?.match(/\.(mp4|webm|mov)$/i) ? (
-                    <video
-                      src={test.media.url}
+                    <LazyVideo
+                      src={test.media.url || ''}
+                      paused
+                      muted={false}
                       className="absolute inset-0 w-full h-full object-cover"
-                      loop
-                      playsInline
                       controls={playingId === test.id}
                       onClick={() => {
                         if (playingId === test.id) setPlayingId(null)
