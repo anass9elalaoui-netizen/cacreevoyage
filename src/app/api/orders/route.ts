@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { tourId, clientName, clientPhone, clientEmail, passengers, travelDate, specialRequests, status } = body
+    const { tourId, clientName, clientPhone, clientEmail, passengers, travelDate, specialRequests } = body
 
     if (!tourId || !clientName || !clientPhone) {
       return NextResponse.json(
@@ -26,15 +26,16 @@ export async function POST(req: Request) {
         passengers: passengers || 1,
         travelDate: travelDate || null,
         specialRequests: specialRequests || null,
-        status: status || 'pending_virement',
+        // Status is set server-side only — never trust the client with it
+        status: 'pending_virement',
       },
     })
 
-    return NextResponse.json({ success: true, order }, { status: 201 })
+    return NextResponse.json({ success: true, id: order.id }, { status: 201 })
   } catch (err: any) {
     console.error('Order creation error:', err)
     return NextResponse.json(
-      { message: err.message || 'Erreur serveur.' },
+      { message: 'Erreur serveur.' },
       { status: 500 },
     )
   }
