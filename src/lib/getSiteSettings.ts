@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
@@ -26,8 +27,9 @@ const DEFAULTS: SiteSettings = {
 
 /**
  * Fetch the site-settings global from Payload CMS.
+ * Memoised per request with React `cache()` — layout and page share one query.
  */
-export async function getSiteSettings(locale?: string): Promise<SiteSettings> {
+export const getSiteSettings = cache(async (locale?: string): Promise<SiteSettings> => {
   try {
     const payload = await getPayload({ config: configPromise })
     const raw = await payload.findGlobal({
@@ -54,7 +56,7 @@ export async function getSiteSettings(locale?: string): Promise<SiteSettings> {
     console.error('Error fetching site settings:', error)
     return DEFAULTS
   }
-}
+})
 /**
  * Strip non-digit characters from a phone number for use in wa.me links.
  * e.g. "+212 661-898865" → "212661898865"

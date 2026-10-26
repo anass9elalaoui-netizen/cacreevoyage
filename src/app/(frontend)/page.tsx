@@ -10,7 +10,7 @@ import CursorTrail from '@/components/CursorTrail'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import DestinationTestimonials from '@/components/DestinationTestimonials'
 import FeaturedToursGrid from '@/components/FeaturedToursGrid'
-import FAQAccordion from '@/components/FAQAccordion'
+import FAQAccordion, { type FAQItem } from '@/components/FAQAccordion'
 import ReviewBadges from '@/components/ReviewBadges'
 import MagneticButton from '@/components/MagneticButton'
 import ScrollTextReveal from '@/components/ScrollTextReveal'
@@ -156,6 +156,17 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
   } catch (err) {
     console.error('Error fetching hero-switcher global', err);
   }
+
+  // Fetch active FAQs (server-side so they are indexable)
+  const { docs: faqDocs } = await payload.find({
+    collection: 'faq',
+    where: { or: [{ isActive: { equals: true } }, { isActive: { exists: false } }] },
+    sort: 'order',
+    depth: 0,
+    limit: 50,
+    locale: locale as any,
+  })
+  const faqs: FAQItem[] = faqDocs.map((f: any) => ({ question: f.question, answer: f.answer }))
 
   // Fetch Partners Config
   let partnersData: { title?: string; description?: string; columnCount?: string; partnersList?: any[] } = {}
@@ -317,7 +328,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           FAQ SECTION
       ─────────────────────────────────────────────────────────── */}
-      <FAQAccordion />
+      <FAQAccordion faqs={faqs} />
 
       {/* ──────────────────────────────────────────────────────────
           FINAL CTA SECTION

@@ -1,26 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export default function FAQAccordion() {
+export interface FAQItem {
+  question: string
+  answer: string
+}
+
+// FAQs are fetched on the server (page.tsx) so they are in the HTML for SEO
+export default function FAQAccordion({ faqs = [] }: { faqs?: FAQItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const [faqs, setFaqs] = useState<{question: string; answer: string}[]>([])
-
-  useEffect(() => {
-    // Fetch FAQs from Payload CMS API using current locale
-    const params = new URLSearchParams(window.location.search)
-    const locale = params.get('locale') || 'fr'
-
-    fetch(`/api/faq?locale=${locale}&sort=order`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.docs) {
-          setFaqs(data.docs.filter((f: any) => f.isActive !== false))
-        }
-      })
-      .catch((err) => console.error('Error fetching FAQs:', err))
-  }, [])
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
