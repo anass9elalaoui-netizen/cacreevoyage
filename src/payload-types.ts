@@ -514,6 +514,14 @@ export interface Testimonial {
    */
   media?: (number | null) | Media;
   /**
+   * Image affichée sur la carte avant la lecture (idéalement une image tirée de la vidéo du client). La vidéo ne se charge qu'au clic.
+   */
+  videoPoster?: (number | null) | Media;
+  /**
+   * Affichée sur le tampon « carte postale » avec la destination (ex : 2025).
+   */
+  tripYear?: number | null;
+  /**
    * Date du voyage ou du témoignage
    */
   date?: string | null;
@@ -952,6 +960,8 @@ export interface TestimonialsSelect<T extends boolean = true> {
   tour?: T;
   destination?: T;
   media?: T;
+  videoPoster?: T;
+  tripYear?: T;
   date?: T;
   isHighlighted?: T;
   platform?: T;
