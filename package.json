@@ -12,7 +12,8 @@
     "seed": "tsx src/seed.ts",
     "migrate": "payload run src/scripts/migrate.ts",
     "migrate:create": "payload migrate:create",
-    "migrate:status": "payload migrate:status"
+    "migrate:status": "payload migrate:status",
+    "media:copy-to-dev": "payload run src/scripts/copy-media-to-dev.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",

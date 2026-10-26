@@ -8,3 +8,4 @@ build
 
 # audit screenshots (large, local only)
 audit/screenshots/**/*.png
+audit/dev-assets/
