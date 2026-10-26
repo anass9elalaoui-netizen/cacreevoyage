@@ -184,6 +184,43 @@ Impact: H/M/L · Effort: S (<1 h) / M (half a day) / L (1 day or more)
 
 ---
 
+## 3b. Batch 1 results (branch `edit-2026-10-26`)
+
+**Done:** D2 (corrected: only `seed-testimonials` needed a guard), D3, D1, D4, A1–A3, A5–A10, B2, B3, B6, C1, D5, D6, D7. Also pulled forward from Batch 3: A11 (Elfsight loads near the viewport) and a favicon link.
+
+**Changes beyond the plan, decided while measuring:**
+- **Hero posters:** 8 WebP posters extracted with ffmpeg into `public/posters/` (24–116 KB each).
+- **The first hero slide renders its poster as a priority `next/image`.** Chrome does not count video posters for LCP, and it ignores full-viewport images on mobile.
+- **Cookie banner now appears on the first scroll, tap or key press** (it used to pop in after 1.5 s). On mobile it had become the LCP element itself (live: "Nous utilisons des cookies…"). This is a visible behaviour change; revert it in `CookieBanner.tsx` if unwanted.
+- **Testimonial videos** (review grid and video testimonials) load only near the viewport.
+
+**Measured.** "Before" = live site. "After" = this branch, `next start` locally against the same Neon DB, mobile Lighthouse in Edge. Local TTFB is *worse* than production (0.4–1.2 s vs 0.2–0.5 s, because of DB round trips from my machine), so the "after" numbers are conservative.
+
+| Page | Perf | FCP | LCP | TBT | Weight | Best practices |
+|---|---|---|---|---|---|---|
+| `/` before | 25 | 18.0 s | 35.8 s (cookie text) | 3,510 ms | 104.7 MB | — |
+| `/` after | 47 | 1.8–1.9 s | 4.6–6.5 s (hero) | 880–1,470 ms | 9.0–10.3 MB | 100 |
+| `/destinations` before | 59 | 2.1 s | 4.3 s | 950 ms | 41.7 MB | 96 |
+| `/destinations` after | 82–89 | 1.4 s | 2.8–3.7 s | 250–290 ms | 3.7–3.9 MB | 100 |
+| `/tours/zanzibar…` before | 56 | 2.1 s | 5.6 s | 610 ms | 23.3 MB | 96 |
+| `/tours/zanzibar…` after | 62–72 | 1.4 s | 3.0–5.9 s | 480–780 ms | 19.7 MB | 100 |
+
+Bytes downloaded in the first 8 s on the home page without scrolling (Edge, CDP):
+
+| | Before | After |
+|---|---|---|
+| Desktop | 75.1 MB (16 videos incl. the 40 MB `.MOV`) | 24.4 MB (4 hero videos; 3 of them start after page idle) |
+| Mobile | 77.3 MB (16 videos) | 9.4 MB (visible hero slide + next slide) |
+
+**Still open:**
+- **Tour page weight** is the tour's hero video: the 40 MB `.MOV`, which is above the fold → A4 (re-encode and replace it in the CMS).
+- **Desktop hero videos are 28 MB in total** → A4.
+- **Home TTFB** → B1.
+- **Not tested on production:** the contact form. The local `.env` points at the production DB, so a test would create a real inquiry. Submit one test after deploying.
+- **Build check:** passes. ESLint is not configured in this repo (`next lint` prompts for setup), so no lint gate.
+
+---
+
 ## 4. What NOT to change, and why
 - **The hero design** (expanding panels, parallax, vertical labels, mobile swipe), the window-frame switcher, starfield and film grain, and the motion timings. They are the brand. The fixes change *when* media loads, not how it looks.
 - **No new libraries** (no video player, no image CDN, no i18n library). Native `IntersectionObserver`, `preload`, `poster` and Next caching cover everything here.
