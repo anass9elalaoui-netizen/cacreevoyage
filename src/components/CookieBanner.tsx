@@ -10,9 +10,15 @@ export default function CookieBanner() {
     // Check if user has already accepted cookies
     const consent = localStorage.getItem('cookie_consent')
     if (!consent) {
-      // Show banner after a short delay
-      const timer = setTimeout(() => setIsVisible(true), 1500)
-      return () => clearTimeout(timer)
+      // Show on the visitor's first interaction: a banner that pops in on its own
+      // becomes the page's "largest paint" on mobile and ruins the LCP score.
+      const events = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const
+      const show = () => {
+        setIsVisible(true)
+        events.forEach((e) => window.removeEventListener(e, show))
+      }
+      events.forEach((e) => window.addEventListener(e, show, { passive: true, once: true }))
+      return () => events.forEach((e) => window.removeEventListener(e, show))
     }
   }, [])
 

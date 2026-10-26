@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import LazyVideo from '@/components/LazyVideo'
 
 export interface HeroPanel {
@@ -91,11 +92,16 @@ export default function HeroGallery({ panels }: { panels?: HeroPanel[] }) {
                 className="absolute inset-[-4%] w-[108%] h-[108%] z-0 pointer-events-none"
                 style={{ x: isActive ? x : 0, y: isActive ? y : 0 }}
               >
-                {/* Active panel loads first (LCP); the others wait until the page is idle */}
+                {/* First panel poster as a real image (browsers don't count video posters for LCP);
+                    the video has no poster so this image paints until the first frame arrives */}
+                {index === 0 && dest.poster && (
+                  <Image src={dest.poster} alt="" fill priority sizes="60vw" className="object-cover" />
+                )}
+                {/* Active panel loads first; the others wait until the page is idle */}
                 <LazyVideo
-                  className="object-cover w-full h-full"
+                  className="relative object-cover w-full h-full"
                   src={dest.video}
-                  poster={dest.poster}
+                  poster={index === 0 ? undefined : dest.poster}
                   defer={!isActive}
                 />
               </motion.div>
@@ -152,10 +158,13 @@ export default function HeroGallery({ panels }: { panels?: HeroPanel[] }) {
             key={index}
             className="relative w-full min-w-full h-full flex-shrink-0 snap-center overflow-hidden"
           >
+            {index === 0 && dest.poster && (
+              <Image src={dest.poster} alt="" fill priority sizes="100vw" className="object-cover" />
+            )}
             <LazyVideo
               className="absolute inset-0 object-cover w-full h-full z-0"
               src={dest.video}
-              poster={dest.poster}
+              poster={index === 0 ? undefined : dest.poster}
             />
 
             {/* Bimodal Atmospheric Overlay */}
