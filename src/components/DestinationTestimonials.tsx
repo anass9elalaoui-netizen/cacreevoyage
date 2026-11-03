@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react'
 import LazyVideo from '@/components/LazyVideo'
 import {
@@ -117,74 +117,204 @@ function VideoLightbox({
   )
 }
 
-/* ─── Featured card: silent preview loop (or cover), one clear call to action ─── */
-function Featured({ t, onPlay }: { t: TestimonialDoc; onPlay: () => void }) {
+/** How long each destination stays featured before the section advances on its own (= preview length). */
+const STEP_MS = 6000
+
+/* ─── Featured card: silent preview loop, pointer tilt + light sheen, swipe to change destination ─── */
+function Featured({
+  t,
+  direction,
+  onPlay,
+  onSwipe,
+}: {
+  t: TestimonialDoc
+  direction: number
+  onPlay: () => void
+  onSwipe: (dir: 1 | -1) => void
+}) {
   const reduce = useReducedMotion()
   const preview = getVideoPreview(t)
+  const dragged = useRef(false)
+
+  // Pointer tilt (motion values: no React re-render per mouse move)
+  const px = useMotionValue(0.5)
+  const py = useMotionValue(0.5)
+  const rotateY = useSpring(useTransform(px, [0, 1], [-7, 7]), { stiffness: 150, damping: 18 })
+  const rotateX = useSpring(useTransform(py, [0, 1], [6, -6]), { stiffness: 150, damping: 18 })
+  const sheenX = useTransform(px, [0, 1], ['0%', '100%'])
+  const sheenY = useTransform(py, [0, 1], ['0%', '100%'])
+  const sheen = useMotionTemplate`radial-gradient(420px circle at ${sheenX} ${sheenY}, rgba(255,255,255,0.18), transparent 45%)`
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (reduce || e.pointerType !== 'mouse') return
+    const r = e.currentTarget.getBoundingClientRect()
+    px.set((e.clientX - r.left) / r.width)
+    py.set((e.clientY - r.top) / r.height)
+  }
+  const onPointerLeave = () => {
+    px.set(0.5)
+    py.set(0.5)
+  }
 
   return (
-    <button
-      type="button"
-      onClick={onPlay}
-      className="group relative block w-full max-w-[420px] mx-auto aspect-[9/16] max-h-[80vh] overflow-hidden rounded-[1.75rem] bg-brand-dark text-left shadow-[0_30px_60px_-25px_rgba(11,19,43,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60"
-      aria-label={`Voir le témoignage vidéo : ${labelOf(t)}`}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={String(t.id)}
-          className="absolute inset-0"
-          initial={reduce ? false : { opacity: 0, scale: 1.02 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+    <div className="mx-auto w-full max-w-[420px] [perspective:1200px]">
+      <motion.div
+        onPointerMove={onPointerMove}
+        onPointerLeave={onPointerLeave}
+        style={reduce ? undefined : { rotateX, rotateY }}
+        drag={reduce ? false : 'x'}
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.18}
+        dragSnapToOrigin
+        onDragStart={() => {
+          dragged.current = true
+        }}
+        onDragEnd={(_, info) => {
+          if (info.offset.x < -60 || info.velocity.x < -400) onSwipe(1)
+          else if (info.offset.x > 60 || info.velocity.x > 400) onSwipe(-1)
+          // The click that ends a drag must not open the video
+          setTimeout(() => {
+            dragged.current = false
+          }, 0)
+        }}
+        className="relative aspect-[9/16] max-h-[80vh] touch-pan-y"
+      >
+        <button
+          type="button"
+          onClick={() => {
+            if (!dragged.current) onPlay()
+          }}
+          className="group relative block h-full w-full overflow-hidden rounded-[1.75rem] bg-brand-dark text-left shadow-[0_30px_60px_-25px_rgba(11,19,43,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60"
+          aria-label={`Voir le témoignage vidéo : ${labelOf(t)}`}
         >
-          <Cover t={t} sizes="(max-width: 640px) 92vw, 420px" eager />
-          {/* Silent 6 s loop on top of the cover (LazyVideo: only when visible, poster-only under reduced motion / Data Saver) */}
-          {preview ? (
-            <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
-          ) : null}
-        </motion.div>
-      </AnimatePresence>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={String(t.id)}
+              className="absolute inset-0"
+              initial={reduce ? { opacity: 0 } : { opacity: 0, x: direction * 60, scale: 1.04 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, x: direction * -60, scale: 0.98 }}
+              transition={{ duration: reduce ? 0.2 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Cover t={t} sizes="(max-width: 640px) 92vw, 420px" eager />
+              {/* Silent 6 s loop on top of the cover (LazyVideo: only when visible, poster-only under reduced motion / Data Saver) */}
+              {preview ? (
+                <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+              ) : null}
+            </motion.div>
+          </AnimatePresence>
 
-      <span className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-brand-deeper/95 via-brand-deeper/45 to-transparent pointer-events-none" />
+          {/* Light sheen following the pointer */}
+          {!reduce && (
+            <motion.span
+              aria-hidden="true"
+              style={{ background: sheen }}
+              className="pointer-events-none absolute inset-0 z-[1] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+          )}
 
-      <span className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-6">
-        <span className="font-heading text-[2rem] leading-none font-medium text-white">{labelOf(t)}</span>
-        {t.testimonialText ? (
-          <span className="text-sm leading-snug text-white/85 line-clamp-3">&laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;</span>
-        ) : null}
-        <span className="inline-flex w-fit items-center gap-2.5 rounded-full bg-white px-5 py-3 text-sm font-semibold text-brand-dark shadow-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-active:scale-[0.98]">
-          <Play className="h-4 w-4 fill-brand-blue text-brand-blue" strokeWidth={1.5} />
-          Voir le témoignage
-          {t.tripYear ? <span className="font-normal text-slate-500">{t.tripYear}</span> : null}
-        </span>
-      </span>
-    </button>
+          <span className="absolute inset-x-0 bottom-0 z-[1] h-3/5 bg-gradient-to-t from-brand-deeper/95 via-brand-deeper/45 to-transparent pointer-events-none" />
+
+          <span className="absolute inset-x-0 bottom-0 z-[2] flex flex-col gap-4 p-6">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={String(t.id)}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, delay: reduce ? 0 : 0.1 }}
+                className="font-heading text-[2rem] leading-none font-medium text-white"
+              >
+                {labelOf(t)}
+              </motion.span>
+            </AnimatePresence>
+            {t.testimonialText ? (
+              <span className="text-sm leading-snug text-white/85 line-clamp-3">&laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;</span>
+            ) : null}
+            <span className="inline-flex w-fit items-center gap-2.5 rounded-full bg-white px-5 py-3 text-sm font-semibold text-brand-dark shadow-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-active:scale-[0.98]">
+              <Play className="h-4 w-4 fill-brand-blue text-brand-blue" strokeWidth={1.5} />
+              Voir le témoignage
+              {t.tripYear ? <span className="font-normal text-slate-500">{t.tripYear}</span> : null}
+            </span>
+          </span>
+        </button>
+      </motion.div>
+    </div>
   )
 }
 
 export default function DestinationTestimonials({ testimonials }: { testimonials: TestimonialDoc[] }) {
   const items = testimonials.filter((t) => getVideo(t))
+  const count = items.length
   const [active, setActive] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const [paused, setPaused] = useState(false)
+  const [inView, setInView] = useState(false)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const reduce = useReducedMotion()
   const close = useCallback(() => setOpenIndex(null), [])
 
   useEffect(() => setMounted(true), [])
 
-  if (items.length === 0) return null
-  const current = Math.min(active, items.length - 1)
+  const go = useCallback(
+    (next: number) => {
+      if (count === 0) return
+      setDirection(next > active ? 1 : -1)
+      setActive(((next % count) + count) % count)
+    },
+    [active, count],
+  )
+
+  // Only run the auto-advance while the section is on screen
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.35 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // Stories-style auto-advance: one destination every STEP_MS. Paused on hover / focus,
+  // while the lightbox is open, off screen, and under prefers-reduced-motion.
+  const autoplay = count > 1 && inView && !paused && openIndex === null && !reduce
+  useEffect(() => {
+    if (!autoplay) return
+    const id = setTimeout(() => go(active + 1), STEP_MS)
+    return () => clearTimeout(id)
+  }, [autoplay, active, go])
+
+  // Keep the active destination visible inside the mobile swipe row (scrolls the row, not the page)
+  useEffect(() => {
+    const tab = tabRefs.current[active]
+    const row = tab?.parentElement
+    if (!tab || !row || row.scrollWidth <= row.clientWidth) return
+    row.scrollTo({ left: tab.offsetLeft - 16, behavior: reduce ? 'auto' : 'smooth' })
+  }, [active, reduce])
+
+  if (count === 0) return null
+  const current = Math.min(active, count - 1)
 
   return (
-    <section className="relative py-20 md:py-28 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:items-center">
+    <section
+      ref={sectionRef}
+      className="relative py-20 md:py-28 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden"
+    >
+      <style dangerouslySetInnerHTML={{ __html: '@keyframes ccv-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}' }} />
+      <div
+        className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:items-center"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
         {/* Header + playlist: first on mobile, right column on desktop (min-w-0 keeps the swipe row inside the grid) */}
         <div className="min-w-0 lg:order-2">
           <h2 className="font-heading text-4xl md:text-5xl font-medium tracking-tight leading-[1.05] text-slate-900 dark:text-white">
             Ils ont vécu <span className="text-brand-blue">l&apos;expérience</span>
           </h2>
           <p className="mt-4 max-w-[46ch] text-base leading-relaxed text-slate-600 dark:text-white/65">
-            Nos voyageurs racontent leur séjour en vidéo. Choisissez une destination.
+            Nos voyageurs racontent leur séjour en vidéo, destination par destination.
           </p>
 
           <div
@@ -197,11 +327,18 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
               return (
                 <button
                   key={String(t.id)}
+                  ref={(el) => {
+                    tabRefs.current[i] = el
+                  }}
                   type="button"
                   role="tab"
                   aria-selected={isActive}
-                  onClick={() => setActive(i)}
-                  className={`flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto rounded-2xl p-2 pr-4 text-left border transition duration-300 active:scale-[0.98] ${
+                  onClick={() => go(i)}
+                  onMouseEnter={() => {
+                    // Hover previews the destination on mouse devices (touch uses tap)
+                    if (i !== current && window.matchMedia('(hover: hover)').matches) go(i)
+                  }}
+                  className={`relative flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto overflow-hidden rounded-2xl p-2 pr-4 text-left border transition duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 ${
                     isActive
                       ? 'bg-white dark:bg-white/10 border-brand-blue/50 shadow-[0_10px_30px_-12px_rgba(28,140,201,0.45)]'
                       : 'bg-white/60 dark:bg-white/[0.04] border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/[0.08]'
@@ -219,6 +356,19 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                       Témoignage vidéo
                     </span>
                   </span>
+
+                  {/* Story progress: fills while this destination is featured, freezes while paused */}
+                  {isActive && count > 1 && !reduce ? (
+                    <span
+                      key={`progress-${current}`}
+                      aria-hidden="true"
+                      className="absolute inset-x-0 bottom-0 h-[3px] origin-left bg-brand-blue"
+                      style={{
+                        animation: `ccv-progress ${STEP_MS}ms linear forwards`,
+                        animationPlayState: autoplay ? 'running' : 'paused',
+                      }}
+                    />
+                  ) : null}
                 </button>
               )
             })}
@@ -227,7 +377,12 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
 
         {/* Featured: second on mobile, left column on desktop */}
         <div className="min-w-0 lg:order-1">
-          <Featured t={items[current]} onPlay={() => setOpenIndex(current)} />
+          <Featured
+            t={items[current]}
+            direction={direction}
+            onPlay={() => setOpenIndex(current)}
+            onSwipe={(dir) => go(current + dir)}
+          />
         </div>
       </div>
 
@@ -241,7 +396,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                 index={openIndex}
                 onIndex={(i) => {
                   setOpenIndex(i)
-                  setActive(i)
+                  go(i)
                 }}
                 onClose={close}
               />
