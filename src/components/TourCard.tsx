@@ -48,16 +48,18 @@ const SEASON_MAP: Record<string, { icon: string; label: string }> = {
   winter: { icon: '❄️', label: 'Hiver' },
 }
 
+const MONTH_NAMES_FR = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
+
 /**
- * Format a date string to a beautiful French locale display
+ * Parse a date string into { day, month, year } for calendar-style display
  */
-function formatDateFR(dateStr: string): string {
+function parseDateParts(dateStr: string) {
   const d = new Date(dateStr)
-  return d.toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
+  return {
+    day: d.getDate(),
+    month: MONTH_NAMES_FR[d.getMonth()],
+    year: d.getFullYear(),
+  }
 }
 
 /**
@@ -72,8 +74,31 @@ function getNextDeparture(departureDates: DepartureDate[] | null | undefined): D
   return upcoming[0] || null
 }
 
+/**
+ * Count total upcoming departures
+ */
+function countUpcoming(departureDates: DepartureDate[] | null | undefined): number {
+  if (!departureDates) return 0
+  const now = new Date()
+  return departureDates.filter((d) => new Date(d.date) >= now && d.status !== 'Full').length
+}
+
 // Convert Link to a motion component so we can pass motion styles directly
 const MotionLink = motion(Link)
+
+/** ── Mini Calendar Chip ─────────────────────────────── */
+function CalendarChip({ day, month }: { day: number; month: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center w-[42px] h-[46px] rounded-xl bg-white/90 dark:bg-white/10 shadow-sm">
+      <span className="text-[10px] uppercase font-bold leading-none text-brand-blue tracking-wide">
+        {month}
+      </span>
+      <span className="text-[20px] font-heading font-bold leading-none text-slate-900 dark:text-white -mt-0.5">
+        {day}
+      </span>
+    </div>
+  )
+}
 
 export default function TourCard({
   title,
@@ -103,34 +128,42 @@ export default function TourCard({
 
   // Compute date display info
   const nextDeparture = useMemo(() => getNextDeparture(departureDates), [departureDates])
+  const upcomingCount = useMemo(() => countUpcoming(departureDates), [departureDates])
 
-  const dateDisplay = useMemo(() => {
+  const dateInfo = useMemo(() => {
     // Priority 1: Next upcoming departure from departureDates array
     if (nextDeparture) {
+      const dep = parseDateParts(nextDeparture.date)
       return {
-        label: 'Prochain départ',
-        date: formatDateFR(nextDeparture.date),
-        status: nextDeparture.status,
+        type: 'next' as const,
+        departure: dep,
+        return: null as ReturnType<typeof parseDateParts> | null,
         spotsLeft: nextDeparture.spotsLeft,
+        status: nextDeparture.status,
+        moreCount: upcomingCount > 1 ? upcomingCount - 1 : 0,
       }
     }
-    // Priority 2: Fixed departure date
+    // Priority 2: Fixed departure/return date
     if (departureDate) {
+      const dep = parseDateParts(departureDate)
+      const ret = returnDate ? parseDateParts(returnDate) : null
       return {
-        label: 'Départ',
-        date: formatDateFR(departureDate) + (returnDate ? ` — ${formatDateFR(returnDate)}` : ''),
-        status: null,
-        spotsLeft: null,
+        type: 'fixed' as const,
+        departure: dep,
+        return: ret,
+        spotsLeft: null as number | null | undefined,
+        status: null as string | null | undefined,
+        moreCount: 0,
       }
     }
     return null
-  }, [nextDeparture, departureDate, returnDate])
+  }, [nextDeparture, upcomingCount, departureDate, returnDate])
 
-  // Status badge color
-  const statusColor = useMemo(() => {
-    if (tourStatus === 'sold_out') return { bg: 'bg-red-500/20', text: 'text-red-400', border: 'border-red-400/30', label: 'Complet' }
-    if (tourStatus === 'coming_soon') return { bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-400/30', label: 'Bientôt' }
-    if (nextDeparture?.status === 'Limited') return { bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-400/30', label: 'Places limitées' }
+  // Status badge
+  const statusBadge = useMemo(() => {
+    if (tourStatus === 'sold_out') return { color: 'bg-red-500', label: 'Complet' }
+    if (tourStatus === 'coming_soon') return { color: 'bg-amber-500', label: 'Bientôt' }
+    if (nextDeparture?.status === 'Limited') return { color: 'bg-amber-500', label: 'Dernières places' }
     return null
   }, [tourStatus, nextDeparture])
 
@@ -141,26 +174,15 @@ export default function TourCard({
   const mouseXSpring = useSpring(x, { stiffness: 300, damping: 40 })
   const mouseYSpring = useSpring(y, { stiffness: 300, damping: 40 })
   
-  // Rotate up to 10 degrees based on mouse position
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"])
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"])
   
-  // Parallax translate Z for the inner elements
-  const translateZImage = useTransform(mouseXSpring, [-0.5, 0.5], ["-20px", "20px"]) // Subtle push back
-  const translateZContent = useTransform(mouseXSpring, [-0.5, 0.5], ["30px", "-30px"]) // Subtle pop out
+  const translateZImage = useTransform(mouseXSpring, [-0.5, 0.5], ["-20px", "20px"])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
-    
-    const width = rect.width
-    const height = rect.height
-    
-    const mouseX = e.clientX - rect.left
-    const mouseY = e.clientY - rect.top
-    
-    const xPct = mouseX / width - 0.5
-    const yPct = mouseY / height - 0.5
-    
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5
     x.set(xPct)
     y.set(yPct)
   }
@@ -176,7 +198,7 @@ export default function TourCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6 }}
-      style={{ perspective: 1000 }} // perspective on the wrapper so child can rotate 3D
+      style={{ perspective: 1000 }}
     >
       <MotionLink
         href={`/tours/${slug}`}
@@ -189,12 +211,12 @@ export default function TourCard({
         }}
         className="group block relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer"
       >
-        {/* Background Image Wrapper (Pushed back slightly for parallax) */}
+        {/* Background Image */}
         <motion.div 
           className="absolute inset-0 z-0 bg-slate-100 dark:bg-[#0B132B]"
           style={{ 
             translateZ: translateZImage, 
-            scale: 1.1 // Scale up slightly so edges don't show when rotating
+            scale: 1.1
           }}
         >
           {imageUrl ? (
@@ -214,40 +236,67 @@ export default function TourCard({
           <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/60 dark:from-[#0B132B]/95 dark:via-[#0B132B]/60 to-transparent z-10" suppressHydrationWarning />
         </motion.div>
 
-        {/* ── DATE BADGE — Top-left corner ── */}
-        {dateDisplay && (
+        {/* ── CALENDAR DATE DISPLAY — Top-left ── */}
+        {dateInfo && (
           <motion.div
             className="absolute top-4 left-4 z-20"
-            style={{ translateZ: 50 }}
+            style={{ translateZ: 55 }}
+            initial={{ opacity: 0, scale: 0.8, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5, type: 'spring' }}
           >
-            <div className="liquid-glass border border-white/20 dark:border-white/10 rounded-2xl px-3.5 py-2.5 backdrop-blur-xl shadow-lg shadow-black/5">
-              {/* Date label */}
-              <span className="block text-[10px] uppercase tracking-widest text-brand-blue font-semibold mb-0.5">
-                {dateDisplay.label}
-              </span>
-              {/* Date value */}
-              <span className="block text-sm font-heading font-semibold text-slate-800 dark:text-white leading-tight">
-                {dateDisplay.date}
-              </span>
-              {/* Spots left indicator */}
-              {dateDisplay.spotsLeft != null && dateDisplay.spotsLeft > 0 && (
-                <span className="flex items-center gap-1 mt-1">
-                  <span className={`inline-block w-1.5 h-1.5 rounded-full ${
-                    dateDisplay.spotsLeft <= 3 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
-                  }`} />
-                  <span className={`text-[10px] font-medium ${
-                    dateDisplay.spotsLeft <= 3 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
-                  }`}>
-                    {dateDisplay.spotsLeft} place{dateDisplay.spotsLeft > 1 ? 's' : ''} restante{dateDisplay.spotsLeft > 1 ? 's' : ''}
-                  </span>
+            <div className="flex items-stretch gap-0 rounded-2xl overflow-hidden shadow-xl shadow-black/10 border border-white/30 dark:border-white/10">
+              {/* Left: Calendar chip(s) */}
+              <div className="flex items-center gap-0 bg-white/70 dark:bg-white/5 backdrop-blur-2xl px-2 py-2">
+                <CalendarChip day={dateInfo.departure.day} month={dateInfo.departure.month} />
+                {dateInfo.return && (
+                  <>
+                    <div className="flex flex-col items-center justify-center px-1.5">
+                      <svg width="16" height="8" viewBox="0 0 16 8" fill="none" className="text-brand-blue">
+                        <path d="M0 4H14M14 4L10.5 0.5M14 4L10.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <CalendarChip day={dateInfo.return.day} month={dateInfo.return.month} />
+                  </>
+                )}
+              </div>
+
+              {/* Right: Meta info strip */}
+              <div className="flex flex-col justify-center bg-brand-blue/10 dark:bg-brand-blue/20 backdrop-blur-2xl px-3 py-2 min-w-[80px] border-l border-brand-blue/10">
+                <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-brand-blue leading-none">
+                  {dateInfo.type === 'next' ? 'Prochain' : 'Départ'}
                 </span>
-              )}
+                <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-brand-blue leading-none mt-0.5">
+                  {dateInfo.type === 'next' ? 'départ' : dateInfo.departure.year.toString()}
+                </span>
+
+                {/* Spots left */}
+                {dateInfo.spotsLeft != null && dateInfo.spotsLeft > 0 && (
+                  <span className="flex items-center gap-1 mt-1.5">
+                    <span className={`w-[5px] h-[5px] rounded-full ${
+                      dateInfo.spotsLeft <= 3 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
+                    }`} />
+                    <span className={`text-[9px] font-semibold leading-none ${
+                      dateInfo.spotsLeft <= 3 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
+                    }`}>
+                      {dateInfo.spotsLeft} place{dateInfo.spotsLeft > 1 ? 's' : ''}
+                    </span>
+                  </span>
+                )}
+
+                {/* More departures */}
+                {dateInfo.moreCount > 0 && (
+                  <span className="text-[8px] text-brand-blue/70 font-medium mt-1 leading-none">
+                    +{dateInfo.moreCount} autre{dateInfo.moreCount > 1 ? 's' : ''} date{dateInfo.moreCount > 1 ? 's' : ''}
+                  </span>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
 
-        {/* ── SEASON PILLS — Below date badge or top-left ── */}
-        {seasons && seasons.length > 0 && !dateDisplay && (
+        {/* ── SEASON PILLS — Top-left when no dates ── */}
+        {seasons && seasons.length > 0 && !dateInfo && (
           <motion.div
             className="absolute top-4 left-4 z-20 flex gap-1.5 flex-wrap"
             style={{ translateZ: 50 }}
@@ -267,23 +316,26 @@ export default function TourCard({
           </motion.div>
         )}
 
-        {/* ── STATUS BADGE — Below featured badge ── */}
-        {statusColor && (
+        {/* ── STATUS BADGE ── */}
+        {statusBadge && (
           <motion.div
-            className={`absolute top-4 ${isFeatured ? 'right-4 top-14' : 'right-4'} z-20`}
+            className={`absolute ${isFeatured ? 'top-14' : 'top-4'} right-4 z-20`}
             style={{ translateZ: 50 }}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
           >
-            <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold rounded-full border ${statusColor.bg} ${statusColor.text} ${statusColor.border}`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-              {statusColor.label}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-lg text-slate-800 dark:text-white">
+              <span className={`w-2 h-2 rounded-full ${statusBadge.color} animate-pulse`} />
+              {statusBadge.label}
             </span>
           </motion.div>
         )}
 
-        {/* Content (Bottom) - Popped out for parallax */}
+        {/* Content (Bottom) */}
         <motion.div 
           className="absolute bottom-0 left-0 right-0 p-6 pointer-events-none"
-          style={{ translateZ: 40 }} // Fixed Z pop out for 3D effect
+          style={{ translateZ: 40 }}
         >
           {/* Scope badge */}
           {scope && (
@@ -316,8 +368,8 @@ export default function TourCard({
             )}
           </div>
 
-          {/* Seasons row — show here if dates are also showing at top */}
-          {seasons && seasons.length > 0 && dateDisplay && (
+          {/* Seasons row — inline when dates are at top */}
+          {seasons && seasons.length > 0 && dateInfo && (
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
               {seasons.map((season) => {
                 const s = SEASON_MAP[season]
@@ -353,7 +405,7 @@ export default function TourCard({
           </div>
         </motion.div>
 
-        {/* Featured badge - Also popped out */}
+        {/* Featured badge */}
         {isFeatured && (
           <motion.div 
             className="absolute top-4 right-4 px-3 py-1 text-xs uppercase tracking-wider liquid-glass border border-brand-blue/40 text-slate-800 dark:text-brand-blue rounded-full font-semibold"
