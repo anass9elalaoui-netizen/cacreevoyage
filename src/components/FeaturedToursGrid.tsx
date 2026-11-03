@@ -20,6 +20,11 @@ interface Tour {
     difficulty?: string
   } | null
   isFeatured?: boolean
+  departureDate?: string | null
+  returnDate?: string | null
+  departureDates?: { date: string; spotsLeft?: number; status?: string }[] | null
+  seasons?: string[] | null
+  tourStatus?: string | null
 }
 
 interface FeaturedToursGridProps {
@@ -105,6 +110,11 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
                     pricing={tour.pricing}
                     logistics={tour.logistics}
                     isFeatured={tour.isFeatured}
+                    departureDate={tour.departureDate}
+                    returnDate={tour.returnDate}
+                    departureDates={tour.departureDates}
+                    seasons={tour.seasons}
+                    tourStatus={tour.tourStatus}
                   />
                 </motion.div>
               )
