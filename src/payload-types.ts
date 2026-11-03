@@ -530,6 +530,10 @@ export interface Testimonial {
    */
   tripYear?: number | null;
   /**
+   * Code à 2 lettres du pays : MA Maroc, TR Turquie, EG Égypte, TZ Zanzibar / Tanzanie, BR Brésil. Vide : pas de drapeau.
+   */
+  countryCode?: string | null;
+  /**
    * Date du voyage ou du témoignage
    */
   date?: string | null;
@@ -972,6 +976,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
   videoLight?: T;
   videoPreview?: T;
   tripYear?: T;
+  countryCode?: T;
   date?: T;
   isHighlighted?: T;
   platform?: T;

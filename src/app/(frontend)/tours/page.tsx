@@ -69,8 +69,6 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
           description={heroData.description}
           backgroundUrl={backgroundUrl}
           isVideo={isVideo}
-          ctaLabel={heroData.ctaLabel}
-          ctaHref={heroData.ctaHref}
           badge1Number={heroData.badgeStat1Number}
           badge1Label={heroData.badgeStat1Label}
           badge2Number={heroData.badgeStat2Number}

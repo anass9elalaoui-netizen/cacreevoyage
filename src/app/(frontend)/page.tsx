@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
@@ -306,14 +305,6 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
                 </div>
               ))}
             </div>
-            <MagneticButton>
-              <Link
-                href="/sur-mesure"
-                className="inline-block mt-10 bg-brand-gold dark:bg-brand-gold border border-brand-gold hover:bg-brand-gold-dark dark:hover:bg-brand-gold-dark text-white px-8 py-4 rounded-full font-body text-sm uppercase font-semibold transition-all duration-300 tracking-wider shadow-[0_4px_20px_rgba(29,161,232,0.2)] hover:shadow-[0_4px_28px_rgba(29,161,232,0.35)]"
-              >
-                {t.philosophyCTA}
-              </Link>
-            </MagneticButton>
           </div>
 
           {/* Right — Review Badges */}
@@ -345,19 +336,11 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <MagneticButton>
-              <Link
-                href="/sur-mesure"
-                className="inline-block bg-brand-blue hover:bg-brand-blue/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_0_30px_rgba(56,163,165,0.3)] hover:shadow-[0_0_40px_rgba(56,163,165,0.5)]"
-              >
-                {t.readyCTA}
-              </Link>
-            </MagneticButton>
-            <MagneticButton>
               <a
                 href={`https://wa.me/${cleanWaNumber}?text=Bonjour, je souhaite en savoir plus sur vos voyages`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-[#25D366]/20 border border-[#25D366]/30 hover:bg-[#25D366]/30 text-[#25D366] px-10 py-5 rounded-full font-medium text-lg transition-all"
+                className="inline-block bg-[#25D366] hover:bg-[#25D366]/90 text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-[0_4px_20px_rgba(37,211,102,0.3)]"
               >
                 💬 WhatsApp
               </a>

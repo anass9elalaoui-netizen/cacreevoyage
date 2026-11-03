@@ -109,6 +109,18 @@ export const Testimonials: CollectionConfig = {
       },
     },
     {
+      name: 'countryCode',
+      type: 'text',
+      label: 'Drapeau (code pays)',
+      maxLength: 2,
+      validate: (value: string | null | undefined) =>
+        !value || /^[A-Za-z]{2}$/.test(value) || 'Code pays à 2 lettres, par exemple MA, TR ou TZ.',
+      admin: {
+        position: 'sidebar',
+        description: 'Code à 2 lettres du pays : MA Maroc, TR Turquie, EG Égypte, TZ Zanzibar / Tanzanie, BR Brésil. Vide : pas de drapeau.',
+      },
+    },
+    {
       name: 'date',
       type: 'date',
       admin: { description: 'Date du voyage ou du témoignage' },

@@ -16,6 +16,7 @@ export interface TestimonialDoc {
   videoLight?: MediaRef
   videoPreview?: MediaRef
   travelerPhoto?: MediaRef
+  countryCode?: string | null
   destination?:
     | {
         id?: string | number

@@ -27,6 +27,23 @@ const destinationHref = (t: TestimonialDoc) => {
 
 const items = (n: number) => Array.from({ length: n }, (_, i) => i)
 
+/** Country flag from /public/flags (SVG, because emoji flags do not display on Windows). Decorative: the name sits next to it. */
+function Flag({ code, className = '' }: { code?: string | null; className?: string }) {
+  const [broken, setBroken] = useState(false)
+  useEffect(() => setBroken(false), [code])
+  if (!code || broken) return null
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`/flags/${code.trim().toLowerCase()}.svg`}
+      alt=""
+      loading="lazy"
+      onError={() => setBroken(true)}
+      className={`inline-block shrink-0 rounded-[3px] object-cover ring-1 ${className}`}
+    />
+  )
+}
+
 /** Poster image, or a single still frame when no cover has been uploaded (metadata only). */
 function Cover({ t, sizes, eager = false }: { t: TestimonialDoc; sizes: string; eager?: boolean }) {
   const poster = getVideoPoster(t)
@@ -146,6 +163,7 @@ function VideoLightbox({
       </div>
 
       <p className="text-center font-heading text-lg text-white" onClick={(e) => e.stopPropagation()}>
+        <Flag code={t.countryCode} className="mr-2 h-4 w-[22px] align-[-2px] ring-white/30" />
         {labelOf(t)}
         {t.tripYear ? <span className="text-white/50">, {t.tripYear}</span> : null}
         <span className="mt-1 block text-xs text-white/45">
@@ -436,8 +454,9 @@ function Featured({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.35, delay: reduce ? 0 : 0.1 }}
-              className="font-heading text-[2rem] leading-none font-medium text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.4)]"
+              className="flex items-center gap-2.5 font-heading text-[2rem] leading-none font-medium text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.4)]"
             >
+              <Flag code={t.countryCode} className="h-6 w-8 shadow-md ring-white/60" />
               {labelOf(t)}
             </motion.span>
           </AnimatePresence>
@@ -619,8 +638,9 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     <Thumb t={t} playing={!reduce && hovered === i} />
                   </span>
                   <span className="relative z-[1] min-w-0">
-                    <span className={`block truncate font-heading text-base font-medium ${isActive ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}>
-                      {labelOf(t)}
+                    <span className={`flex items-center gap-2 font-heading text-base font-medium ${isActive ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}>
+                      <Flag code={t.countryCode} className="h-3.5 w-[19px] ring-black/10 dark:ring-white/20" />
+                      <span className="truncate">{labelOf(t)}</span>
                     </span>
                     <span className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-500 dark:text-white/50">
                       <Play className="h-3 w-3" strokeWidth={2} />
