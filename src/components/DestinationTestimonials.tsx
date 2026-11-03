@@ -133,9 +133,9 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
 
   return (
     <section className="relative py-20 md:py-28 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:items-center">
-        {/* Header: first on mobile, right column on desktop */}
-        <div className="lg:order-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:items-center">
+        {/* Header: first on mobile, right column on desktop (min-w-0: the swipe row must not widen the grid) */}
+        <div className="min-w-0 lg:order-2">
           <h2 className="font-heading text-4xl md:text-5xl font-medium tracking-tight leading-[1.05] text-slate-900 dark:text-white">
             Ils ont vécu <span className="text-brand-blue">l&apos;expérience</span>
           </h2>
@@ -176,7 +176,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
         </div>
 
         {/* Featured player: second on mobile, left column on desktop */}
-        <div className="lg:order-1">
+        <div className="min-w-0 lg:order-1">
           <div className="relative mx-auto w-full max-w-[400px] aspect-[9/16] max-h-[78vh] overflow-hidden rounded-[1.75rem] bg-brand-dark shadow-[0_30px_60px_-25px_rgba(11,19,43,0.55)]">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
