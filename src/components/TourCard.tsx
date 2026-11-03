@@ -248,27 +248,35 @@ export default function TourCard({
         >
           {/* Left: Date Badge */}
           {dateBadge ? (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-xl border border-white/20 text-white shadow-lg">
-              <svg
-                className="w-3.5 h-3.5 text-brand-cyan flex-shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              <span className="text-[11px] font-medium tracking-tight whitespace-nowrap text-white/95">
-                {dateBadge.text}
+            <div className="flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-2xl bg-black/55 backdrop-blur-xl border border-white/20 text-white shadow-lg">
+              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-brand-blue/90 shadow-inner">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </span>
+              <span className="flex flex-col leading-tight">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-brand-cyan">
+                  Prochain départ
+                </span>
+                <span className="text-[13px] font-semibold tracking-tight whitespace-nowrap text-white">
+                  {dateBadge.text}
+                </span>
               </span>
 
               {/* Limited spots indicator */}
               {dateBadge.spotsLeft != null && dateBadge.spotsLeft > 0 && (
-                <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/40 text-[9px] font-bold text-amber-300">
+                <span className="ml-0.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/40 text-[9px] font-bold text-amber-300">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                   {dateBadge.spotsLeft} pl.
                 </span>
