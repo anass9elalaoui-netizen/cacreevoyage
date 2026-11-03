@@ -3,14 +3,33 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react'
 import LazyVideo from '@/components/LazyVideo'
-import { Stars, destinationOf, getVideo, getVideoPoster, type TestimonialDoc } from '@/components/testimonials/shared'
+import { destinationOf, getVideo, getVideoPoster, type TestimonialDoc } from '@/components/testimonials/shared'
 
-/** "Turquie" from the linked destination, otherwise the traveler/group name typed in the admin. */
+/** "Turquie" from the linked destination, otherwise the name typed in the admin. */
 const labelOf = (t: TestimonialDoc) => destinationOf(t)?.title || t.travelerName?.trim() || 'Nos voyageurs'
 
-/* ─── Lightbox: video with sound, loads only once opened; ← → between destinations ─── */
+/** Poster image, or a single still frame when no cover has been uploaded (metadata only). */
+function Cover({ t, sizes, eager = false }: { t: TestimonialDoc; sizes: string; eager?: boolean }) {
+  const poster = getVideoPoster(t)
+  if (poster) {
+    return (
+      <Image
+        src={poster}
+        alt=""
+        fill
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        className="object-cover"
+      />
+    )
+  }
+  return <LazyVideo src={`${getVideo(t)}#t=1`} paused aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+}
+
+/* ─── Lightbox: the video (with sound) only loads once opened; arrows move between destinations ─── */
 function VideoLightbox({
   items,
   index,
@@ -44,14 +63,14 @@ function VideoLightbox({
   }, [index, hasNext, hasPrev, onClose, onIndex])
 
   const arrow =
-    'absolute top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-colors disabled:opacity-0'
+    'absolute top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 active:scale-95 transition disabled:pointer-events-none disabled:opacity-0'
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={`Témoignage vidéo — ${labelOf(t)}`}
-      className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-4 bg-brand-deeper/90 backdrop-blur-md p-4"
+      aria-label={`Témoignage vidéo : ${labelOf(t)}`}
+      className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-5 bg-brand-deeper/90 backdrop-blur-md p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -59,15 +78,10 @@ function VideoLightbox({
       onClick={onClose}
     >
       <div className="relative w-full max-w-[420px]" onClick={(e) => e.stopPropagation()}>
-        <motion.div
-          key={String(t.id)}
-          className="relative w-full aspect-[9/16] max-h-[78vh] mx-auto rounded-2xl overflow-hidden bg-black shadow-2xl"
-          initial={{ scale: 0.97, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 320, damping: 30 }}
-        >
+        <div className="relative w-full aspect-[9/16] max-h-[78vh] mx-auto rounded-2xl overflow-hidden bg-black shadow-2xl">
           {/* Opened by a click, so playback with sound is allowed */}
           <video
+            key={String(t.id)}
             src={getVideo(t)!}
             poster={getVideoPoster(t) || undefined}
             controls
@@ -75,21 +89,20 @@ function VideoLightbox({
             playsInline
             className="absolute inset-0 h-full w-full object-contain"
           />
-        </motion.div>
-
-        <button type="button" onClick={() => onIndex(index - 1)} disabled={!hasPrev} className={`${arrow} -left-2 md:-left-16`} aria-label="Témoignage précédent">
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        </div>
+        <button type="button" onClick={() => onIndex(index - 1)} disabled={!hasPrev} className={`${arrow} -left-3 md:-left-20`} aria-label="Destination précédente">
+          <ChevronLeft className="h-5 w-5" strokeWidth={2} />
         </button>
-        <button type="button" onClick={() => onIndex(index + 1)} disabled={!hasNext} className={`${arrow} -right-2 md:-right-16`} aria-label="Témoignage suivant">
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+        <button type="button" onClick={() => onIndex(index + 1)} disabled={!hasNext} className={`${arrow} -right-3 md:-right-20`} aria-label="Destination suivante">
+          <ChevronRight className="h-5 w-5" strokeWidth={2} />
         </button>
       </div>
 
-      <p className="text-center text-white/90 font-heading text-lg" onClick={(e) => e.stopPropagation()}>
-        Témoignage {labelOf(t)}
-        {t.tripYear ? <span className="text-white/50"> · {t.tripYear}</span> : null}
-        <span className="block text-xs uppercase tracking-[0.25em] text-white/40 mt-1">
-          {index + 1} / {items.length}
+      <p className="text-center font-heading text-lg text-white" onClick={(e) => e.stopPropagation()}>
+        {labelOf(t)}
+        {t.tripYear ? <span className="text-white/50">, {t.tripYear}</span> : null}
+        <span className="mt-1 block text-xs text-white/45">
+          {index + 1} sur {items.length}
         </span>
       </p>
 
@@ -99,132 +112,129 @@ function VideoLightbox({
         className="absolute top-5 right-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-colors"
         aria-label="Fermer la vidéo"
       >
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <X className="h-5 w-5" strokeWidth={2} />
       </button>
     </motion.div>
   )
 }
 
-/* ─── One tall "story" card per destination ─────────────────────────── */
-function StoryCard({ t, onPlay }: { t: TestimonialDoc; onPlay: () => void }) {
-  const video = getVideo(t)!
-  const poster = getVideoPoster(t)
-  const label = labelOf(t)
-
-  return (
-    <button
-      type="button"
-      onClick={onPlay}
-      id={`temoignage-${String(t.id)}`}
-      className="group relative block w-[72vw] max-w-[300px] sm:w-[260px] shrink-0 snap-center aspect-[9/16] rounded-[1.75rem] overflow-hidden bg-brand-dark text-left shadow-[0_24px_50px_-20px_rgba(11,19,43,0.55)] ring-1 ring-black/5 dark:ring-white/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60 transition-transform duration-500 hover:-translate-y-1.5"
-      aria-label={`Lire le témoignage vidéo — ${label}`}
-    >
-      {poster ? (
-        <Image src={poster} alt="" fill sizes="(max-width: 640px) 72vw, 260px" loading="lazy" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-      ) : (
-        // No cover uploaded yet: a still frame (metadata only), never the full video
-        <LazyVideo src={`${video}#t=1`} paused aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
-      )}
-
-      {/* Legibility gradients */}
-      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/55 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-brand-deeper/95 via-brand-deeper/40 to-transparent" />
-
-      {/* Top: video badge + year */}
-      <div className="absolute top-4 inset-x-4 flex items-center justify-between">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
-          <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-          Vidéo
-        </span>
-        {t.tripYear ? (
-          <span className="rounded-full bg-black/35 backdrop-blur-md px-2.5 py-1 text-[11px] font-medium tracking-widest text-white/90">{t.tripYear}</span>
-        ) : null}
-      </div>
-
-      {/* Center: play */}
-      <span className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-brand-blue shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-110">
-        <span className="absolute inset-0 rounded-full border-2 border-white/60 animate-ping [animation-duration:2.4s] motion-reduce:hidden" />
-        <svg className="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
-      </span>
-
-      {/* Bottom: destination title, optional quote */}
-      <div className="absolute bottom-0 inset-x-0 p-5">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-brand-cyan">Témoignage</p>
-        <h3 className="mt-1 font-heading text-[1.75rem] leading-none font-medium text-white">{label}</h3>
-        {t.testimonialText ? (
-          <p className="mt-3 font-heading italic text-sm leading-snug text-white/80 line-clamp-2">&laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;</p>
-        ) : null}
-        {t.rating ? <Stars rating={t.rating} className="mt-3 text-sm" /> : null}
-      </div>
-    </button>
-  )
-}
-
 export default function DestinationTestimonials({ testimonials }: { testimonials: TestimonialDoc[] }) {
   const items = testimonials.filter((t) => getVideo(t))
+  const [active, setActive] = useState(0)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
-  const rowRef = useRef<HTMLDivElement>(null)
+  const reduce = useReducedMotion()
   const close = useCallback(() => setOpenIndex(null), [])
 
   useEffect(() => setMounted(true), [])
 
-  const scrollToCard = (id: string | number) => {
-    const card = document.getElementById(`temoignage-${String(id)}`)
-    const row = rowRef.current
-    if (!card || !row) return
-    row.scrollTo({ left: card.offsetLeft - row.clientWidth / 2 + card.clientWidth / 2, behavior: 'smooth' })
-  }
-
   if (items.length === 0) return null
+  const featured = items[Math.min(active, items.length - 1)]
 
   return (
-    <section className="relative py-24 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-10">
-          <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">Avis clients · en vidéo</span>
-          <h2 className="font-heading text-4xl md:text-5xl text-slate-900 dark:text-white tracking-tight font-bold">
-            Ils Ont Vécu <span className="text-brand-blue">l&apos;Expérience</span>
+    <section className="relative py-20 md:py-28 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:items-center">
+        {/* Header: first on mobile, right column on desktop */}
+        <div className="lg:order-2">
+          <h2 className="font-heading text-4xl md:text-5xl font-medium tracking-tight leading-[1.05] text-slate-900 dark:text-white">
+            Ils ont vécu <span className="text-brand-blue">l&apos;expérience</span>
           </h2>
-          <p className="mt-4 text-slate-600 dark:text-white/60 max-w-xl mx-auto">
-            Nos voyageurs racontent leur voyage, destination par destination.
+          <p className="mt-4 max-w-[46ch] text-base leading-relaxed text-slate-600 dark:text-white/65">
+            Nos voyageurs racontent leur séjour en vidéo. Choisissez une destination pour les écouter.
           </p>
+
+          {/* Destination picker: grid on desktop, swipe row on mobile */}
+          <div
+            role="tablist"
+            aria-label="Témoignages par destination"
+            className="mt-8 -mx-4 px-4 flex gap-3 overflow-x-auto snap-x snap-mandatory hide-scrollbar sm:mx-0 sm:px-0 sm:grid sm:grid-cols-4 sm:overflow-visible lg:grid-cols-4"
+          >
+            {items.map((t, i) => {
+              const isActive = i === active
+              return (
+                <button
+                  key={String(t.id)}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActive(i)}
+                  className={`group relative shrink-0 snap-start w-[30%] min-w-[104px] sm:w-auto aspect-[4/5] overflow-hidden rounded-2xl bg-brand-dark text-left transition duration-300 active:scale-[0.98] ${
+                    isActive
+                      ? 'ring-2 ring-brand-blue ring-offset-2 ring-offset-slate-50 dark:ring-offset-brand-dark'
+                      : 'opacity-80 hover:opacity-100'
+                  }`}
+                >
+                  <Cover t={t} sizes="(max-width: 640px) 30vw, 140px" />
+                  <span className="absolute inset-0 bg-gradient-to-t from-brand-deeper/85 via-brand-deeper/10 to-transparent" />
+                  <span className="absolute inset-x-2.5 bottom-2.5 font-heading text-sm font-medium leading-tight text-white">
+                    {labelOf(t)}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Destination chips */}
-        {items.length > 1 && (
-          <div className="mb-10 flex flex-wrap justify-center gap-2">
-            {items.map((t) => (
-              <button
-                key={String(t.id)}
-                type="button"
-                onClick={() => scrollToCard(t.id)}
-                className="rounded-full border border-slate-200 dark:border-white/15 bg-white dark:bg-white/5 px-4 py-1.5 text-sm text-slate-700 dark:text-white/80 hover:border-brand-blue hover:text-brand-blue transition-colors"
+        {/* Featured player: second on mobile, left column on desktop */}
+        <div className="lg:order-1">
+          <div className="relative mx-auto w-full max-w-[400px] aspect-[9/16] max-h-[78vh] overflow-hidden rounded-[1.75rem] bg-brand-dark shadow-[0_30px_60px_-25px_rgba(11,19,43,0.55)]">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={String(featured.id)}
+                className="absolute inset-0"
+                initial={reduce ? false : { opacity: 0, scale: 1.02 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               >
-                {labelOf(t)}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+                <Cover t={featured} sizes="(max-width: 640px) 90vw, 400px" eager />
+              </motion.div>
+            </AnimatePresence>
 
-      {/* Story row: swipe on mobile, centered wrap on large screens */}
-      <div
-        ref={rowRef}
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory px-[14vw] sm:px-8 pb-8 pt-2 hide-scrollbar lg:justify-center lg:flex-wrap lg:overflow-visible lg:px-8"
-      >
-        {items.map((t, i) => (
-          <StoryCard key={String(t.id)} t={t} onPlay={() => setOpenIndex(i)} />
-        ))}
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brand-deeper/90 via-brand-deeper/35 to-transparent pointer-events-none" />
+
+            <button
+              type="button"
+              onClick={() => setOpenIndex(Math.min(active, items.length - 1))}
+              className="group absolute inset-0 flex items-center justify-center focus-visible:outline-none"
+              aria-label={`Lire le témoignage vidéo : ${labelOf(featured)}`}
+            >
+              <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/95 text-brand-blue shadow-[0_12px_32px_rgba(11,19,43,0.35)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95 group-focus-visible:ring-4 group-focus-visible:ring-brand-cyan/60">
+                <Play className="ml-1 h-8 w-8 fill-current" strokeWidth={1.5} />
+              </span>
+            </button>
+
+            <div className="absolute inset-x-0 bottom-0 p-6 pointer-events-none">
+              <h3 className="font-heading text-3xl font-medium leading-none text-white">{labelOf(featured)}</h3>
+              {featured.testimonialText ? (
+                <p className="mt-3 text-sm leading-snug text-white/85 line-clamp-3">
+                  &laquo;&nbsp;{featured.testimonialText}&nbsp;&raquo;
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-white/70">
+                  Témoignage vidéo{featured.tripYear ? `, ${featured.tripYear}` : ''}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Portal to <body>: <main> is a stacking context below the fixed navbar */}
       {mounted &&
         createPortal(
           <AnimatePresence>
-            {openIndex !== null && <VideoLightbox items={items} index={openIndex} onIndex={setOpenIndex} onClose={close} />}
+            {openIndex !== null && (
+              <VideoLightbox
+                items={items}
+                index={openIndex}
+                onIndex={(i) => {
+                  setOpenIndex(i)
+                  setActive(i)
+                }}
+                onClose={close}
+              />
+            )}
           </AnimatePresence>,
           document.body,
         )}
