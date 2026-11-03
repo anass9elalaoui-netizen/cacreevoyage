@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import React, { useMemo } from 'react'
+import { ArrowRight, CalendarDays, Clock, Gauge, Star, Users } from 'lucide-react'
 
 interface DepartureDate {
   date: string
@@ -230,13 +231,13 @@ export default function TourCard({
             </div>
           )}
 
-          {/* Vignette Overlay: subtle dark fade at the top, rich cinematic fade at the bottom */}
+          {/* Shade only behind the text: the photo stays bright and is what sells the trip */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent via-25% to-transparent pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent via-20% to-transparent pointer-events-none"
             aria-hidden="true"
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 via-45% to-transparent pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/45 via-30% to-transparent to-60% pointer-events-none"
             aria-hidden="true"
           />
         </motion.div>
@@ -248,49 +249,36 @@ export default function TourCard({
         >
           {/* Left: Date Badge */}
           {dateBadge ? (
-            <div className="flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-2xl bg-black/55 backdrop-blur-xl border border-white/20 text-white shadow-lg">
-              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-brand-blue/90 shadow-inner">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
+            <div className="flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-xl text-slate-900 shadow-lg">
+              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-brand-blue">
+                <CalendarDays className="w-4 h-4 text-white" strokeWidth={2} aria-hidden="true" />
               </span>
               <span className="flex flex-col leading-tight">
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-brand-cyan">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-brand-blue">
                   Prochain départ
                 </span>
-                <span className="text-[13px] font-semibold tracking-tight whitespace-nowrap text-white">
+                <span className="text-[13px] font-semibold tracking-tight whitespace-nowrap text-slate-900">
                   {dateBadge.text}
                 </span>
               </span>
 
               {/* Limited spots indicator */}
               {dateBadge.spotsLeft != null && dateBadge.spotsLeft > 0 && (
-                <span className="ml-0.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/40 text-[9px] font-bold text-amber-300">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                <span className="ml-0.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-100 text-[9px] font-bold text-amber-800">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                   {dateBadge.spotsLeft} pl.
                 </span>
               )}
             </div>
           ) : seasons && seasons.length > 0 ? (
             /* Fallback to seasons if no date */
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-xl border border-white/15 text-white text-[11px] shadow-md">
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-xl text-slate-800 text-[11px] shadow-md">
               {seasons.map((s) => (
                 <span key={s} title={SEASON_MAP[s]?.label || s}>
                   {SEASON_MAP[s]?.icon || '✨'}
                 </span>
               ))}
-              <span className="text-[10px] text-white/80 font-medium ml-1">
+              <span className="text-[10px] text-slate-600 font-medium ml-1">
                 {SEASON_MAP[seasons[0]]?.label || 'Saisons'}
               </span>
             </div>
@@ -307,8 +295,8 @@ export default function TourCard({
                 Bientôt
               </span>
             ) : isFeatured ? (
-              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/40 to-yellow-500/40 text-amber-200 border border-amber-400/50 text-[10px] font-bold uppercase tracking-widest backdrop-blur-xl shadow-lg flex items-center gap-1">
-                <span>⭐</span>
+              <span className="px-3 py-1 rounded-full bg-amber-400 text-amber-950 text-[10px] font-bold uppercase tracking-widest shadow-md flex items-center gap-1">
+                <Star className="w-3 h-3 fill-current" strokeWidth={0} aria-hidden="true" />
                 <span>Signature</span>
               </span>
             ) : null}
@@ -328,7 +316,7 @@ export default function TourCard({
           </div>
 
           {/* Title */}
-          <h3 className="font-heading text-xl md:text-[22px] font-bold text-white leading-snug tracking-tight drop-shadow-md group-hover:text-brand-cyan transition-colors duration-300 line-clamp-2">
+          <h3 className="font-heading text-xl md:text-[22px] font-bold text-white leading-snug tracking-tight [text-shadow:0_1px_12px_rgba(0,0,0,0.45)] line-clamp-2">
             {title}
           </h3>
 
@@ -336,19 +324,19 @@ export default function TourCard({
           <div className="flex items-center gap-2 mt-2.5 flex-wrap">
             {durationText && (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] text-white/90 font-medium">
-                <span className="opacity-75">⏱️</span>
+                <Clock className="w-3 h-3 opacity-80" strokeWidth={2} aria-hidden="true" />
                 <span>{durationText}</span>
               </span>
             )}
             {logistics?.maxGroupSize && (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] text-white/90 font-medium">
-                <span className="opacity-75">👥</span>
+                <Users className="w-3 h-3 opacity-80" strokeWidth={2} aria-hidden="true" />
                 <span>Max {logistics.maxGroupSize}</span>
               </span>
             )}
             {logistics?.difficulty && (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] text-white/90 font-medium">
-                <span className="opacity-75">⭐</span>
+                <Gauge className="w-3 h-3 opacity-80" strokeWidth={2} aria-hidden="true" />
                 <span>{logistics.difficulty}</span>
               </span>
             )}
@@ -373,24 +361,16 @@ export default function TourCard({
                   </div>
                 </div>
               ) : (
-                <span className="text-sm font-heading font-medium text-white/80 italic">
+                <span className="text-sm font-heading font-medium text-white">
                   Sur devis
                 </span>
               )}
             </div>
 
             {/* CTA Button */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/15 group-hover:bg-brand-blue border border-white/25 group-hover:border-brand-blue text-white text-xs font-semibold backdrop-blur-md transition-all duration-300 shadow-md group-hover:shadow-brand-blue/40 group-hover:translate-x-0.5">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white text-brand-dark group-hover:bg-brand-blue group-hover:text-white text-xs font-semibold transition-colors duration-300 shadow-md">
               <span>Découvrir</span>
-              <svg
-                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} aria-hidden="true" />
             </div>
           </div>
         </div>

@@ -154,7 +154,7 @@ export default function LazyVideo({
     entry.priority = priority
     entry.ratio = ratio
     schedulePlayback()
-  }, [id, shouldLoad, active, ratio, priority])
+  }, [id, shouldLoad, active, ratio, priority, paused])
 
   // Switching into click-to-play mode (e.g. a carousel card losing focus) stops playback
   useEffect(() => {

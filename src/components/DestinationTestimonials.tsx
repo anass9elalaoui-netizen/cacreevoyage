@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight, Play, Volume2, VolumeX, X } from 'lucide-react'
 import LazyVideo from '@/components/LazyVideo'
 import {
   destinationOf,
@@ -17,6 +18,14 @@ import {
 
 /** "Turquie" from the linked destination, otherwise the name typed in the admin. */
 const labelOf = (t: TestimonialDoc) => destinationOf(t)?.title || t.travelerName?.trim() || 'Nos voyageurs'
+
+/** Destination page of a testimonial, when it is linked to one in the admin. */
+const destinationHref = (t: TestimonialDoc) => {
+  const slug = destinationOf(t)?.slug
+  return slug ? `/destinations/${slug}` : null
+}
+
+const items = (n: number) => Array.from({ length: n }, (_, i) => i)
 
 /** Poster image, or a single still frame when no cover has been uploaded (metadata only). */
 function Cover({ t, sizes, eager = false }: { t: TestimonialDoc; sizes: string; eager?: boolean }) {
@@ -142,6 +151,16 @@ function VideoLightbox({
         <span className="mt-1 block text-xs text-white/45">
           {index + 1} sur {items.length}
         </span>
+        {destinationHref(t) ? (
+          <Link
+            href={destinationHref(t)!}
+            onClick={onClose}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-brand-dark transition-transform duration-200 hover:-translate-y-0.5"
+          >
+            Découvrir {labelOf(t)}
+            <ArrowRight className="h-4 w-4" strokeWidth={2} />
+          </Link>
+        ) : null}
       </p>
 
       <button
@@ -159,23 +178,83 @@ function VideoLightbox({
 /** How long each destination stays featured before the section advances on its own (= preview length). */
 const STEP_MS = 6000
 
-/* ─── Featured card: silent preview loop, pointer tilt + light sheen, swipe to change destination ─── */
+/* ─── Featured card: silent preview, sound on request, story segments, swipe, neighbours peeking on mobile ─── */
 function Featured({
   t,
+  prev,
+  next,
+  index,
+  count,
   direction,
   running,
+  advancing,
+  sound,
+  onSound,
   onPlay,
   onSwipe,
 }: {
   t: TestimonialDoc
+  prev: TestimonialDoc
+  next: TestimonialDoc
+  index: number
+  count: number
   direction: number
   running: boolean
+  advancing: boolean
+  sound: boolean
+  onSound: (on: boolean) => void
   onPlay: () => void
   onSwipe: (dir: 1 | -1) => void
 }) {
   const reduce = useReducedMotion()
   const preview = getVideoPreview(t)
+  const href = destinationHref(t)
   const dragged = useRef(false)
+  const soundRef = useRef<HTMLVideoElement>(null)
+  const [soundLive, setSoundLive] = useState(false)
+
+  // Replacing the src aborts the previous play(): that is not a refusal from the browser
+  const start = (v: HTMLVideoElement, url: string) => {
+    v.src = url
+    v.muted = false
+    v.play().catch((e: Error) => {
+      if (e.name !== 'AbortError') onSound(false)
+    })
+  }
+
+  const toggleSound = () => {
+    if (dragged.current) return
+    const v = soundRef.current
+    if (!v) return
+    if (sound) {
+      onSound(false)
+      return
+    }
+    // Started inside the tap: browsers only allow sound from a user gesture
+    start(v, pickPlaybackUrl(t))
+    onSound(true)
+  }
+
+  // Sound stays on when the destination changes; stopping it releases the full video
+  useEffect(() => {
+    const v = soundRef.current
+    if (!v) return
+    if (!sound) {
+      setSoundLive(false)
+      if (v.getAttribute('src')) {
+        v.pause()
+        v.removeAttribute('src')
+        v.load()
+      }
+      return
+    }
+    const url = pickPlaybackUrl(t)
+    if (v.getAttribute('src') !== url) {
+      setSoundLive(false)
+      start(v, url)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sound, t])
 
   // Pointer tilt (motion values: no React re-render per mouse move)
   const px = useMotionValue(0.5)
@@ -197,8 +276,25 @@ function Featured({
     py.set(0.5)
   }
 
+  const peek =
+    'absolute inset-y-8 z-0 w-2/5 overflow-hidden rounded-[1.25rem] bg-brand-dark opacity-75 transition-opacity active:opacity-100 lg:hidden'
+
   return (
-    <div className="mx-auto w-full max-w-[420px] [perspective:1200px]">
+    <div className="relative isolate mx-auto w-full max-w-[420px] [perspective:1200px]">
+      {/* Mobile: the neighbours peek out on both sides, a visible promise that there is more to see */}
+      {count > 1 ? (
+        <>
+          {count > 2 ? (
+            <button type="button" onClick={() => onSwipe(-1)} aria-label={`Témoignage précédent : ${labelOf(prev)}`} className={`${peek} left-0`}>
+              <Cover t={prev} sizes="160px" />
+            </button>
+          ) : null}
+          <button type="button" onClick={() => onSwipe(1)} aria-label={`Témoignage suivant : ${labelOf(next)}`} className={`${peek} right-0`}>
+            <Cover t={next} sizes="160px" />
+          </button>
+        </>
+      ) : null}
+
       <motion.div
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
@@ -218,14 +314,14 @@ function Featured({
           if (info.offset.x < -60 || info.velocity.x < -400) onSwipe(1)
           else if (info.offset.x > 60 || info.velocity.x > 400) onSwipe(-1)
         }}
-        className="relative aspect-[9/16] max-h-[80vh] touch-pan-y"
+        className="group relative z-[1] mx-auto aspect-[9/16] w-[84%] max-w-[calc(80vh*0.5625)] touch-pan-y lg:w-full"
       >
         <button
           type="button"
           onClick={() => {
             if (!dragged.current) onPlay()
           }}
-          className="group relative block h-full w-full overflow-hidden rounded-[1.75rem] bg-brand-dark text-left shadow-[0_30px_60px_-25px_rgba(11,19,43,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60"
+          className="absolute inset-0 block overflow-hidden rounded-[1.75rem] bg-brand-dark text-left shadow-[0_24px_50px_-28px_rgba(11,19,43,0.4)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60"
           aria-label={`Voir le témoignage vidéo : ${labelOf(t)}`}
         >
           <AnimatePresence mode="popLayout" initial={false}>
@@ -249,14 +345,28 @@ function Featured({
                       }
                 }
               >
-                <Cover t={t} sizes="(max-width: 640px) 92vw, 420px" eager />
+                <Cover t={t} sizes="(max-width: 640px) 84vw, 420px" eager />
                 {/* Silent 6 s loop on top of the cover (LazyVideo: only when visible, poster-only under reduced motion / Data Saver) */}
                 {preview ? (
-                  <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+                  <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority paused={soundLive} aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
                 ) : null}
               </div>
             </motion.div>
           </AnimatePresence>
+
+          {/* The video with sound: its src is only set once the visitor asks for sound */}
+          <video
+            ref={soundRef}
+            playsInline
+            preload="none"
+            onPlaying={() => setSoundLive(true)}
+            onEnded={() => {
+              if (count > 1) onSwipe(1)
+              else onSound(false)
+            }}
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${soundLive ? 'opacity-100' : 'opacity-0'}`}
+          />
 
           {/* Light sheen following the pointer */}
           {!reduce && (
@@ -267,31 +377,93 @@ function Featured({
             />
           )}
 
-          <span className="absolute inset-x-0 bottom-0 z-[1] h-3/5 bg-gradient-to-t from-brand-deeper/95 via-brand-deeper/45 to-transparent pointer-events-none" />
+          {/* Just enough shade to read the text: the traveller stays bright */}
+          <span className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-24 bg-gradient-to-b from-black/30 to-transparent" />
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[45%] bg-gradient-to-t from-brand-deeper/75 via-brand-deeper/25 to-transparent" />
+        </button>
 
-          <span className="absolute inset-x-0 bottom-0 z-[2] flex flex-col gap-4 p-6">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={String(t.id)}
-                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.35, delay: reduce ? 0 : 0.1 }}
-                className="font-heading text-[2rem] leading-none font-medium text-white"
-              >
-                {labelOf(t)}
-              </motion.span>
-            </AnimatePresence>
-            {t.testimonialText ? (
-              <span className="text-sm leading-snug text-white/85 line-clamp-3">&laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;</span>
-            ) : null}
-            <span className="inline-flex w-fit items-center gap-2.5 rounded-full bg-white px-5 py-3 text-sm font-semibold text-brand-dark shadow-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-active:scale-[0.98]">
+        {/* Story segments: how many testimonials there are, and how far along we are */}
+        {count > 1 ? (
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-4 top-3.5 z-[2] flex gap-1">
+            {items(count).map((i) => (
+              <span key={i} className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-white/45">
+                {i < index ? <span className="absolute inset-0 bg-white" /> : null}
+                {i === index ? (
+                  <span
+                    key={`segment-${index}`}
+                    className="absolute inset-0 origin-left bg-white"
+                    style={
+                      reduce
+                        ? undefined
+                        : {
+                            animation: `ccv-progress ${STEP_MS}ms linear forwards`,
+                            animationPlayState: advancing ? 'running' : 'paused',
+                          }
+                    }
+                  />
+                ) : null}
+              </span>
+            ))}
+          </div>
+        ) : null}
+
+        {count > 1 ? (
+          <span className="pointer-events-none absolute left-4 top-8 z-[2] text-xs font-semibold tabular-nums text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.5)]">
+            {index + 1} / {count}
+          </span>
+        ) : null}
+
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-pressed={sound}
+          aria-label={sound ? 'Couper le son' : 'Activer le son'}
+          className="absolute right-3 top-7 z-[3] flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-brand-dark shadow-md backdrop-blur transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60"
+        >
+          {sound ? (
+            <Volume2 className={`h-5 w-5 text-brand-blue ${soundLive ? '' : 'animate-pulse'}`} strokeWidth={2} />
+          ) : (
+            <VolumeX className="h-5 w-5" strokeWidth={2} />
+          )}
+        </button>
+
+        {/* Clicks pass through to the card; only the destination link catches them */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-col gap-3 p-5 md:p-6">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={String(t.id)}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, delay: reduce ? 0 : 0.1 }}
+              className="font-heading text-[2rem] leading-none font-medium text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.4)]"
+            >
+              {labelOf(t)}
+            </motion.span>
+          </AnimatePresence>
+          {t.testimonialText ? (
+            <span className="text-sm leading-snug text-white/90 line-clamp-3 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]">&laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;</span>
+          ) : null}
+          <span className="flex flex-wrap items-center gap-2">
+            <span aria-hidden="true" className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-brand-dark shadow-lg transition-transform duration-300 group-hover:-translate-y-0.5">
               <Play className="h-4 w-4 fill-brand-blue text-brand-blue" strokeWidth={1.5} />
               Voir le témoignage
-              {t.tripYear ? <span className="font-normal text-slate-500">{t.tripYear}</span> : null}
             </span>
+            {href ? (
+              <Link
+                href={href}
+                draggable={false}
+                onClick={(e) => {
+                  if (dragged.current) e.preventDefault()
+                }}
+                className="pointer-events-auto inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/50 bg-white/20 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition-colors duration-200 hover:bg-white hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60"
+              >
+                Découvrir {labelOf(t)}
+                <ArrowRight className="h-4 w-4" strokeWidth={2} />
+              </Link>
+            ) : null}
           </span>
-        </button>
+        </div>
       </motion.div>
     </div>
   )
@@ -304,6 +476,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
   const [direction, setDirection] = useState(1)
   const [paused, setPaused] = useState(false)
   const [hovered, setHovered] = useState<number | null>(null)
+  const [sound, setSound] = useState(false)
   const [inView, setInView] = useState(false)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -327,14 +500,19 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
   useEffect(() => {
     const el = sectionRef.current
     if (!el) return
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.35 })
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.25 })
     io.observe(el)
     return () => io.disconnect()
   }, [])
 
   // Stories-style auto-advance: one destination every STEP_MS. Paused on hover / focus,
   // while the lightbox is open, off screen, and under prefers-reduced-motion.
-  const autoplay = count > 1 && inView && !paused && openIndex === null && !reduce
+  const autoplay = count > 1 && inView && !paused && !sound && openIndex === null && !reduce
+
+  // Sound never outlives the section: it stops off screen and when the full video opens
+  useEffect(() => {
+    if (!inView || openIndex !== null) setSound(false)
+  }, [inView, openIndex])
   useEffect(() => {
     if (!autoplay) return
     const id = setTimeout(() => go(active + 1), STEP_MS)
@@ -360,8 +538,13 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
       <style dangerouslySetInnerHTML={{ __html: '@keyframes ccv-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes ccv-pushin{from{transform:scale(1)}to{transform:scale(1.07)}}' }} />
       <div
         className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:items-center"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
+        // Pointer type matters: a tap fires a fake mouseenter with no leave, which froze the section on phones
+        onPointerEnter={(e) => {
+          if (e.pointerType === 'mouse') setPaused(true)
+        }}
+        onPointerLeave={(e) => {
+          if (e.pointerType === 'mouse') setPaused(false)
+        }}
       >
         {/* Header + playlist: first on mobile, right column on desktop (min-w-0 keeps the swipe row inside the grid) */}
         <div className="min-w-0 lg:order-2">
@@ -410,12 +593,13 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                   }}
                   whileTap={reduce ? undefined : { scale: 0.98 }}
                   onClick={() => go(i)}
-                  onMouseEnter={() => {
-                    setHovered(i)
+                  onPointerEnter={(e) => {
                     // Hover previews the destination on mouse devices (touch uses tap)
-                    if (i !== current && window.matchMedia('(hover: hover)').matches) go(i)
+                    if (e.pointerType !== 'mouse') return
+                    setHovered(i)
+                    if (i !== current) go(i)
                   }}
-                  onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+                  onPointerLeave={() => setHovered((h) => (h === i ? null : h))}
                   className={`relative flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto rounded-2xl p-2 pr-4 text-left border transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 ${
                     isActive
                       ? 'border-transparent'
@@ -467,8 +651,15 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
         <div className="min-w-0 lg:order-1">
           <Featured
             t={items[current]}
+            prev={items[(current - 1 + count) % count]}
+            next={items[(current + 1) % count]}
+            index={current}
+            count={count}
             direction={direction}
             running={inView && openIndex === null}
+            advancing={autoplay}
+            sound={sound}
+            onSound={setSound}
             onPlay={() => setOpenIndex(current)}
             onSwipe={(dir) => go(current + dir)}
           />
