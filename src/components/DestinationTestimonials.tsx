@@ -401,6 +401,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     hidden: { opacity: 0, y: 18 },
                     shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
                   }}
+                  whileTap={reduce ? undefined : { scale: 0.98 }}
                   onClick={() => go(i)}
                   onMouseEnter={() => {
                     setHovered(i)
@@ -408,7 +409,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     if (i !== current && window.matchMedia('(hover: hover)').matches) go(i)
                   }}
                   onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
-                  className={`relative flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto overflow-hidden rounded-2xl p-2 pr-4 text-left border transition-colors duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 ${
+                  className={`relative flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto rounded-2xl p-2 pr-4 text-left border transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 ${
                     isActive
                       ? 'border-transparent'
                       : 'bg-white/60 dark:bg-white/[0.04] border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/[0.08]'
@@ -438,15 +439,16 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
 
                   {/* Story progress: fills while this destination is featured, freezes while paused */}
                   {isActive && count > 1 && !reduce ? (
-                    <span
-                      key={`progress-${current}`}
-                      aria-hidden="true"
-                      className="absolute inset-x-0 bottom-0 z-[1] h-[3px] origin-left bg-brand-blue"
-                      style={{
-                        animation: `ccv-progress ${STEP_MS}ms linear forwards`,
-                        animationPlayState: autoplay ? 'running' : 'paused',
-                      }}
-                    />
+                    <span aria-hidden="true" className="absolute inset-0 z-[1] overflow-hidden rounded-2xl pointer-events-none">
+                      <span
+                        key={`progress-${current}`}
+                        className="absolute inset-x-0 bottom-0 h-[3px] origin-left bg-brand-blue"
+                        style={{
+                          animation: `ccv-progress ${STEP_MS}ms linear forwards`,
+                          animationPlayState: autoplay ? 'running' : 'paused',
+                        }}
+                      />
+                    </span>
                   ) : null}
                 </motion.button>
               )
