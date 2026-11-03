@@ -518,6 +518,14 @@ export interface Testimonial {
    */
   videoPoster?: (number | null) | Media;
   /**
+   * Optionnel. Même vidéo en 480p (quelques Mo) : utilisée sur téléphone et connexion lente. Sans elle, la vidéo principale est utilisée partout.
+   */
+  videoLight?: (number | null) | Media;
+  /**
+   * Optionnel. Court extrait muet (moins de 1 Mo) qui tourne en boucle sur la carte mise en avant. Le son reste réservé à la vidéo complète.
+   */
+  videoPreview?: (number | null) | Media;
+  /**
    * Affichée sur le tampon « carte postale » avec la destination (ex : 2025).
    */
   tripYear?: number | null;
@@ -961,6 +969,8 @@ export interface TestimonialsSelect<T extends boolean = true> {
   destination?: T;
   media?: T;
   videoPoster?: T;
+  videoLight?: T;
+  videoPreview?: T;
   tripYear?: T;
   date?: T;
   isHighlighted?: T;

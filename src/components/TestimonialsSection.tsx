@@ -88,10 +88,13 @@ const TestimonialCard = ({ data }: { data: TestimonialDoc }) => {
 }
 
 export default function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
-  if (!testimonials || testimonials.length === 0) return null
+  // Written reviews only: video testimonials have their own section, and a card without
+  // text is an empty quote. No real written review yet → the section stays hidden.
+  const written = (testimonials || []).filter((t) => t.testimonialText?.trim())
+  if (written.length === 0) return null
 
   // Duplicate for marquee infinite loop
-  const loopItems = [...testimonials, ...testimonials]
+  const loopItems = [...written, ...written]
 
   return (
     <section className="w-full py-20 md:py-32 overflow-hidden bg-slate-50/50 dark:bg-transparent">

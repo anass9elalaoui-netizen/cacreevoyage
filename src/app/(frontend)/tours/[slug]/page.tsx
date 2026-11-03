@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
@@ -11,6 +11,14 @@ import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 import { getDictionary, Locale } from '@/i18n/dictionaries'
 import LazyVideo from '@/components/LazyVideo'
+
+/**
+ * Old tour URLs that were renamed in the CMS → their current slug. Visitors and search
+ * engines following an old link get a permanent redirect instead of a 404.
+ */
+const LEGACY_TOUR_SLUGS: Record<string, string> = {
+  'zanzibar-appel-du-paradis-22-septembre-au-05-octobre': 'zanzibar-appel-du-paradis',
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -56,7 +64,11 @@ export default async function TourPage({ params, searchParams }: Args) {
   })
 
   const tour = docs[0] as any
-  if (!tour) notFound()
+  if (!tour) {
+    const renamed = LEGACY_TOUR_SLUGS[slug.toLowerCase()]
+    if (renamed) permanentRedirect(`/tours/${renamed}`)
+    notFound()
+  }
 
   const siteSettings = await getSiteSettings(locale)
   const cleanWaNumber = cleanWhatsAppNumber(siteSettings.whatsappNumber)

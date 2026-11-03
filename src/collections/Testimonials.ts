@@ -76,6 +76,28 @@ export const Testimonials: CollectionConfig = {
       },
     },
     {
+      name: 'videoLight',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Version légère de la vidéo (mobile)',
+      admin: {
+        description:
+          'Optionnel. Même vidéo en 480p (quelques Mo) : utilisée sur téléphone et connexion lente. Sans elle, la vidéo principale est utilisée partout.',
+        condition: (data) => Boolean(data?.media),
+      },
+    },
+    {
+      name: 'videoPreview',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Aperçu silencieux (6 secondes)',
+      admin: {
+        description:
+          'Optionnel. Court extrait muet (moins de 1 Mo) qui tourne en boucle sur la carte mise en avant. Le son reste réservé à la vidéo complète.',
+        condition: (data) => Boolean(data?.media),
+      },
+    },
+    {
       name: 'tripYear',
       type: 'number',
       label: 'Année du voyage',

@@ -13,6 +13,8 @@ export interface TestimonialDoc {
   tripYear?: number | null
   media?: MediaRef
   videoPoster?: MediaRef
+  videoLight?: MediaRef
+  videoPreview?: MediaRef
   travelerPhoto?: MediaRef
   destination?:
     | {
@@ -54,6 +56,31 @@ export function getTestimonialCover(t: TestimonialDoc): Cover | null {
 export function getVideo(t: TestimonialDoc) {
   const m = asMedia(t.media)
   return m && isVideoMedia(m) ? m.url! : null
+}
+
+/** Light 480p rendition (phones, slow networks), if uploaded. */
+export function getVideoLight(t: TestimonialDoc) {
+  const m = asMedia(t.videoLight)
+  return m && isVideoMedia(m) ? m.url! : null
+}
+
+/** Short silent preview loop for the featured card, if uploaded. */
+export function getVideoPreview(t: TestimonialDoc) {
+  const m = asMedia(t.videoPreview)
+  return m && isVideoMedia(m) ? m.url! : null
+}
+
+/**
+ * Pick the rendition for playback: the light one on small screens, Data Saver or a
+ * slow connection, otherwise the full one. Client-side only (reads window/navigator).
+ */
+export function pickPlaybackUrl(t: TestimonialDoc): string {
+  const full = getVideo(t)!
+  const light = getVideoLight(t)
+  if (!light || typeof window === 'undefined') return full
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+  const slow = Boolean(conn?.saveData) || ['slow-2g', '2g', '3g'].includes(conn?.effectiveType || '')
+  return slow || window.innerWidth < 768 ? light : full
 }
 
 export function getVideoPoster(t: TestimonialDoc) {
