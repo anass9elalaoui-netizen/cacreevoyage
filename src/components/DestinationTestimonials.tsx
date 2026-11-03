@@ -27,6 +27,45 @@ function Cover({ t, sizes, eager = false }: { t: TestimonialDoc; sizes: string; 
   return <LazyVideo src={`${getVideo(t)}#t=1`} paused aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
 }
 
+/**
+ * Playlist thumbnail: cover image, and the 6 s silent preview playing while the row is hovered
+ * (mouse devices only). The preview's src is only attached on the first hover (≤ 0.5 MB).
+ */
+function Thumb({ t, playing }: { t: TestimonialDoc; playing: boolean }) {
+  const preview = getVideoPreview(t)
+  const ref = useRef<HTMLVideoElement>(null)
+  const [armed, setArmed] = useState(false)
+
+  useEffect(() => {
+    if (playing && preview) setArmed(true)
+  }, [playing, preview])
+
+  useEffect(() => {
+    const v = ref.current
+    if (!v || !armed) return
+    if (playing) v.play().catch(() => {})
+    else v.pause()
+  }, [playing, armed])
+
+  return (
+    <span className="relative h-[72px] w-14 shrink-0 overflow-hidden rounded-xl bg-brand-dark">
+      <Cover t={t} sizes="56px" />
+      {preview ? (
+        <video
+          ref={ref}
+          src={armed ? preview : undefined}
+          muted
+          loop
+          playsInline
+          preload="none"
+          aria-hidden="true"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${playing && armed ? 'opacity-100' : 'opacity-0'}`}
+        />
+      ) : null}
+    </span>
+  )
+}
+
 /* ─── Lightbox: adaptive rendition with sound, loads only once opened; arrows between destinations ─── */
 function VideoLightbox({
   items,
@@ -196,11 +235,19 @@ function Featured({
               exit={reduce ? { opacity: 0 } : { opacity: 0, x: direction * -60, scale: 0.98 }}
               transition={{ duration: reduce ? 0.2 : 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Cover t={t} sizes="(max-width: 640px) 92vw, 420px" eager />
-              {/* Silent 6 s loop on top of the cover (LazyVideo: only when visible, poster-only under reduced motion / Data Saver) */}
-              {preview ? (
-                <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
-              ) : null}
+              {/* Slow cinematic push-in while the destination is featured */}
+              <motion.div
+                className="absolute inset-0"
+                initial={{ scale: 1 }}
+                animate={reduce ? { scale: 1 } : { scale: 1.07 }}
+                transition={{ duration: STEP_MS / 1000 + 2, ease: 'linear' }}
+              >
+                <Cover t={t} sizes="(max-width: 640px) 92vw, 420px" eager />
+                {/* Silent 6 s loop on top of the cover (LazyVideo: only when visible, poster-only under reduced motion / Data Saver) */}
+                {preview ? (
+                  <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+                ) : null}
+              </motion.div>
             </motion.div>
           </AnimatePresence>
 
@@ -249,6 +296,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
   const [active, setActive] = useState(0)
   const [direction, setDirection] = useState(1)
   const [paused, setPaused] = useState(false)
+  const [hovered, setHovered] = useState<number | null>(null)
   const [inView, setInView] = useState(false)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -310,22 +358,38 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
       >
         {/* Header + playlist: first on mobile, right column on desktop (min-w-0 keeps the swipe row inside the grid) */}
         <div className="min-w-0 lg:order-2">
-          <h2 className="font-heading text-4xl md:text-5xl font-medium tracking-tight leading-[1.05] text-slate-900 dark:text-white">
+          <motion.h2
+            initial={reduce ? false : { opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="font-heading text-4xl md:text-5xl font-medium tracking-tight leading-[1.05] text-slate-900 dark:text-white"
+          >
             Ils ont vécu <span className="text-brand-blue">l&apos;expérience</span>
-          </h2>
-          <p className="mt-4 max-w-[46ch] text-base leading-relaxed text-slate-600 dark:text-white/65">
+          </motion.h2>
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 max-w-[46ch] text-base leading-relaxed text-slate-600 dark:text-white/65"
+          >
             Nos voyageurs racontent leur séjour en vidéo, destination par destination.
-          </p>
+          </motion.p>
 
-          <div
+          <motion.div
             role="tablist"
             aria-label="Témoignages par destination"
+            initial={reduce ? false : 'hidden'}
+            whileInView="shown"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } } }}
             className="mt-8 -mx-4 px-4 flex gap-3 overflow-x-auto snap-x snap-mandatory hide-scrollbar sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible"
           >
             {items.map((t, i) => {
               const isActive = i === current
               return (
-                <button
+                <motion.button
                   key={String(t.id)}
                   ref={(el) => {
                     tabRefs.current[i] = el
@@ -333,21 +397,36 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                   type="button"
                   role="tab"
                   aria-selected={isActive}
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+                  }}
                   onClick={() => go(i)}
                   onMouseEnter={() => {
+                    setHovered(i)
                     // Hover previews the destination on mouse devices (touch uses tap)
                     if (i !== current && window.matchMedia('(hover: hover)').matches) go(i)
                   }}
-                  className={`relative flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto overflow-hidden rounded-2xl p-2 pr-4 text-left border transition duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 ${
+                  onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+                  className={`relative flex shrink-0 snap-start items-center gap-3.5 w-[220px] sm:w-auto overflow-hidden rounded-2xl p-2 pr-4 text-left border transition-colors duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 ${
                     isActive
-                      ? 'bg-white dark:bg-white/10 border-brand-blue/50 shadow-[0_10px_30px_-12px_rgba(28,140,201,0.45)]'
+                      ? 'border-transparent'
                       : 'bg-white/60 dark:bg-white/[0.04] border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/[0.08]'
                   }`}
                 >
-                  <span className="relative h-[72px] w-14 shrink-0 overflow-hidden rounded-xl bg-brand-dark">
-                    <Cover t={t} sizes="56px" />
+                  {/* Selection that glides from one destination to the next */}
+                  {isActive ? (
+                    <motion.span
+                      layoutId="ccv-active-destination"
+                      aria-hidden="true"
+                      transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 32 }}
+                      className="absolute inset-0 rounded-2xl border border-brand-blue/50 bg-white dark:bg-white/10 shadow-[0_10px_30px_-12px_rgba(28,140,201,0.45)]"
+                    />
+                  ) : null}
+                  <span className="relative z-[1]">
+                    <Thumb t={t} playing={!reduce && hovered === i} />
                   </span>
-                  <span className="min-w-0">
+                  <span className="relative z-[1] min-w-0">
                     <span className={`block truncate font-heading text-base font-medium ${isActive ? 'text-brand-blue' : 'text-slate-900 dark:text-white'}`}>
                       {labelOf(t)}
                     </span>
@@ -362,17 +441,17 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                     <span
                       key={`progress-${current}`}
                       aria-hidden="true"
-                      className="absolute inset-x-0 bottom-0 h-[3px] origin-left bg-brand-blue"
+                      className="absolute inset-x-0 bottom-0 z-[1] h-[3px] origin-left bg-brand-blue"
                       style={{
                         animation: `ccv-progress ${STEP_MS}ms linear forwards`,
                         animationPlayState: autoplay ? 'running' : 'paused',
                       }}
                     />
                   ) : null}
-                </button>
+                </motion.button>
               )
             })}
-          </div>
+          </motion.div>
         </div>
 
         {/* Featured: second on mobile, left column on desktop */}
