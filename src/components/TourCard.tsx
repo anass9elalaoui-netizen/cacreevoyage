@@ -40,7 +40,6 @@ interface TourCardProps {
   tourStatus?: string | null
 }
 
-// Season icons and labels
 const SEASON_MAP: Record<string, { icon: string; label: string }> = {
   spring: { icon: '🌸', label: 'Printemps' },
   summer: { icon: '☀️', label: 'Été' },
@@ -48,57 +47,46 @@ const SEASON_MAP: Record<string, { icon: string; label: string }> = {
   winter: { icon: '❄️', label: 'Hiver' },
 }
 
-const MONTH_NAMES_FR = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
+const MONTHS_FR = [
+  'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
+  'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc',
+]
 
-/**
- * Parse a date string into { day, month, year } for calendar-style display
- */
-function parseDateParts(dateStr: string) {
-  const d = new Date(dateStr)
-  return {
-    day: d.getDate(),
-    month: MONTH_NAMES_FR[d.getMonth()],
-    year: d.getFullYear(),
+/** Format a single date nicely in French (e.g. "22 Sept 2026") */
+function formatShortDate(dateStr: string, includeYear = true): string {
+  try {
+    const d = new Date(dateStr)
+    if (isNaN(d.getTime())) return ''
+    const day = d.getDate()
+    const month = MONTHS_FR[d.getMonth()]
+    const year = d.getFullYear()
+    return includeYear ? `${day} ${month} ${year}` : `${day} ${month}`
+  } catch {
+    return ''
   }
 }
 
-/**
- * Get the next upcoming departure from a departureDates array
- */
-function getNextDeparture(departureDates: DepartureDate[] | null | undefined): DepartureDate | null {
-  if (!departureDates || departureDates.length === 0) return null
-  const now = new Date()
-  const upcoming = departureDates
-    .filter((d) => new Date(d.date) >= now && d.status !== 'Full')
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  return upcoming[0] || null
+/** Format a date range cleanly: "22 Sept — 05 Oct 2026" */
+function formatDateRange(depStr?: string | null, retStr?: string | null): string {
+  if (!depStr) return ''
+  try {
+    const d1 = new Date(depStr)
+    if (isNaN(d1.getTime())) return ''
+    if (!retStr) return formatShortDate(depStr, true)
+
+    const d2 = new Date(retStr)
+    if (isNaN(d2.getTime())) return formatShortDate(depStr, true)
+
+    const sameYear = d1.getFullYear() === d2.getFullYear()
+    const start = formatShortDate(depStr, !sameYear)
+    const end = formatShortDate(retStr, true)
+    return `${start} — ${end}`
+  } catch {
+    return ''
+  }
 }
 
-/**
- * Count total upcoming departures
- */
-function countUpcoming(departureDates: DepartureDate[] | null | undefined): number {
-  if (!departureDates) return 0
-  const now = new Date()
-  return departureDates.filter((d) => new Date(d.date) >= now && d.status !== 'Full').length
-}
-
-// Convert Link to a motion component so we can pass motion styles directly
 const MotionLink = motion(Link)
-
-/** ── Mini Calendar Chip ─────────────────────────────── */
-function CalendarChip({ day, month }: { day: number; month: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center w-[42px] h-[46px] rounded-xl bg-white/90 dark:bg-white/10 shadow-sm">
-      <span className="text-[10px] uppercase font-bold leading-none text-brand-blue tracking-wide">
-        {month}
-      </span>
-      <span className="text-[20px] font-heading font-bold leading-none text-slate-900 dark:text-white -mt-0.5">
-        {day}
-      </span>
-    </div>
-  )
-}
 
 export default function TourCard({
   title,
@@ -118,66 +106,69 @@ export default function TourCard({
   tourStatus,
 }: TourCardProps) {
   const imageUrl = thumbnail?.url || ''
-  const durationText = logistics?.durationDays && logistics?.durationNights
-    ? `${logistics.durationDays} Jours / ${logistics.durationNights} Nuits`
-    : duration || ''
+
+  const durationText =
+    logistics?.durationDays && logistics?.durationNights
+      ? `${logistics.durationDays}J / ${logistics.durationNights}N`
+      : duration || ''
 
   const priceText = pricing?.basePrice
-    ? `${pricing.basePrice.toLocaleString()} ${pricing.currency || '€'}`
+    ? `${pricing.basePrice.toLocaleString('fr-FR')} ${pricing.currency || '€'}`
     : null
 
-  // Compute date display info
-  const nextDeparture = useMemo(() => getNextDeparture(departureDates), [departureDates])
-  const upcomingCount = useMemo(() => countUpcoming(departureDates), [departureDates])
+  // Find next upcoming departure if array exists
+  const nextDeparture = useMemo(() => {
+    if (!departureDates || departureDates.length === 0) return null
+    const now = new Date()
+    const upcoming = departureDates
+      .filter((d) => {
+        const dt = new Date(d.date)
+        return !isNaN(dt.getTime()) && dt >= now && d.status !== 'Full'
+      })
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    return upcoming[0] || departureDates[0] || null
+  }, [departureDates])
 
-  const dateInfo = useMemo(() => {
-    // Priority 1: Next upcoming departure from departureDates array
-    if (nextDeparture) {
-      const dep = parseDateParts(nextDeparture.date)
-      return {
-        type: 'next' as const,
-        departure: dep,
-        return: null as ReturnType<typeof parseDateParts> | null,
-        spotsLeft: nextDeparture.spotsLeft,
-        status: nextDeparture.status,
-        moreCount: upcomingCount > 1 ? upcomingCount - 1 : 0,
-      }
-    }
-    // Priority 2: Fixed departure/return date
+  // Resolve active date badge text
+  const dateBadge = useMemo(() => {
+    // 1) Fixed departure date (and optional return)
     if (departureDate) {
-      const dep = parseDateParts(departureDate)
-      const ret = returnDate ? parseDateParts(returnDate) : null
-      return {
-        type: 'fixed' as const,
-        departure: dep,
-        return: ret,
-        spotsLeft: null as number | null | undefined,
-        status: null as string | null | undefined,
-        moreCount: 0,
+      const formatted = formatDateRange(departureDate, returnDate)
+      if (formatted) {
+        return {
+          text: formatted,
+          spotsLeft: nextDeparture?.spotsLeft ?? null,
+          isLimited: nextDeparture?.status === 'Limited' || tourStatus === 'coming_soon',
+        }
+      }
+    }
+    // 2) From departureDates array
+    if (nextDeparture?.date) {
+      const formatted = formatShortDate(nextDeparture.date, true)
+      if (formatted) {
+        return {
+          text: formatted,
+          spotsLeft: nextDeparture.spotsLeft ?? null,
+          isLimited: nextDeparture.status === 'Limited',
+        }
       }
     }
     return null
-  }, [nextDeparture, upcomingCount, departureDate, returnDate])
+  }, [departureDate, returnDate, nextDeparture, tourStatus])
 
-  // Status badge
-  const statusBadge = useMemo(() => {
-    if (tourStatus === 'sold_out') return { color: 'bg-red-500', label: 'Complet' }
-    if (tourStatus === 'coming_soon') return { color: 'bg-amber-500', label: 'Bientôt' }
-    if (nextDeparture?.status === 'Limited') return { color: 'bg-amber-500', label: 'Dernières places' }
-    return null
-  }, [tourStatus, nextDeparture])
+  // Status flags
+  const isSoldOut = tourStatus === 'sold_out'
+  const isComingSoon = tourStatus === 'coming_soon'
 
-  // 3D Tilt & Parallax Logic
+  // 3D Tilt & Parallax Physics
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 40 })
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 40 })
-  
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"])
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"])
-  
-  const translateZImage = useTransform(mouseXSpring, [-0.5, 0.5], ["-20px", "20px"])
+  const mouseXSpring = useSpring(x, { stiffness: 280, damping: 35 })
+  const mouseYSpring = useSpring(y, { stiffness: 280, damping: 35 })
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7deg', '-7deg'])
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7deg', '7deg'])
+  const translateZImage = useTransform(mouseXSpring, [-0.5, 0.5], ['-15px', '15px'])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -186,7 +177,7 @@ export default function TourCard({
     x.set(xPct)
     y.set(yPct)
   }
-  
+
   const handleMouseLeave = () => {
     x.set(0)
     y.set(0)
@@ -194,226 +185,205 @@ export default function TourCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6 }}
-      style={{ perspective: 1000 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
+      style={{ perspective: 1100 }}
+      className="w-full"
     >
       <MotionLink
         href={`/tours/${slug}`}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ 
-          rotateX, 
+        style={{
+          rotateX,
           rotateY,
-          transformStyle: "preserve-3d"
+          transformStyle: 'preserve-3d',
         }}
-        className="group block relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer"
+        className="group relative block w-full aspect-[3/4] rounded-3xl overflow-hidden cursor-pointer shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/60 dark:border-white/10 hover:shadow-2xl hover:border-brand-blue/40 transition-[border,box-shadow] duration-500 bg-slate-900"
       >
-        {/* Background Image */}
-        <motion.div 
-          className="absolute inset-0 z-0 bg-slate-100 dark:bg-[#0B132B]"
-          style={{ 
-            translateZ: translateZImage, 
-            scale: 1.1
+        {/* ── Background Image Layer ── */}
+        <motion.div
+          className="absolute inset-0 z-0 bg-slate-900"
+          style={{
+            translateZ: translateZImage,
+            scale: 1.08,
           }}
         >
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={thumbnail?.alt || title || 'Placeholder'}
+              alt={thumbnail?.alt || title || 'Circuit'}
               fill
-              className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
+              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={false}
             />
           ) : (
-            <div className="absolute inset-0 liquid-glass animate-pulse flex items-center justify-center z-0">
-              <span className="text-slate-400 dark:text-white/30 font-heading italic text-xs">Visuel en préparation...</span>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
+              <span className="text-white/40 font-heading italic text-xs tracking-wider">
+                Visuel en préparation
+              </span>
             </div>
           )}
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/60 dark:from-[#0B132B]/95 dark:via-[#0B132B]/60 to-transparent z-10" suppressHydrationWarning />
+
+          {/* Vignette Overlay: subtle dark fade at the top, rich cinematic fade at the bottom */}
+          <div
+            className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent via-25% to-transparent pointer-events-none"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 via-45% to-transparent pointer-events-none"
+            aria-hidden="true"
+          />
         </motion.div>
 
-        {/* ── CALENDAR DATE DISPLAY — Top-left ── */}
-        {dateInfo && (
-          <motion.div
-            className="absolute top-4 left-4 z-20"
-            style={{ translateZ: 55 }}
-            initial={{ opacity: 0, scale: 0.8, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5, type: 'spring' }}
-          >
-            <div className="flex items-stretch gap-0 rounded-2xl overflow-hidden shadow-xl shadow-black/10 border border-white/30 dark:border-white/10">
-              {/* Left: Calendar chip(s) */}
-              <div className="flex items-center gap-0 bg-white/70 dark:bg-white/5 backdrop-blur-2xl px-2 py-2">
-                <CalendarChip day={dateInfo.departure.day} month={dateInfo.departure.month} />
-                {dateInfo.return && (
-                  <>
-                    <div className="flex flex-col items-center justify-center px-1.5">
-                      <svg width="16" height="8" viewBox="0 0 16 8" fill="none" className="text-brand-blue">
-                        <path d="M0 4H14M14 4L10.5 0.5M14 4L10.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <CalendarChip day={dateInfo.return.day} month={dateInfo.return.month} />
-                  </>
-                )}
-              </div>
-
-              {/* Right: Meta info strip */}
-              <div className="flex flex-col justify-center bg-brand-blue/10 dark:bg-brand-blue/20 backdrop-blur-2xl px-3 py-2 min-w-[80px] border-l border-brand-blue/10">
-                <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-brand-blue leading-none">
-                  {dateInfo.type === 'next' ? 'Prochain' : 'Départ'}
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-brand-blue leading-none mt-0.5">
-                  {dateInfo.type === 'next' ? 'départ' : dateInfo.departure.year.toString()}
-                </span>
-
-                {/* Spots left */}
-                {dateInfo.spotsLeft != null && dateInfo.spotsLeft > 0 && (
-                  <span className="flex items-center gap-1 mt-1.5">
-                    <span className={`w-[5px] h-[5px] rounded-full ${
-                      dateInfo.spotsLeft <= 3 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
-                    }`} />
-                    <span className={`text-[9px] font-semibold leading-none ${
-                      dateInfo.spotsLeft <= 3 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
-                    }`}>
-                      {dateInfo.spotsLeft} place{dateInfo.spotsLeft > 1 ? 's' : ''}
-                    </span>
-                  </span>
-                )}
-
-                {/* More departures */}
-                {dateInfo.moreCount > 0 && (
-                  <span className="text-[8px] text-brand-blue/70 font-medium mt-1 leading-none">
-                    +{dateInfo.moreCount} autre{dateInfo.moreCount > 1 ? 's' : ''} date{dateInfo.moreCount > 1 ? 's' : ''}
-                  </span>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ── SEASON PILLS — Top-left when no dates ── */}
-        {seasons && seasons.length > 0 && !dateInfo && (
-          <motion.div
-            className="absolute top-4 left-4 z-20 flex gap-1.5 flex-wrap"
-            style={{ translateZ: 50 }}
-          >
-            {seasons.map((season) => {
-              const s = SEASON_MAP[season]
-              if (!s) return null
-              return (
-                <span
-                  key={season}
-                  className="liquid-glass border border-white/20 dark:border-white/10 rounded-full px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold text-slate-700 dark:text-white/80 backdrop-blur-xl shadow-sm"
-                >
-                  {s.icon} {s.label}
-                </span>
-              )
-            })}
-          </motion.div>
-        )}
-
-        {/* ── STATUS BADGE ── */}
-        {statusBadge && (
-          <motion.div
-            className={`absolute ${isFeatured ? 'top-14' : 'top-4'} right-4 z-20`}
-            style={{ translateZ: 50 }}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-wider font-bold rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-lg text-slate-800 dark:text-white">
-              <span className={`w-2 h-2 rounded-full ${statusBadge.color} animate-pulse`} />
-              {statusBadge.label}
-            </span>
-          </motion.div>
-        )}
-
-        {/* Content (Bottom) */}
-        <motion.div 
-          className="absolute bottom-0 left-0 right-0 p-6 pointer-events-none"
-          style={{ translateZ: 40 }}
+        {/* ── TOP BAR: Date Badge & Status Badges ── */}
+        <div
+          className="absolute top-0 inset-x-0 p-4 z-20 flex items-start justify-between gap-2 pointer-events-none"
+          style={{ transform: 'translateZ(30px)' }}
         >
-          {/* Scope badge */}
-          {scope && (
-            <span className="inline-block px-3 py-1 text-xs uppercase tracking-wider text-brand-blue liquid-glass border border-brand-blue/30 rounded-full mb-2 font-semibold">
+          {/* Left: Date Badge */}
+          {dateBadge ? (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-xl border border-white/20 text-white shadow-lg">
+              <svg
+                className="w-3.5 h-3.5 text-brand-cyan flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <span className="text-[11px] font-medium tracking-tight whitespace-nowrap text-white/95">
+                {dateBadge.text}
+              </span>
+
+              {/* Limited spots indicator */}
+              {dateBadge.spotsLeft != null && dateBadge.spotsLeft > 0 && (
+                <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/40 text-[9px] font-bold text-amber-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  {dateBadge.spotsLeft} pl.
+                </span>
+              )}
+            </div>
+          ) : seasons && seasons.length > 0 ? (
+            /* Fallback to seasons if no date */
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-xl border border-white/15 text-white text-[11px] shadow-md">
+              {seasons.map((s) => (
+                <span key={s} title={SEASON_MAP[s]?.label || s}>
+                  {SEASON_MAP[s]?.icon || '✨'}
+                </span>
+              ))}
+              <span className="text-[10px] text-white/80 font-medium ml-1">
+                {SEASON_MAP[seasons[0]]?.label || 'Saisons'}
+              </span>
+            </div>
+          ) : <div />}
+
+          {/* Right: Signature or Status badge */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {isSoldOut ? (
+              <span className="px-2.5 py-1 rounded-full bg-red-600/90 text-white border border-red-400/40 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-md">
+                Complet
+              </span>
+            ) : isComingSoon ? (
+              <span className="px-2.5 py-1 rounded-full bg-sky-600/90 text-white border border-sky-400/40 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-md">
+                Bientôt
+              </span>
+            ) : isFeatured ? (
+              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/40 to-yellow-500/40 text-amber-200 border border-amber-400/50 text-[10px] font-bold uppercase tracking-widest backdrop-blur-xl shadow-lg flex items-center gap-1">
+                <span>⭐</span>
+                <span>Signature</span>
+              </span>
+            ) : null}
+          </div>
+        </div>
+
+        {/* ── BOTTOM CONTENT: Scope, Title, Meta Specs, Pricing & CTA ── */}
+        <div
+          className="absolute bottom-0 inset-x-0 p-5 md:p-6 z-20 flex flex-col justify-end pointer-events-none"
+          style={{ transform: 'translateZ(35px)' }}
+        >
+          {/* Scope Tag */}
+          <div className="mb-2">
+            <span className="inline-block px-2.5 py-0.5 rounded-full bg-brand-blue/90 text-white text-[10px] font-bold uppercase tracking-widest backdrop-blur-md shadow-sm border border-brand-cyan/30">
               {scope === 'national' ? 'Maroc' : 'International'}
             </span>
-          )}
+          </div>
 
           {/* Title */}
-          <h3 className="font-heading text-2xl md:text-[26px] text-slate-900 dark:text-white mt-1 leading-tight drop-shadow-md">
+          <h3 className="font-heading text-xl md:text-[22px] font-bold text-white leading-snug tracking-tight drop-shadow-md group-hover:text-brand-cyan transition-colors duration-300 line-clamp-2">
             {title}
           </h3>
 
-          {/* Meta row */}
-          <div className="flex items-center gap-3 mt-2 flex-wrap">
+          {/* Specs / Meta Badges */}
+          <div className="flex items-center gap-2 mt-2.5 flex-wrap">
             {durationText && (
-              <span className="text-xs text-slate-600 dark:text-brand-silver flex items-center gap-1">
-                🕐 {durationText}
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] text-white/90 font-medium">
+                <span className="opacity-75">⏱️</span>
+                <span>{durationText}</span>
               </span>
             )}
             {logistics?.maxGroupSize && (
-              <span className="text-xs text-slate-600 dark:text-brand-silver flex items-center gap-1">
-                👥 Max {logistics.maxGroupSize}
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] text-white/90 font-medium">
+                <span className="opacity-75">👥</span>
+                <span>Max {logistics.maxGroupSize}</span>
               </span>
             )}
             {logistics?.difficulty && (
-              <span className="text-xs text-slate-600 dark:text-brand-silver flex items-center gap-1">
-                ⭐ {logistics.difficulty}
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[11px] text-white/90 font-medium">
+                <span className="opacity-75">⭐</span>
+                <span>{logistics.difficulty}</span>
               </span>
             )}
           </div>
 
-          {/* Seasons row — inline when dates are at top */}
-          {seasons && seasons.length > 0 && dateInfo && (
-            <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-              {seasons.map((season) => {
-                const s = SEASON_MAP[season]
-                if (!s) return null
-                return (
-                  <span
-                    key={season}
-                    className="text-[10px] text-slate-500 dark:text-brand-silver/70"
-                  >
-                    {s.icon} {s.label}
+          {/* Subtle Divider */}
+          <div className="w-full h-px bg-white/15 my-3.5" aria-hidden="true" />
+
+          {/* Price & CTA Button */}
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              {priceText ? (
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase tracking-wider text-white/60 font-medium">
+                    À partir de
                   </span>
-                )
-              })}
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-lg md:text-xl font-heading font-bold text-white tracking-tight">
+                      {priceText}
+                    </span>
+                    <span className="text-[11px] text-white/60 font-normal">/pers</span>
+                  </div>
+                </div>
+              ) : (
+                <span className="text-sm font-heading font-medium text-white/80 italic">
+                  Sur devis
+                </span>
+              )}
             </div>
-          )}
 
-          {/* Price + CTA row */}
-          <div className="flex items-center justify-between mt-4">
-            {priceText ? (
-              <div>
-                <span className="text-[11px] text-slate-500 dark:text-brand-silver">À partir de</span>
-                <br />
-                <span className="text-lg font-medium text-brand-blue dark:text-brand-blue">{priceText}/pers</span>
-              </div>
-            ) : (
-              <div>
-                <span className="text-sm text-slate-500 dark:text-brand-silver italic">Sur devis</span>
-              </div>
-            )}
-            <span className="text-brand-blue text-sm font-body font-medium group-hover:translate-x-1 transition-transform duration-300 drop-shadow-sm dark:drop-shadow-none">
-              Découvrir →
-            </span>
+            {/* CTA Button */}
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/15 group-hover:bg-brand-blue border border-white/25 group-hover:border-brand-blue text-white text-xs font-semibold backdrop-blur-md transition-all duration-300 shadow-md group-hover:shadow-brand-blue/40 group-hover:translate-x-0.5">
+              <span>Découvrir</span>
+              <svg
+                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
           </div>
-        </motion.div>
-
-        {/* Featured badge */}
-        {isFeatured && (
-          <motion.div 
-            className="absolute top-4 right-4 px-3 py-1 text-xs uppercase tracking-wider liquid-glass border border-brand-blue/40 text-slate-800 dark:text-brand-blue rounded-full font-semibold"
-            style={{ translateZ: 50 }}
-          >
-            ⭐ Signature
-          </motion.div>
-        )}
+        </div>
       </MotionLink>
     </motion.div>
   )
