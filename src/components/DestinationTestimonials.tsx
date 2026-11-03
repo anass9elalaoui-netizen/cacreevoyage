@@ -48,7 +48,7 @@ function Thumb({ t, playing }: { t: TestimonialDoc; playing: boolean }) {
   }, [playing, armed])
 
   return (
-    <span className="relative h-[72px] w-14 shrink-0 overflow-hidden rounded-xl bg-brand-dark">
+    <span className="relative block h-[72px] w-14 shrink-0 overflow-hidden rounded-xl bg-brand-dark">
       <Cover t={t} sizes="56px" />
       {preview ? (
         <video
@@ -163,11 +163,13 @@ const STEP_MS = 6000
 function Featured({
   t,
   direction,
+  running,
   onPlay,
   onSwipe,
 }: {
   t: TestimonialDoc
   direction: number
+  running: boolean
   onPlay: () => void
   onSwipe: (dir: 1 | -1) => void
 }) {
@@ -236,18 +238,23 @@ function Featured({
               transition={{ duration: reduce ? 0.2 : 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Slow cinematic push-in while the destination is featured */}
-              <motion.div
+              <div
                 className="absolute inset-0"
-                initial={{ scale: 1 }}
-                animate={reduce ? { scale: 1 } : { scale: 1.07 }}
-                transition={{ duration: STEP_MS / 1000 + 2, ease: 'linear' }}
+                style={
+                  reduce
+                    ? undefined
+                    : {
+                        animation: `ccv-pushin ${STEP_MS + 2000}ms linear forwards`,
+                        animationPlayState: running ? 'running' : 'paused',
+                      }
+                }
               >
                 <Cover t={t} sizes="(max-width: 640px) 92vw, 420px" eager />
                 {/* Silent 6 s loop on top of the cover (LazyVideo: only when visible, poster-only under reduced motion / Data Saver) */}
                 {preview ? (
                   <LazyVideo src={preview} poster={getVideoPoster(t) || undefined} priority aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
                 ) : null}
-              </motion.div>
+              </div>
             </motion.div>
           </AnimatePresence>
 
@@ -350,7 +357,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
       ref={sectionRef}
       className="relative py-20 md:py-28 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden"
     >
-      <style dangerouslySetInnerHTML={{ __html: '@keyframes ccv-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}' }} />
+      <style dangerouslySetInnerHTML={{ __html: '@keyframes ccv-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes ccv-pushin{from{transform:scale(1)}to{transform:scale(1.07)}}' }} />
       <div
         className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:items-center"
         onMouseEnter={() => setPaused(true)}
@@ -384,7 +391,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
             whileInView="shown"
             viewport={{ once: true, amount: 0.3 }}
             variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } } }}
-            className="mt-8 -mx-4 px-4 flex gap-3 overflow-x-auto snap-x snap-mandatory hide-scrollbar sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible"
+            className="mt-8 -mx-4 px-4 flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-4 hide-scrollbar sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-visible"
           >
             {items.map((t, i) => {
               const isActive = i === current
@@ -424,7 +431,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
                       className="absolute inset-0 rounded-2xl border border-brand-blue/50 bg-white dark:bg-white/10 shadow-[0_10px_30px_-12px_rgba(28,140,201,0.45)]"
                     />
                   ) : null}
-                  <span className="relative z-[1]">
+                  <span className="relative z-[1] block shrink-0">
                     <Thumb t={t} playing={!reduce && hovered === i} />
                   </span>
                   <span className="relative z-[1] min-w-0">
@@ -461,6 +468,7 @@ export default function DestinationTestimonials({ testimonials }: { testimonials
           <Featured
             t={items[current]}
             direction={direction}
+            running={inView && openIndex === null}
             onPlay={() => setOpenIndex(current)}
             onSwipe={(dir) => go(current + dir)}
           />
