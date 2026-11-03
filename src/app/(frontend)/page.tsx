@@ -94,7 +94,8 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
   const { docs: testimonials } = await payload.find({
     collection: 'testimonials',
     depth: 2,
-    limit: 10,
+    // One video per destination + written reviews: 10 silently dropped the oldest ones
+    limit: 50,
     locale: locale as any,
   })
 
