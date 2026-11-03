@@ -5,22 +5,35 @@ import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import LazyVideo from '@/components/LazyVideo'
-import {
-  PostcardStamp,
-  Stars,
-  destinationOf,
-  getVideo,
-  getVideoPoster,
-  type TestimonialDoc,
-} from '@/components/testimonials/shared'
+import { Stars, destinationOf, getVideo, getVideoPoster, type TestimonialDoc } from '@/components/testimonials/shared'
 
-/* ─── Lightbox: the video (with sound) only loads once opened ───────── */
-function VideoLightbox({ src, title, onClose }: { src: string; title: string; onClose: () => void }) {
+/** "Turquie" from the linked destination, otherwise the traveler/group name typed in the admin. */
+const labelOf = (t: TestimonialDoc) => destinationOf(t)?.title || t.travelerName?.trim() || 'Nos voyageurs'
+
+/* ─── Lightbox: video with sound, loads only once opened; ← → between destinations ─── */
+function VideoLightbox({
+  items,
+  index,
+  onIndex,
+  onClose,
+}: {
+  items: TestimonialDoc[]
+  index: number
+  onIndex: (i: number) => void
+  onClose: () => void
+}) {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const t = items[index]
+  const hasPrev = index > 0
+  const hasNext = index < items.length - 1
 
   useEffect(() => {
     closeRef.current?.focus()
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight' && hasNext) onIndex(index + 1)
+      if (e.key === 'ArrowLeft' && hasPrev) onIndex(index - 1)
+    }
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
@@ -28,31 +41,58 @@ function VideoLightbox({ src, title, onClose }: { src: string; title: string; on
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = prevOverflow
     }
-  }, [onClose])
+  }, [index, hasNext, hasPrev, onClose, onIndex])
+
+  const arrow =
+    'absolute top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-colors disabled:opacity-0'
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={title}
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-brand-deeper/85 backdrop-blur-md p-4"
+      aria-label={`Témoignage vidéo — ${labelOf(t)}`}
+      className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-4 bg-brand-deeper/90 backdrop-blur-md p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       onClick={onClose}
     >
-      <motion.div
-        className="relative w-full max-w-[420px] aspect-[9/16] max-h-[85vh] rounded-2xl overflow-hidden bg-black shadow-2xl"
-        initial={{ scale: 0.96, y: 12 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.96, y: 12 }}
-        transition={{ type: 'spring', stiffness: 320, damping: 30 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Opened by a click, so playback with sound is allowed */}
-        <video src={src} controls autoPlay playsInline className="absolute inset-0 h-full w-full object-contain" />
-      </motion.div>
+      <div className="relative w-full max-w-[420px]" onClick={(e) => e.stopPropagation()}>
+        <motion.div
+          key={String(t.id)}
+          className="relative w-full aspect-[9/16] max-h-[78vh] mx-auto rounded-2xl overflow-hidden bg-black shadow-2xl"
+          initial={{ scale: 0.97, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+        >
+          {/* Opened by a click, so playback with sound is allowed */}
+          <video
+            src={getVideo(t)!}
+            poster={getVideoPoster(t) || undefined}
+            controls
+            autoPlay
+            playsInline
+            className="absolute inset-0 h-full w-full object-contain"
+          />
+        </motion.div>
+
+        <button type="button" onClick={() => onIndex(index - 1)} disabled={!hasPrev} className={`${arrow} -left-2 md:-left-16`} aria-label="Témoignage précédent">
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+        <button type="button" onClick={() => onIndex(index + 1)} disabled={!hasNext} className={`${arrow} -right-2 md:-right-16`} aria-label="Témoignage suivant">
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
+
+      <p className="text-center text-white/90 font-heading text-lg" onClick={(e) => e.stopPropagation()}>
+        Témoignage {labelOf(t)}
+        {t.tripYear ? <span className="text-white/50"> · {t.tripYear}</span> : null}
+        <span className="block text-xs uppercase tracking-[0.25em] text-white/40 mt-1">
+          {index + 1} / {items.length}
+        </span>
+      </p>
+
       <button
         ref={closeRef}
         onClick={onClose}
@@ -67,109 +107,124 @@ function VideoLightbox({ src, title, onClose }: { src: string; title: string; on
   )
 }
 
-/* ─── Postcard card ─────────────────────────────────────────────────── */
-function PostcardCard({ t, index, onPlay }: { t: TestimonialDoc; index: number; onPlay: () => void }) {
+/* ─── One tall "story" card per destination ─────────────────────────── */
+function StoryCard({ t, onPlay }: { t: TestimonialDoc; onPlay: () => void }) {
   const video = getVideo(t)!
   const poster = getVideoPoster(t)
-  const dest = destinationOf(t)
-  const firstName = t.travelerName?.trim() || 'Voyageur'
-  const tilt = index % 2 === 0 ? '-rotate-[1.2deg]' : 'rotate-[1.2deg]'
+  const label = labelOf(t)
 
   return (
-    <article
-      className={`group relative w-[300px] sm:w-[320px] shrink-0 rounded-[6px] bg-[#FBF7EF] p-3 pb-5 shadow-[0_18px_40px_-12px_rgba(11,19,43,0.35)] transition-transform duration-500 hover:rotate-0 hover:-translate-y-1 ${tilt}`}
+    <button
+      type="button"
+      onClick={onPlay}
+      id={`temoignage-${String(t.id)}`}
+      className="group relative block w-[72vw] max-w-[300px] sm:w-[260px] shrink-0 snap-center aspect-[9/16] rounded-[1.75rem] overflow-hidden bg-brand-dark text-left shadow-[0_24px_50px_-20px_rgba(11,19,43,0.55)] ring-1 ring-black/5 dark:ring-white/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/60 transition-transform duration-500 hover:-translate-y-1.5"
+      aria-label={`Lire le témoignage vidéo — ${label}`}
     >
-      {/* Photo area, printed-photo style */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[3px] bg-brand-dark">
-        {poster ? (
-          <Image src={poster} alt={`Témoignage de ${firstName}`} fill sizes="320px" loading="lazy" className="object-cover" />
-        ) : (
-          // No poster uploaded yet: a still frame (metadata only), never the full video
-          <LazyVideo src={`${video}#t=0.5`} paused aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+      {poster ? (
+        <Image src={poster} alt="" fill sizes="(max-width: 640px) 72vw, 260px" loading="lazy" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+      ) : (
+        // No cover uploaded yet: a still frame (metadata only), never the full video
+        <LazyVideo src={`${video}#t=1`} paused aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+      )}
 
-        <PostcardStamp destination={dest?.title} year={t.tripYear} className="absolute top-3 right-3" />
+      {/* Legibility gradients */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-brand-deeper/95 via-brand-deeper/40 to-transparent" />
 
-        <button
-          type="button"
-          onClick={onPlay}
-          className="absolute inset-0 flex items-center justify-center focus-visible:outline-none"
-          aria-label={`Lire le témoignage vidéo de ${firstName}`}
-        >
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-brand-blue shadow-[0_8px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-110 group-focus-within:ring-4 group-focus-within:ring-brand-cyan/60">
-            <svg className="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </span>
-        </button>
+      {/* Top: video badge + year */}
+      <div className="absolute top-4 inset-x-4 flex items-center justify-between">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+          <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+          Vidéo
+        </span>
+        {t.tripYear ? (
+          <span className="rounded-full bg-black/35 backdrop-blur-md px-2.5 py-1 text-[11px] font-medium tracking-widest text-white/90">{t.tripYear}</span>
+        ) : null}
       </div>
 
-      {/* Postcard back: stars, quote, signature */}
-      <div className="px-2 pt-4">
-        <Stars rating={t.rating} className="text-base" />
-        {t.testimonialText && (
-          <p className="mt-2 font-heading italic text-[1.05rem] leading-snug text-slate-800 line-clamp-3">
-            &laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;
-          </p>
-        )}
-        <div className="mt-4 flex items-end justify-between border-t border-dashed border-brand-dark/15 pt-3">
-          <div>
-            <p className="font-heading text-lg leading-none text-brand-dark">{firstName}</p>
-            {dest?.title && (
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-blue">
-                {dest.title}
-                {t.tripYear ? ` · ${t.tripYear}` : ''}
-              </p>
-            )}
-          </div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-brand-dark/40">Carte postale</span>
-        </div>
+      {/* Center: play */}
+      <span className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-brand-blue shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-110">
+        <span className="absolute inset-0 rounded-full border-2 border-white/60 animate-ping [animation-duration:2.4s] motion-reduce:hidden" />
+        <svg className="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      </span>
+
+      {/* Bottom: destination title, optional quote */}
+      <div className="absolute bottom-0 inset-x-0 p-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-brand-cyan">Témoignage</p>
+        <h3 className="mt-1 font-heading text-[1.75rem] leading-none font-medium text-white">{label}</h3>
+        {t.testimonialText ? (
+          <p className="mt-3 font-heading italic text-sm leading-snug text-white/80 line-clamp-2">&laquo;&nbsp;{t.testimonialText}&nbsp;&raquo;</p>
+        ) : null}
+        {t.rating ? <Stars rating={t.rating} className="mt-3 text-sm" /> : null}
       </div>
-    </article>
+    </button>
   )
 }
 
 export default function DestinationTestimonials({ testimonials }: { testimonials: TestimonialDoc[] }) {
-  const videoTestimonials = testimonials.filter((t) => getVideo(t))
-  const [open, setOpen] = useState<TestimonialDoc | null>(null)
+  const items = testimonials.filter((t) => getVideo(t))
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
-  const close = useCallback(() => setOpen(null), [])
+  const rowRef = useRef<HTMLDivElement>(null)
+  const close = useCallback(() => setOpenIndex(null), [])
 
   useEffect(() => setMounted(true), [])
 
-  if (videoTestimonials.length === 0) return null
+  const scrollToCard = (id: string | number) => {
+    const card = document.getElementById(`temoignage-${String(id)}`)
+    const row = rowRef.current
+    if (!card || !row) return
+    row.scrollTo({ left: card.offsetLeft - row.clientWidth / 2 + card.clientWidth / 2, behavior: 'smooth' })
+  }
+
+  if (items.length === 0) return null
 
   return (
     <section className="relative py-24 bg-slate-50 dark:bg-transparent transition-colors duration-700 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-14">
-          <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">Avis Clients</span>
+        <div className="text-center mb-10">
+          <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">Avis clients · en vidéo</span>
           <h2 className="font-heading text-4xl md:text-5xl text-slate-900 dark:text-white tracking-tight font-bold">
             Ils Ont Vécu <span className="text-brand-blue">l&apos;Expérience</span>
           </h2>
+          <p className="mt-4 text-slate-600 dark:text-white/60 max-w-xl mx-auto">
+            Nos voyageurs racontent leur voyage, destination par destination.
+          </p>
         </div>
 
-        <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 px-2 md:flex-wrap md:justify-center md:overflow-visible hide-scrollbar">
-          {videoTestimonials.map((t, i) => (
-            <div key={t.id} className="snap-center">
-              <PostcardCard t={t} index={i} onPlay={() => setOpen(t)} />
-            </div>
-          ))}
-        </div>
+        {/* Destination chips */}
+        {items.length > 1 && (
+          <div className="mb-10 flex flex-wrap justify-center gap-2">
+            {items.map((t) => (
+              <button
+                key={String(t.id)}
+                type="button"
+                onClick={() => scrollToCard(t.id)}
+                className="rounded-full border border-slate-200 dark:border-white/15 bg-white dark:bg-white/5 px-4 py-1.5 text-sm text-slate-700 dark:text-white/80 hover:border-brand-blue hover:text-brand-blue transition-colors"
+              >
+                {labelOf(t)}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Story row: swipe on mobile, centered wrap on large screens */}
+      <div
+        ref={rowRef}
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory px-[14vw] sm:px-8 pb-8 pt-2 hide-scrollbar lg:justify-center lg:flex-wrap lg:overflow-visible lg:px-8"
+      >
+        {items.map((t, i) => (
+          <StoryCard key={String(t.id)} t={t} onPlay={() => setOpenIndex(i)} />
+        ))}
       </div>
 
       {/* Portal to <body>: <main> is a stacking context below the fixed navbar */}
       {mounted &&
         createPortal(
           <AnimatePresence>
-            {open && (
-              <VideoLightbox
-                src={getVideo(open)!}
-                title={`Témoignage vidéo de ${open.travelerName || 'voyageur'}`}
-                onClose={close}
-              />
-            )}
+            {openIndex !== null && <VideoLightbox items={items} index={openIndex} onIndex={setOpenIndex} onClose={close} />}
           </AnimatePresence>,
           document.body,
         )}

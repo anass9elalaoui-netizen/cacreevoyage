@@ -126,13 +126,15 @@ export default function TourCard({
         return !isNaN(dt.getTime()) && dt >= now && d.status !== 'Full'
       })
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    return upcoming[0] || departureDates[0] || null
+    // Never fall back to a past date: an expired date on the cover misleads visitors
+    return upcoming[0] || null
   }, [departureDates])
 
   // Resolve active date badge text
   const dateBadge = useMemo(() => {
-    // 1) Fixed departure date (and optional return)
-    if (departureDate) {
+    // 1) Fixed departure date (and optional return), only while it is still upcoming
+    const fixedIsUpcoming = departureDate ? new Date(departureDate).getTime() >= new Date().setHours(0, 0, 0, 0) : false
+    if (departureDate && fixedIsUpcoming) {
       const formatted = formatDateRange(departureDate, returnDate)
       if (formatted) {
         return {
