@@ -166,16 +166,16 @@ function Featured({
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.18}
         dragSnapToOrigin
+        // A new press clears the flag; a drag sets it, so the click that ends a drag is ignored
+        onPointerDownCapture={() => {
+          dragged.current = false
+        }}
         onDragStart={() => {
           dragged.current = true
         }}
         onDragEnd={(_, info) => {
           if (info.offset.x < -60 || info.velocity.x < -400) onSwipe(1)
           else if (info.offset.x > 60 || info.velocity.x > 400) onSwipe(-1)
-          // The click that ends a drag must not open the video
-          setTimeout(() => {
-            dragged.current = false
-          }, 0)
         }}
         className="relative aspect-[9/16] max-h-[80vh] touch-pan-y"
       >
