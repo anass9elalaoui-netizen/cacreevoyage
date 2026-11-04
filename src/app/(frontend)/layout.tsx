@@ -45,10 +45,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: 'Ça Crée Voyage | Voyages de groupe au départ du Maroc',
+    default: 'Ça Crée Voyage | Voyages de groupe à travers le monde',
     template: '%s | Ça Crée Voyage',
   },
-  description: 'Découvrez nos voyages de groupe au départ du Maroc : dates, programmes et réservation sur WhatsApp.',
+  description: 'Découvrez nos voyages de groupe à travers le monde : dates, programmes et réservation sur WhatsApp.',
   icons: { icon: '/logo.jpeg', apple: '/logo.jpeg' },
 }
 

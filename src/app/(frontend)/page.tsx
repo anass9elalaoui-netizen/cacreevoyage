@@ -221,7 +221,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION — Cinematic canvas scroll portal
       ─────────────────────────────────────────────────────────── */}
-      <HeroGallery panels={heroPanels} headline={siteSettings.homepageHero?.headline || t.heroHeadline} discoverLabel={t.heroDiscover} allToursLabel={t.heroAllTours} />
+      <HeroGallery panels={heroPanels} headline={siteSettings.homepageHero?.headline || t.heroHeadline} discoverLabel={t.heroDiscover} />
 
       {/* ──────────────────────────────────────────────────────────
           FEATURED TOURS GRID — "Nos Voyages d'Exception"
