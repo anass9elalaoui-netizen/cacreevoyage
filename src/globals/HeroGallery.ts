@@ -95,7 +95,7 @@ export const HeroGallery: GlobalConfig = {
           required: true,
           label: 'Vidéo de fond (ordinateur)',
           admin: {
-            description: 'MP4 H.264 sans son, 12 à 15 secondes, 720 px de large, moins de 5 Mo. Les fichiers .MOV de téléphone ne se lisent pas partout.',
+            description: 'MP4 H.264 sans son, 12 à 15 secondes, 1080 px de large, moins de 10 Mo. Les fichiers .MOV de téléphone ne se lisent pas partout.',
           },
           validate: (value: unknown) => {
             if (value && typeof value === 'object' && 'filesize' in value) {
@@ -113,7 +113,7 @@ export const HeroGallery: GlobalConfig = {
           relationTo: 'media',
           label: 'Vidéo de fond (téléphone)',
           admin: {
-            description: 'Optionnel. La même vidéo en 480 px de large, moins de 2 Mo. Vide : la vidéo ordinateur est utilisée.',
+            description: 'Optionnel. La même vidéo en 720 px de large, moins de 5 Mo. Vide : la vidéo ordinateur est utilisée.',
           },
         },
       ],

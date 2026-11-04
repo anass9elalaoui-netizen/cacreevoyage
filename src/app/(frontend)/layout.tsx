@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Manrope } from 'next/font/google'
+import { Manrope, Outfit } from 'next/font/google'
 import '../globals.css'
 import GlassNavbar from '@/components/GlassNavbar'
 import FloatingWhatsApp from '@/components/FloatingWhatsApp'
@@ -8,6 +8,14 @@ import StarfieldCanvas from '@/components/StarfieldCanvas'
 import FilmGrain from '@/components/FilmGrain'
 import { getSiteSettings } from '@/lib/getSiteSettings'
 import { getSiteUrl } from '@/lib/siteUrl'
+
+// Display font for the hero's destination names and headline
+const outfitDisplay = Outfit({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  variable: '--font-display',
+  display: 'swap',
+})
 
 const manropeHeading = Manrope({
   subsets: ['latin'],
@@ -37,10 +45,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: 'Ça Crée Voyage | Voyages organisés au départ du Maroc',
+    default: 'Ça Crée Voyage | Voyages de groupe au départ du Maroc',
     template: '%s | Ça Crée Voyage',
   },
-  description: 'Découvrez nos voyages organisés au départ du Maroc : dates, programmes et réservation sur WhatsApp.',
+  description: 'Découvrez nos voyages de groupe au départ du Maroc : dates, programmes et réservation sur WhatsApp.',
   icons: { icon: '/logo.jpeg', apple: '/logo.jpeg' },
 }
 
@@ -52,7 +60,7 @@ export default async function FrontendLayout({
   const settings = await getSiteSettings()
 
   return (
-    <html lang="fr" className={`${manropeHeading.variable} ${manropeBody.variable} lenis lenis-smooth`} suppressHydrationWarning>
+    <html lang="fr" className={`${outfitDisplay.variable} ${manropeHeading.variable} ${manropeBody.variable} lenis lenis-smooth`} suppressHydrationWarning>
       <body className="antialiased relative" suppressHydrationWarning>
         <FilmGrain />
         <StarfieldCanvas />
