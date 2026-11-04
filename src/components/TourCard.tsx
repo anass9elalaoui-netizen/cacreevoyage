@@ -354,8 +354,8 @@ export default function TourCard({
                   <span className="text-[10px] uppercase tracking-wider text-white/60 font-medium">
                     À partir de
                   </span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-lg md:text-xl font-heading font-bold text-white tracking-tight">
+                  <div className="flex items-baseline gap-1 whitespace-nowrap">
+                    <span className="text-lg font-heading font-bold text-white tracking-tight">
                       {priceText}
                     </span>
                     <span className="text-[11px] text-white/60 font-normal">/pers</span>
@@ -369,7 +369,7 @@ export default function TourCard({
             </div>
 
             {/* CTA Button */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white text-brand-dark group-hover:bg-brand-blue group-hover:text-white text-xs font-semibold transition-colors duration-300 shadow-md">
+            <div className="inline-flex shrink-0 items-center gap-1.5 px-3.5 py-2 rounded-full bg-white text-brand-dark group-hover:bg-brand-blue group-hover:text-white text-xs font-semibold transition-colors duration-300 shadow-md">
               <span>Découvrir</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} aria-hidden="true" />
             </div>
