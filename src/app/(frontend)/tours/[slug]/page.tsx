@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { Check } from 'lucide-react'
+import { Check, Clock, Gauge, MapPin, Sun, Users } from 'lucide-react'
 import ItineraryTimeline from '@/components/ItineraryTimeline'
 import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
@@ -11,7 +11,8 @@ import BookingSidebar from '@/components/BookingSidebar'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 import { getDictionary, Locale } from '@/i18n/dictionaries'
-import LazyVideo from '@/components/LazyVideo'
+import TourHero from '@/components/TourHero'
+import TourMobileBar from '@/components/TourMobileBar'
 
 /**
  * Old tour URLs that were renamed in the CMS → their current slug. Visitors and search
@@ -96,6 +97,22 @@ export default async function TourPage({ params, searchParams }: Args) {
 
   const hasFixedDates = Boolean(tour.departureDate && tour.returnDate)
 
+  // "19 – 22 novembre 2026": short enough to stay on one line on a phone
+  const formatRange = (from: string, to: string) => {
+    const a = new Date(from)
+    const b = new Date(to)
+    const sameMonth = a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear()
+    const start = sameMonth
+      ? String(a.getDate())
+      : a.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+    return `${start} – ${b.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`
+  }
+
+  const priceText = tour.pricing?.basePrice
+    ? `${tour.pricing.basePrice.toLocaleString('fr-FR')} ${tour.pricing.currency || '€'}`
+    : null
+  const bookingUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par le circuit "${tour.title}". Pouvez-vous me donner plus d'informations ?`)}`
+
   // Duration text
   const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? 's' : ''}`
   const durationText = tour.logistics?.durationDays && tour.logistics?.durationNights
@@ -108,63 +125,22 @@ export default async function TourPage({ params, searchParams }: Args) {
   )
 
   return (
-    <main className="relative w-full min-h-screen bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-hidden">
+    <main className="relative w-full min-h-screen pb-20 lg:pb-0 bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-hidden">
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION
       ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full h-[100vh] flex flex-col items-center justify-end pb-24 shrink-0">
-        {/* Background Media */}
-        {heroVideoUrl ? (
-          <LazyVideo src={heroVideoUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
-        ) : thumbnailUrl ? (
-          <img
-            src={thumbnailUrl}
-            alt={tour.title}
-            className="absolute inset-0 w-full h-full object-cover z-0"
-          />
-        ) : (
-          <div className="absolute inset-0 w-full h-full z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-200 dark:from-[#0B132B] via-slate-300 dark:via-[#1a2744] to-slate-200 dark:to-[#0B132B]" />
-            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/8 rounded-full blur-[180px]" />
-          </div>
-        )}
-
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/40 dark:from-[#0B132B] dark:via-[#0B132B]/40 to-transparent z-10" />
-
-        {/* Glass Card Content */}
-        <div className="relative z-20 glass-card p-10 md:p-14 w-[90%] max-w-4xl text-center flex flex-col items-center transform translate-y-16">
-          <span className="uppercase text-brand-blue font-semibold mb-4 text-sm tracking-wider">
-            {tour.scope === 'national' ? 'Maroc' : 'International'} • {durationText}
-          </span>
-
-          <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-heading text-slate-900 dark:text-white mb-6 drop-shadow-sm dark:drop-shadow-md leading-tight font-medium tracking-wide"
-            style={{ textShadow: '0 0 60px rgba(56,163,165,0.15), 0 4px 20px rgba(0,0,0,0.5)' }}
-          >
-            {tour.title}
-          </h1>
-
-          <p className="text-slate-600 dark:text-white/70 text-lg md:text-xl max-w-2xl font-light mb-8 leading-relaxed">
-            {tour.excerpt}
-          </p>
-
-          {/* Fixed Dates Badge */}
-          {hasFixedDates && (
-            <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-brand-blue/10 border border-brand-blue/25 mb-8">
-              <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-slate-900 dark:text-white font-heading text-sm md:text-base">
-                {formatDate(tour.departureDate)} — {formatDate(tour.returnDate)}
-              </span>
-            </div>
-          )}
-
-          <div className="w-px h-16 bg-gradient-to-b from-brand-blue to-transparent animate-pulse" />
-          <span className="text-slate-500 dark:text-white/50 text-xs uppercase mt-4 font-semibold tracking-wider">Scroll to discover</span>
-        </div>
-      </section>
+      <TourHero
+        title={tour.title}
+        excerpt={tour.excerpt}
+        label={`${tour.scope === 'national' ? 'Maroc' : 'International'} · ${durationText}`}
+        imageUrl={thumbnailUrl}
+        videoUrl={heroVideoUrl}
+        sideImages={galleryImages.filter((img: { url: string }) => img.url !== thumbnailUrl)}
+        dates={hasFixedDates ? formatRange(tour.departureDate, tour.returnDate) : null}
+        price={priceText}
+        whatsappUrl={bookingUrl}
+        labels={{ dates: t.heroDates, from: t.heroFrom, perPerson: t.heroPerPerson, onRequest: t.heroOnRequest, book: t.heroBook, programme: t.heroProgramme }}
+      />
 
       {/* ──────────────────────────────────────────────────────────
           MAIN CONTENT + SIDEBAR LAYOUT
@@ -186,27 +162,27 @@ export default async function TourPage({ params, searchParams }: Args) {
               <div className="flex flex-wrap gap-3 mb-8">
                 {durationText && (
                   <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    🕐 {durationText}
+                    <Clock className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{durationText}
                   </span>
                 )}
                 {tour.logistics?.maxGroupSize && (
                   <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    👥 Max {tour.logistics.maxGroupSize} pers.
+                    <Users className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />Max {tour.logistics.maxGroupSize} pers.
                   </span>
                 )}
                 {tour.logistics?.difficulty && (
                   <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    ⭐ {tour.logistics.difficulty}
+                    <Gauge className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{tour.logistics.difficulty}
                   </span>
                 )}
                 {tour.logistics?.departureCity && (
                   <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    📍 {t.departure} {tour.logistics.departureCity}
+                    <MapPin className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{t.departure} {tour.logistics.departureCity}
                   </span>
                 )}
                 {tour.seasons && tour.seasons.length > 0 && (
                   <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    🌤️ {tour.seasons.join(', ')}
+                    <Sun className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{tour.seasons.join(', ')}
                   </span>
                 )}
               </div>
@@ -287,7 +263,7 @@ export default async function TourPage({ params, searchParams }: Args) {
       <section id="itinerary" className="relative z-10 pt-12 md:pt-16 pb-24 md:pb-32">
         <div className="absolute top-0 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto text-center mb-16 md:mb-20 px-4 relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-10 md:mb-20 px-4 relative z-10">
           <span className="uppercase text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md tracking-wider">
             {t.itinerary}
           </span>
@@ -296,10 +272,12 @@ export default async function TourPage({ params, searchParams }: Args) {
           >
             {t.dayByDay}
           </h2>
-          {/* Short programmes are not a swipe on desktop */}
-          <p className={`text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed ${tour.storyDays?.length <= 5 ? 'lg:hidden' : ''}`}>
-            {t.swipe}
-          </p>
+          {/* Only long programmes are a swipe */}
+          {tour.storyDays?.length > 5 ? (
+            <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed">
+              {t.swipe}
+            </p>
+          ) : null}
         </div>
 
         {hasStoryDays ? (
@@ -410,6 +388,15 @@ export default async function TourPage({ params, searchParams }: Args) {
           </div>
         </div>
       </section>
+
+      <TourMobileBar
+        price={priceText}
+        fallback={t.heroOnRequest}
+        from={t.heroFrom}
+        perPerson={t.heroPerPerson}
+        book={t.heroBookShort}
+        whatsappUrl={bookingUrl}
+      />
 
       <Footer
         whatsappNumber={siteSettings.whatsappNumber}

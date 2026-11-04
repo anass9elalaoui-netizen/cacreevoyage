@@ -22,6 +22,9 @@ interface StoryDay {
   media?: { url?: string; mimeType?: string } | null
 }
 
+/** A title typed as "Samedi 21 novembre 2026 :" should not end on a dangling colon. */
+const cleanTitle = (title: string) => title.replace(/\s*:\s*$/, '')
+
 /* ─── Focus Pull Card ────────────────────────────────────── */
 function StoryCard({
   day,
@@ -112,7 +115,7 @@ function StoryCard({
           animate={isActive ? { x: 0, opacity: 1 } : { x: -30, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 20, delay: isActive ? 0.15 : 0 }}
         >
-          {day.title}
+          {cleanTitle(day.title)}
         </motion.h3>
 
         {/* Location */}
@@ -163,12 +166,12 @@ function StoryCard({
   )
 }
 
-/* ─── Desktop presentation for short programmes: photo and day side by side, alternating ─── */
+/* ─── Short programmes, no slider: photo above the day on phones, side by side and alternating on desktop ─── */
 function DayRows({ days }: { days: StoryDay[] }) {
   const reduce = useReducedMotion()
 
   return (
-    <ol className="mx-auto flex max-w-6xl flex-col gap-20 px-6">
+    <ol className="mx-auto flex max-w-6xl flex-col gap-12 px-4 lg:gap-20 lg:px-6">
       {days.map((day, i) => {
         const flipped = i % 2 === 1
         const mediaUrl = typeof day.media === 'object' && day.media?.url ? day.media.url : null
@@ -181,28 +184,28 @@ function DayRows({ days }: { days: StoryDay[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className={`grid items-center gap-14 ${flipped ? 'grid-cols-[minmax(0,7fr)_minmax(0,5fr)]' : 'grid-cols-[minmax(0,5fr)_minmax(0,7fr)]'}`}
+            className={`grid grid-cols-[minmax(0,1fr)] items-center gap-5 lg:gap-14 ${flipped ? 'lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]' : 'lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]'}`}
           >
-            <div className={`relative aspect-[4/5] overflow-hidden rounded-3xl bg-slate-200 shadow-[0_24px_50px_-28px_rgba(11,19,43,0.4)] dark:bg-white/5 ${flipped ? 'order-2' : ''}`}>
+            <div className={`relative aspect-[4/3] overflow-hidden rounded-3xl bg-slate-200 shadow-[0_24px_50px_-28px_rgba(11,19,43,0.4)] dark:bg-white/5 lg:aspect-[4/5] ${flipped ? 'lg:order-2' : ''}`}>
               {mediaUrl && isVideo ? (
                 <LazyVideo src={mediaUrl} className="absolute inset-0 h-full w-full object-cover" />
               ) : mediaUrl ? (
-                <Image src={mediaUrl} alt={day.title} fill sizes="460px" className="object-cover" />
+                <Image src={mediaUrl} alt={day.title} fill sizes="(max-width: 1024px) 92vw, 460px" className="object-cover" />
               ) : null}
             </div>
 
-            <div className={flipped ? 'order-1' : ''}>
+            <div className={flipped ? 'lg:order-1' : ''}>
               <span className="text-sm font-semibold uppercase tracking-wider text-brand-blue">
                 Jour {String(day.dayNumber).padStart(2, '0')}
               </span>
-              <h3 className="mt-2 font-heading text-3xl font-medium leading-tight tracking-tight text-slate-900 dark:text-white">
-                {day.title}
+              <h3 className="mt-2 font-heading text-2xl lg:text-3xl font-medium leading-tight tracking-tight text-slate-900 dark:text-white">
+                {cleanTitle(day.title)}
               </h3>
               <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-white/60">
                 <MapPin className="h-4 w-4 shrink-0 text-brand-blue" strokeWidth={2} aria-hidden="true" />
                 {day.location}
               </p>
-              <ul className={`mt-6 gap-x-8 ${day.activities.length > 8 ? 'columns-2' : ''}`}>
+              <ul className={`mt-4 gap-x-8 lg:mt-6 ${day.activities.length > 8 ? 'lg:columns-2' : ''}`}>
                 {day.activities.map((act, actIdx) => (
                   <li key={act.id || actIdx} className="flex break-inside-avoid items-start gap-3 py-1.5 text-[15px] leading-snug text-slate-700 dark:text-white/80">
                     <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue" aria-hidden="true" />
@@ -218,21 +221,11 @@ function DayRows({ days }: { days: StoryDay[] }) {
   )
 }
 
-/** Short programmes: swipe one day at a time on phones and tablets, side-by-side rows on desktop. Long ones: carousel everywhere. */
+/** 5 days or fewer: everything visible, no slider, on every screen. Longer programmes: carousel. */
 export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) {
   const days = useMemo(() => [...(itinerary || [])].sort((a, b) => a.dayNumber - b.dayNumber), [itinerary])
   if (days.length === 0) return null
-  if (days.length > 5) return <Carousel sorted={days} />
-  return (
-    <>
-      <div className="lg:hidden">
-        <Carousel sorted={days} />
-      </div>
-      <div className="hidden lg:block">
-        <DayRows days={days} />
-      </div>
-    </>
-  )
+  return days.length > 5 ? <Carousel sorted={days} /> : <DayRows days={days} />
 }
 
 /* ─── Main StoryCarousel Component ─────────────────────── */

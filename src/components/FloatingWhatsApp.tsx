@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface FloatingWhatsAppProps {
@@ -10,6 +11,8 @@ interface FloatingWhatsAppProps {
 export default function FloatingWhatsApp({ whatsappNumber = '212661373347' }: FloatingWhatsAppProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  // Tour pages have their own booking bar on phones
+  const onTourPage = usePathname()?.startsWith('/tours/')
 
   // Show button after a short delay for a polished entrance
   useEffect(() => {
@@ -25,7 +28,7 @@ export default function FloatingWhatsApp({ whatsappNumber = '212661373347' }: Fl
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 z-50"
+      className={`fixed bottom-6 right-6 z-50 ${onTourPage ? 'hidden lg:block' : ''}`}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
