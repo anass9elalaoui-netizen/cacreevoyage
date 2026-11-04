@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import TourCard from './TourCard'
 
 interface Tour {
@@ -32,6 +32,11 @@ interface FeaturedToursGridProps {
   tours: Tour[]
 }
 
+/** Phones: time each tour stays before the row moves on by itself. */
+const AUTO_MS = 4500
+/** Phones: pause after a touch before the row starts moving again. */
+const RESUME_MS = 5000
+
 /** Columns follow the number of tours, so a card never ends up alone on its row. */
 function layoutFor(count: number) {
   if (count === 1) return 'md:grid-cols-1 md:max-w-sm'
@@ -43,10 +48,62 @@ function layoutFor(count: number) {
 
 export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
   const [active, setActive] = useState(0)
+  const [isPhone, setIsPhone] = useState(false)
+  const [inView, setInView] = useState(false)
+  const [touching, setTouching] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
+  const resumeRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const reduce = useReducedMotion()
+  const count = tours?.length ?? 0
 
-  if (!tours || tours.length === 0) return null
-  const count = tours.length
+  // Auto-move is for the phone row only: the desktop grid shows every tour at once
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsPhone(mql.matches)
+    update()
+    mql.addEventListener('change', update)
+    return () => mql.removeEventListener('change', update)
+  }, [])
+
+  // Only moves while the visitor can actually see it
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.5 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(
+    () => () => {
+      if (resumeRef.current) clearTimeout(resumeRef.current)
+    },
+    [],
+  )
+
+  const autoplay = isPhone && inView && !touching && !reduce && count > 1
+
+  useEffect(() => {
+    if (!autoplay) return
+    const id = setTimeout(() => {
+      const track = trackRef.current
+      const next = track?.children[(active + 1) % count] as HTMLElement | undefined
+      // Scrolls the row, never the page
+      if (track && next) track.scrollTo({ left: next.offsetLeft - 16, behavior: 'smooth' })
+    }, AUTO_MS)
+    return () => clearTimeout(id)
+  }, [autoplay, active, count])
+
+  const holdAuto = () => {
+    if (resumeRef.current) clearTimeout(resumeRef.current)
+    setTouching(true)
+  }
+  const releaseAuto = () => {
+    if (resumeRef.current) clearTimeout(resumeRef.current)
+    resumeRef.current = setTimeout(() => setTouching(false), RESUME_MS)
+  }
+
+  if (count === 0) return null
 
   const onScroll = () => {
     const track = trackRef.current
@@ -106,6 +163,9 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
       <div
         ref={trackRef}
         onScroll={onScroll}
+        onTouchStart={holdAuto}
+        onTouchEnd={releaseAuto}
+        onTouchCancel={releaseAuto}
         role="group"
         aria-label="Nos circuits signature"
         className={`hide-scrollbar relative flex snap-x snap-mandatory scroll-pl-4 gap-4 overflow-x-auto overscroll-x-contain px-4 pb-2 md:mx-auto md:grid md:snap-none md:gap-6 md:overflow-visible md:px-6 md:pb-0 ${layoutFor(count)}`}
@@ -136,15 +196,25 @@ export default function FeaturedToursGrid({ tours }: FeaturedToursGridProps) {
 
       {count > 1 ? (
         <div className="mt-4 flex items-center gap-3 px-4 md:hidden">
-          <div aria-hidden="true" className="h-1 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
-            <div
-              className="h-full origin-left rounded-full bg-brand-blue transition-transform duration-200 ease-out"
-              style={{ transform: `scaleX(${(active + 1) / count})` }}
-            />
-          </div>
+          <style dangerouslySetInnerHTML={{ __html: '@keyframes ccv-tour-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}' }} />
           <span className="shrink-0 text-xs font-medium tabular-nums text-slate-500 dark:text-white/60">
             {active + 1} / {count}
           </span>
+          {/* One segment per tour: the current one fills until the row moves on */}
+          <div aria-hidden="true" className="flex flex-1 gap-1.5">
+            {tours.map((tour, i) => (
+              <span key={tour.id} className="relative h-1 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+                {i < active ? <span className="absolute inset-0 bg-brand-blue" /> : null}
+                {i === active ? (
+                  <span
+                    key={`${active}-${autoplay}`}
+                    className="absolute inset-0 origin-left bg-brand-blue"
+                    style={autoplay ? { animation: `ccv-tour-fill ${AUTO_MS}ms linear forwards` } : undefined}
+                  />
+                ) : null}
+              </span>
+            ))}
+          </div>
         </div>
       ) : null}
     </section>
