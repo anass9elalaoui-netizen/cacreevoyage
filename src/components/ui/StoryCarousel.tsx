@@ -8,7 +8,9 @@ import {
   useTransform,
   animate,
   PanInfo,
+  useReducedMotion,
 } from 'framer-motion'
+import { MapPin } from 'lucide-react'
 import LazyVideo from '@/components/LazyVideo'
 
 /* ─── Types ──────────────────────────────────────────────── */
@@ -38,7 +40,7 @@ function StoryCard({
 
   return (
     <motion.div
-      className="relative flex-shrink-0 h-[72vh] min-h-[500px] max-h-[680px] aspect-[9/16] mx-auto overflow-hidden rounded-3xl"
+      className="relative flex flex-shrink-0 flex-col justify-end w-[calc(clamp(500px,72vh,680px)*0.5625)] min-h-[clamp(500px,72vh,680px)] rounded-3xl"
       animate={{
         scale: isActive ? 1 : Math.max(0.8, 1 - offset * 0.1),
         opacity: isActive ? 1 : Math.max(0.3, 1 - offset * 0.35),
@@ -50,6 +52,7 @@ function StoryCard({
         mass: 0.8,
       }}
     >
+      <div className="absolute inset-0 overflow-hidden rounded-3xl">
       {/* ── Background Media ── */}
       {mediaUrl && isVideo ? (
         // Only the active card plays (and is never unloaded); others show a still first frame
@@ -86,6 +89,7 @@ function StoryCard({
         animate={{ opacity: isActive ? 0 : Math.min(0.35 + offset * 0.1, 0.6) }}
         transition={{ duration: 0.3 }}
       />
+      </div>
 
       {/* ── Day Badge — drops from top ── */}
       <motion.div
@@ -100,7 +104,7 @@ function StoryCard({
       </motion.div>
 
       {/* ── Content Block ── */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
+      <div className="relative z-20 flex flex-col gap-3 p-6 pt-20 md:p-8 md:pt-20">
         {/* Title — slides from left */}
         <motion.h3
           className="text-xl md:text-2xl font-semibold font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight"
@@ -135,11 +139,11 @@ function StoryCard({
                 type: 'spring',
                 stiffness: 180,
                 damping: 18,
-                delay: isActive ? 0.35 + actIdx * 0.1 : 0,
+                delay: isActive ? 0.3 + Math.min(actIdx, 8) * 0.05 : 0,
               }}
             >
               <span className="w-1.5 h-1.5 mt-2 rounded-full bg-brand-blue/60 flex-shrink-0" />
-              <span className="text-white/70 text-sm font-light leading-relaxed">{act.activity}</span>
+              <span className="text-white/90 text-sm leading-relaxed">{act.activity}</span>
             </motion.div>
           ))}
         </div>
@@ -159,68 +163,84 @@ function StoryCard({
   )
 }
 
-function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
-  const mediaUrl = typeof day.media === 'object' && day.media?.url ? day.media.url : null
-  const isVideo = typeof day.media === 'object' && day.media?.mimeType?.startsWith('video')
+/* ─── Desktop presentation for short programmes: photo and day side by side, alternating ─── */
+function DayRows({ days }: { days: StoryDay[] }) {
+  const reduce = useReducedMotion()
 
   return (
-    // 9:16 is the minimum: a long day makes the card taller instead of cutting its text
-    <div className="relative mx-auto flex w-full max-w-[382px] aspect-[9/16] flex-col justify-end group">
-      <div className="absolute inset-0 overflow-hidden rounded-3xl">
-        {/* ── Background Media ── */}
-        {mediaUrl && isVideo ? (
-          <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
-        ) : mediaUrl ? (
-          <Image src={mediaUrl} alt={day.title} fill sizes="(max-width: 768px) 92vw, 382px" className="object-cover z-0" />
-        ) : (
-          <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#0B132B] via-[#162040] to-[#0B132B]" />
-        )}
+    <ol className="mx-auto flex max-w-6xl flex-col gap-20 px-6">
+      {days.map((day, i) => {
+        const flipped = i % 2 === 1
+        const mediaUrl = typeof day.media === 'object' && day.media?.url ? day.media.url : null
+        const isVideo = typeof day.media === 'object' && day.media?.mimeType?.startsWith('video')
 
-        {/* ── Cinematic Overlay ── */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/55 to-transparent z-10" />
-      </div>
-
-      {/* ── Day Badge ── */}
-      <div className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase drop-shadow-lg tracking-wider">
-        Jour {String(day.dayNumber).padStart(2, '0')}
-      </div>
-
-      {/* ── Content Block ── */}
-      <div className="relative z-20 flex flex-col gap-3 p-6 pt-20 md:p-8 md:pt-20">
-        <h3 className="text-xl md:text-2xl font-semibold font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight">
-          {day.title}
-        </h3>
-        <div className="flex items-center gap-2 text-brand-blue">
-          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-          </svg>
-          <span className="text-xs md:text-sm font-medium tracking-wide">{day.location}</span>
-        </div>
-        <div className="flex flex-col gap-1.5 mt-2">
-          {day.activities.map((act, actIdx) => (
-            <div key={act.id || actIdx} className="flex items-start gap-2.5">
-              <span className="w-1.5 h-1.5 mt-2 rounded-full bg-brand-blue/60 flex-shrink-0" />
-              <span className="text-white/90 text-sm leading-relaxed">{act.activity}</span>
+        return (
+          <motion.li
+            key={day.dayNumber}
+            initial={reduce ? false : { opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className={`grid items-center gap-14 ${flipped ? 'grid-cols-[minmax(0,7fr)_minmax(0,5fr)]' : 'grid-cols-[minmax(0,5fr)_minmax(0,7fr)]'}`}
+          >
+            <div className={`relative aspect-[4/5] overflow-hidden rounded-3xl bg-slate-200 shadow-[0_24px_50px_-28px_rgba(11,19,43,0.4)] dark:bg-white/5 ${flipped ? 'order-2' : ''}`}>
+              {mediaUrl && isVideo ? (
+                <LazyVideo src={mediaUrl} className="absolute inset-0 h-full w-full object-cover" />
+              ) : mediaUrl ? (
+                <Image src={mediaUrl} alt={day.title} fill sizes="460px" className="object-cover" />
+              ) : null}
             </div>
-          ))}
-        </div>
+
+            <div className={flipped ? 'order-1' : ''}>
+              <span className="text-sm font-semibold uppercase tracking-wider text-brand-blue">
+                Jour {String(day.dayNumber).padStart(2, '0')}
+              </span>
+              <h3 className="mt-2 font-heading text-3xl font-medium leading-tight tracking-tight text-slate-900 dark:text-white">
+                {day.title}
+              </h3>
+              <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-white/60">
+                <MapPin className="h-4 w-4 shrink-0 text-brand-blue" strokeWidth={2} aria-hidden="true" />
+                {day.location}
+              </p>
+              <ul className={`mt-6 gap-x-8 ${day.activities.length > 8 ? 'columns-2' : ''}`}>
+                {day.activities.map((act, actIdx) => (
+                  <li key={act.id || actIdx} className="flex break-inside-avoid items-start gap-3 py-1.5 text-[15px] leading-snug text-slate-700 dark:text-white/80">
+                    <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue" aria-hidden="true" />
+                    {act.activity}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.li>
+        )
+      })}
+    </ol>
+  )
+}
+
+/** Short programmes: swipe one day at a time on phones and tablets, side-by-side rows on desktop. Long ones: carousel everywhere. */
+export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) {
+  const days = useMemo(() => [...(itinerary || [])].sort((a, b) => a.dayNumber - b.dayNumber), [itinerary])
+  if (days.length === 0) return null
+  if (days.length > 5) return <Carousel sorted={days} />
+  return (
+    <>
+      <div className="lg:hidden">
+        <Carousel sorted={days} />
       </div>
-    </div>
+      <div className="hidden lg:block">
+        <DayRows days={days} />
+      </div>
+    </>
   )
 }
 
 /* ─── Main StoryCarousel Component ─────────────────────── */
-export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) {
+function Carousel({ sorted }: { sorted: StoryDay[] }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
 
-  // All hooks run before any early return (Rules of Hooks)
-  const sorted = useMemo(
-    () => [...(itinerary || [])].sort((a, b) => a.dayNumber - b.dayNumber),
-    [itinerary],
-  )
   const count = sorted.length
 
   // Card width calculation based on 9:16 aspect ratio
@@ -232,7 +252,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   const getGap = useCallback(() => {
     if (typeof window === 'undefined') return 24
-    return window.innerWidth >= 768 ? 24 : 20
+    return 24 // matches gap-6 on the track
   }, [])
 
   // Calculate drag constraints for justify-center track
@@ -277,7 +297,6 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   // Initial centering
   useEffect(() => {
-    if (count <= 5) return
     const timer = setTimeout(() => {
       const step = getCardWidth() + getGap()
       const centerIndex = (count - 1) / 2
@@ -310,7 +329,6 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
 
   // Keyboard navigation
   useEffect(() => {
-    if (count <= 5) return
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         goTo(activeIndex - 1)
@@ -320,19 +338,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeIndex, goTo, count])
-
-  if (count === 0) return null
-
-  if (count <= 5) {
-    return (
-      <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto px-4 md:px-12 lg:px-20">
-        {sorted.map((day, index) => (
-          <VerticalStoryCard key={day.dayNumber} day={day} index={index} />
-        ))}
-      </div>
-    )
-  }
+  }, [activeIndex, goTo])
 
   return (
     <div className="relative w-full overflow-hidden mt-8 md:mt-12 pb-8">
@@ -363,7 +369,7 @@ export default function StoryCarousel({ itinerary }: { itinerary: StoryDay[] }) 
       {/* ── Drag Track ── */}
       <motion.div
         ref={containerRef}
-        className="flex items-center justify-center gap-6 cursor-grab active:cursor-grabbing w-full min-h-[60vh]"
+        className="flex items-stretch justify-center gap-6 cursor-grab active:cursor-grabbing w-full min-h-[60vh]"
         style={{ x }}
         drag="x"
         dragConstraints={getDragConstraints()}

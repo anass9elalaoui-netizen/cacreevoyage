@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { Check } from 'lucide-react'
 import ItineraryTimeline from '@/components/ItineraryTimeline'
 import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
@@ -227,47 +228,6 @@ export default async function TourPage({ params, searchParams }: Args) {
               </div>
             </section>
 
-            {/* Includes / Excludes */}
-            {(tour.pricing?.priceIncludes?.length > 0 || tour.pricing?.priceExcludes?.length > 0) && (
-              <section>
-                <h2 className="font-heading text-3xl text-slate-900 dark:text-white mb-8 tracking-tight font-bold">{t.includes}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {tour.pricing?.priceIncludes?.length > 0 && (
-                    <div className="rounded-2xl p-6 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
-                      <h3 className="text-slate-900 dark:text-white text-sm uppercase tracking-wider mb-4 flex items-center gap-2 font-semibold">
-                        <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs">✓</span>
-                        {t.included}
-                      </h3>
-                      <ul className="space-y-2">
-                        {tour.pricing.priceIncludes.map((item: any, i: number) => (
-                          <li key={i} className="text-slate-600 dark:text-brand-silver text-sm flex items-start gap-2">
-                            <span className="text-green-400 mt-0.5">•</span>
-                            {item.item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {tour.pricing?.priceExcludes?.length > 0 && (
-                    <div className="rounded-2xl p-6 bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none">
-                      <h3 className="text-slate-900 dark:text-white text-sm uppercase tracking-wider mb-4 flex items-center gap-2 font-semibold">
-                        <span className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-xs">✕</span>
-                        {t.notIncluded}
-                      </h3>
-                      <ul className="space-y-2">
-                        {tour.pricing.priceExcludes.map((item: any, i: number) => (
-                          <li key={i} className="text-slate-600 dark:text-brand-silver text-sm flex items-start gap-2">
-                            <span className="text-red-400 mt-0.5">•</span>
-                            {item.item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </section>
-            )}
-
             {/* Departure dates table */}
             {tour.departureDates && tour.departureDates.length > 0 && (
               <section>
@@ -336,7 +296,8 @@ export default async function TourPage({ params, searchParams }: Args) {
           >
             {t.dayByDay}
           </h2>
-          <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed">
+          {/* Short programmes are not a swipe on desktop */}
+          <p className={`text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed ${tour.storyDays?.length <= 5 ? 'lg:hidden' : ''}`}>
             {t.swipe}
           </p>
         </div>
@@ -370,6 +331,25 @@ export default async function TourPage({ params, searchParams }: Args) {
           </div>
         )}
       </section>
+
+      {/* ──────────────────────────────────────────────────────────
+          WHAT IS INCLUDED
+      ─────────────────────────────────────────────────────────── */}
+      {tour.pricing?.priceIncludes?.length > 0 && (
+        <section className="relative px-4 md:px-6 pb-20 md:pb-28">
+          <div className="mx-auto max-w-6xl rounded-3xl border border-slate-200 bg-white/80 p-8 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none md:p-12">
+            <h2 className="font-heading text-3xl font-medium tracking-tight text-slate-900 dark:text-white md:text-4xl">{t.includes}</h2>
+            <ul className="mt-8 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+              {tour.pricing.priceIncludes.map((item: any, i: number) => (
+                <li key={i} className="flex items-start gap-3 text-[15px] leading-snug text-slate-700 dark:text-white/80">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-blue" strokeWidth={2.5} aria-hidden="true" />
+                  {item.item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* ──────────────────────────────────────────────────────────
           PHOTO GALLERY

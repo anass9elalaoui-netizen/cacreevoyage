@@ -237,7 +237,7 @@ export const Tours: CollectionConfig = {
           name: 'priceExcludes',
           type: 'array',
           fields: [{ name: 'item', type: 'text', localized: true }],
-          admin: { description: 'Ce qui n\'est pas inclus' },
+          admin: { description: '(Non affiché sur le site) Ce qui n\'est pas inclus' },
         },
         {
           name: 'depositPercentage',
