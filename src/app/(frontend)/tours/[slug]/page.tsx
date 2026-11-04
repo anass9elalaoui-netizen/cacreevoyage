@@ -2,6 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import ItineraryTimeline from '@/components/ItineraryTimeline'
 import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
@@ -95,9 +96,15 @@ export default async function TourPage({ params, searchParams }: Args) {
   const hasFixedDates = Boolean(tour.departureDate && tour.returnDate)
 
   // Duration text
+  const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? 's' : ''}`
   const durationText = tour.logistics?.durationDays && tour.logistics?.durationNights
-    ? `${tour.logistics.durationDays} Jours / ${tour.logistics.durationNights} Nuits`
+    ? `${plural(tour.logistics.durationDays, 'Jour')} / ${plural(tour.logistics.durationNights, 'Nuit')}`
     : tour.duration || ''
+
+  // Photos added in the admin under "gallery"
+  const galleryImages = (tour.gallery ?? []).flatMap((g: any) =>
+    typeof g.image === 'object' && g.image?.url ? [{ url: g.image.url, alt: g.image.alt || tour.title }] : [],
+  )
 
   return (
     <main className="relative w-full min-h-screen bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-hidden">
@@ -363,6 +370,36 @@ export default async function TourPage({ params, searchParams }: Args) {
           </div>
         )}
       </section>
+
+      {/* ──────────────────────────────────────────────────────────
+          PHOTO GALLERY
+      ─────────────────────────────────────────────────────────── */}
+      {galleryImages.length > 0 && (
+        <section className="relative px-4 md:px-6 pb-8">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="mb-10 text-center font-heading text-4xl md:text-5xl font-medium tracking-tight text-slate-900 dark:text-white">
+              {t.gallery}
+            </h2>
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+              {galleryImages.map((img: { url: string; alt: string }) => (
+                <div
+                  key={img.url}
+                  className="group relative aspect-[4/5] w-[47%] overflow-hidden rounded-2xl bg-slate-200 dark:bg-white/5 md:w-[31%]"
+                >
+                  <Image
+                    src={img.url}
+                    alt={img.alt}
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 768px) 47vw, 360px"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ──────────────────────────────────────────────────────────
           BOOKING CTA SECTION

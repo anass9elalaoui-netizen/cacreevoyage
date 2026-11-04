@@ -164,18 +164,21 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
   const isVideo = typeof day.media === 'object' && day.media?.mimeType?.startsWith('video')
 
   return (
-    <div className="relative h-[72vh] min-h-[500px] max-h-[680px] aspect-[9/16] mx-auto overflow-hidden rounded-3xl group">
-      {/* ── Background Media ── */}
-      {mediaUrl && isVideo ? (
-        <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
-      ) : mediaUrl ? (
-        <Image src={mediaUrl} alt={day.title} fill sizes="(max-width: 768px) 85vw, 400px" className="object-cover z-0" />
-      ) : (
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#0B132B] via-[#162040] to-[#0B132B]" />
-      )}
+    // 9:16 is the minimum: a long day makes the card taller instead of cutting its text
+    <div className="relative mx-auto flex w-full max-w-[382px] aspect-[9/16] flex-col justify-end group">
+      <div className="absolute inset-0 overflow-hidden rounded-3xl">
+        {/* ── Background Media ── */}
+        {mediaUrl && isVideo ? (
+          <LazyVideo src={mediaUrl} className="absolute inset-0 w-full h-full object-cover z-0" />
+        ) : mediaUrl ? (
+          <Image src={mediaUrl} alt={day.title} fill sizes="(max-width: 768px) 92vw, 382px" className="object-cover z-0" />
+        ) : (
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#0B132B] via-[#162040] to-[#0B132B]" />
+        )}
 
-      {/* ── Cinematic Overlay ── */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/55 to-transparent z-10" />
+        {/* ── Cinematic Overlay ── */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/55 to-transparent z-10" />
+      </div>
 
       {/* ── Day Badge ── */}
       <div className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-semibold uppercase drop-shadow-lg tracking-wider">
@@ -183,7 +186,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
       </div>
 
       {/* ── Content Block ── */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-8 flex flex-col gap-3">
+      <div className="relative z-20 flex flex-col gap-3 p-6 pt-20 md:p-8 md:pt-20">
         <h3 className="text-xl md:text-2xl font-semibold font-heading text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] tracking-tight">
           {day.title}
         </h3>
@@ -198,7 +201,7 @@ function VerticalStoryCard({ day, index }: { day: StoryDay, index: number }) {
           {day.activities.map((act, actIdx) => (
             <div key={act.id || actIdx} className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 mt-2 rounded-full bg-brand-blue/60 flex-shrink-0" />
-              <span className="text-white/70 text-sm font-light leading-relaxed">{act.activity}</span>
+              <span className="text-white/90 text-sm leading-relaxed">{act.activity}</span>
             </div>
           ))}
         </div>
