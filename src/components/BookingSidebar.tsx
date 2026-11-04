@@ -88,15 +88,6 @@ export default function BookingSidebar({
           <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-normal border shadow-sm ${status.color}`}>
             {status.label}
           </span>
-          {pricing?.basePrice && (
-            <div className="text-right">
-              <span className="text-[11px] text-brand-silver block">{t.from}</span>
-              <span className="text-2xl font-heading text-brand-blue">
-                {pricing.basePrice.toLocaleString('fr-FR')} {pricing.currency || '€'}
-              </span>
-              <span className="text-brand-silver text-xs">{t.pers}</span>
-            </div>
-          )}
         </div>
 
         {/* Quick Info */}

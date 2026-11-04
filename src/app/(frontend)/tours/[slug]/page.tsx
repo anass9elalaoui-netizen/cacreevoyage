@@ -55,6 +55,7 @@ export default async function TourPage({ params, searchParams }: Args) {
   const resolvedSearchParams = await searchParams
   const locale = (resolvedSearchParams.locale as string) || 'fr'
   const t = getDictionary(locale).tourPage
+  const bookingT = getDictionary(locale).bookingSidebar
   const payload = await getPayload({ config: configPromise })
 
   const { docs } = await payload.find({
@@ -111,6 +112,9 @@ export default async function TourPage({ params, searchParams }: Args) {
   const priceText = tour.pricing?.basePrice
     ? `${tour.pricing.basePrice.toLocaleString('fr-FR')} ${tour.pricing.currency || '€'}`
     : null
+  const depositText = tour.pricing?.basePrice && tour.pricing?.depositPercentage
+    ? `${bookingT.deposit} ${Math.round(tour.pricing.basePrice * (tour.pricing.depositPercentage / 100)).toLocaleString('fr-FR')} ${tour.pricing.currency || '€'} (${tour.pricing.depositPercentage}% ${bookingT.toConfirm})`
+    : null
   const bookingUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par le circuit "${tour.title}". Pouvez-vous me donner plus d'informations ?`)}`
 
   // Duration text
@@ -132,10 +136,15 @@ export default async function TourPage({ params, searchParams }: Args) {
       <TourHero
         title={tour.title}
         excerpt={tour.excerpt}
-        label={`${tour.scope === 'national' ? 'Maroc' : 'International'} · ${durationText}`}
+        scope={tour.scope === 'national' ? 'Maroc' : 'International'}
+        duration={durationText}
+        status={tour.tourStatus === 'sold_out' ? bookingT.soldOut : tour.tourStatus === 'coming_soon' ? bookingT.comingSoon : null}
+        departureCity={tour.logistics?.departureCity}
+        departureLabel={t.departure}
+        deposit={depositText}
         imageUrl={thumbnailUrl}
         videoUrl={heroVideoUrl}
-        sideImages={galleryImages.filter((img: { url: string }) => img.url !== thumbnailUrl)}
+        otherImages={galleryImages.filter((img: { url: string }) => img.url !== thumbnailUrl)}
         dates={hasFixedDates ? formatRange(tour.departureDate, tour.returnDate) : null}
         price={priceText}
         whatsappUrl={bookingUrl}
@@ -145,23 +154,23 @@ export default async function TourPage({ params, searchParams }: Args) {
       {/* ──────────────────────────────────────────────────────────
           MAIN CONTENT + SIDEBAR LAYOUT
       ─────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-16 md:pt-24 pb-8 md:pb-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pt-8 lg:pt-8 pb-8 md:pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Left: Main content (2/3) */}
-          <div className="lg:col-span-2 space-y-20">
+          <div className="lg:col-span-2 space-y-12 lg:space-y-20">
             {/* Tour Overview */}
             <section>
-              <span className="uppercase text-brand-blue text-xs font-body mb-4 block font-semibold tracking-wider">
+              <span className="uppercase text-brand-blue text-xs font-body mb-4 hidden lg:block font-semibold tracking-wider">
                 {t.overview}
               </span>
-              <h2 className="font-heading text-3xl md:text-4xl text-slate-900 dark:text-white mb-6 tracking-tight font-bold">
+              <h2 className="font-heading text-2xl md:text-4xl text-slate-900 dark:text-white mb-3 lg:mb-6 tracking-tight font-medium lg:font-bold">
                 {t.about}
               </h2>
 
               {/* Meta badges */}
-              <div className="flex flex-wrap gap-3 mb-8">
+              <div className="flex flex-wrap gap-3 lg:mb-8 [&>span:not(.hidden)]:mb-3 lg:[&>span]:mb-0">
                 {durationText && (
-                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
+                  <span className="hidden lg:inline-block px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     <Clock className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{durationText}
                   </span>
                 )}
@@ -176,7 +185,7 @@ export default async function TourPage({ params, searchParams }: Args) {
                   </span>
                 )}
                 {tour.logistics?.departureCity && (
-                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
+                  <span className="hidden lg:inline-block px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
                     <MapPin className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{t.departure} {tour.logistics.departureCity}
                   </span>
                 )}
@@ -192,7 +201,7 @@ export default async function TourPage({ params, searchParams }: Args) {
               </p>
 
               {/* Animated Scroll Indicator */}
-              <div className="mt-10 flex flex-col items-start opacity-80 hover:opacity-100 transition-opacity">
+              <div className="mt-10 hidden lg:flex flex-col items-start opacity-80 hover:opacity-100 transition-opacity">
                 <a href="#itinerary" className="flex items-center gap-4 text-brand-blue group cursor-pointer">
                   <span className="text-xs uppercase tracking-widest font-semibold">Découvrir l'itinéraire</span>
                   <div className="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
@@ -241,7 +250,7 @@ export default async function TourPage({ params, searchParams }: Args) {
           </div>
 
           {/* Right: Booking Sidebar (1/3) */}
-          <div className="lg:col-span-1">
+          <div className="hidden lg:block lg:col-span-1">
             <BookingSidebar
               tourId={String(tour.id)}
               tourTitle={tour.title}
@@ -260,14 +269,14 @@ export default async function TourPage({ params, searchParams }: Args) {
       {/* ──────────────────────────────────────────────────────────
           TRAVEL STORY CAROUSEL — Drag-based 9:16 Cards
       ─────────────────────────────────────────────────────────── */}
-      <section id="itinerary" className="relative z-10 pt-12 md:pt-16 pb-24 md:pb-32">
+      <section id="itinerary" className="relative z-10 scroll-mt-20 pt-4 md:pt-16 pb-12 md:pb-32">
         <div className="absolute top-0 left-1/3 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto text-center mb-10 md:mb-20 px-4 relative z-10">
+        <div className="max-w-4xl mx-auto text-left lg:text-center mb-6 md:mb-20 px-4 relative z-10">
           <span className="uppercase text-brand-blue font-semibold text-xs mb-4 block drop-shadow-md tracking-wider">
             {t.itinerary}
           </span>
-          <h2 className="text-4xl md:text-6xl font-heading text-slate-900 dark:text-white mb-6 font-medium tracking-wide"
+          <h2 className="text-2xl md:text-6xl font-heading text-slate-900 dark:text-white mb-2 lg:mb-6 font-medium tracking-tight lg:tracking-wide"
             style={{ textShadow: '0 0 40px rgba(56,163,165,0.1)' }}
           >
             {t.dayByDay}
@@ -314,10 +323,10 @@ export default async function TourPage({ params, searchParams }: Args) {
           WHAT IS INCLUDED
       ─────────────────────────────────────────────────────────── */}
       {tour.pricing?.priceIncludes?.length > 0 && (
-        <section className="relative px-4 md:px-6 pb-20 md:pb-28">
-          <div className="mx-auto max-w-6xl rounded-3xl border border-slate-200 bg-white/80 p-8 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none md:p-12">
-            <h2 className="font-heading text-3xl font-medium tracking-tight text-slate-900 dark:text-white md:text-4xl">{t.includes}</h2>
-            <ul className="mt-8 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="relative px-4 md:px-6 pb-10 md:pb-28">
+          <div className="mx-auto max-w-6xl rounded-3xl border border-slate-200 bg-white/80 p-5 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none md:p-12">
+            <h2 className="font-heading text-2xl font-medium tracking-tight text-slate-900 dark:text-white md:text-4xl">{t.includes}</h2>
+            <ul className="mt-5 grid grid-cols-1 gap-x-10 gap-y-3 sm:grid-cols-2 lg:mt-8 lg:grid-cols-3 lg:gap-y-4">
               {tour.pricing.priceIncludes.map((item: any, i: number) => (
                 <li key={i} className="flex items-start gap-3 text-[15px] leading-snug text-slate-700 dark:text-white/80">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-blue" strokeWidth={2.5} aria-hidden="true" />
@@ -333,7 +342,7 @@ export default async function TourPage({ params, searchParams }: Args) {
           PHOTO GALLERY
       ─────────────────────────────────────────────────────────── */}
       {galleryImages.length > 0 && (
-        <section className="relative px-4 md:px-6 pb-8">
+        <section className="relative hidden px-6 pb-8 lg:block">
           <div className="max-w-6xl mx-auto">
             <h2 className="mb-10 text-center font-heading text-4xl md:text-5xl font-medium tracking-tight text-slate-900 dark:text-white">
               {t.gallery}
@@ -362,7 +371,7 @@ export default async function TourPage({ params, searchParams }: Args) {
       {/* ──────────────────────────────────────────────────────────
           BOOKING CTA SECTION
       ─────────────────────────────────────────────────────────── */}
-      <section className="py-32 text-center px-4 relative overflow-hidden">
+      <section className="hidden lg:block py-32 text-center px-4 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-brand-blue/5 rounded-full blur-[150px] pointer-events-none" />
 

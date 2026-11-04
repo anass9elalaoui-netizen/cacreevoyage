@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
 import '../globals.css'
 import GlassNavbar from '@/components/GlassNavbar'
@@ -22,6 +22,17 @@ const manropeBody = Manrope({
   weight: ['300', '400', '500', '600'],
   display: 'swap',
 })
+
+// viewport-fit=cover makes env(safe-area-inset-*) real; the page background reaches behind the phone's chrome
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B132B' },
+  ],
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),

@@ -15,6 +15,34 @@
 
 html {
   scroll-behavior: smooth;
+  /* No grey flash on tap: every control has its own :active state */
+  -webkit-tap-highlight-color: transparent;
+  /* No font inflation when a phone turns to landscape */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Controls answer the tap at once, and a long press does not select their label */
+a,
+button,
+[role='button'],
+[role='tab'] {
+  touch-action: manipulation;
+}
+
+button,
+[role='button'],
+[role='tab'] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* iOS zooms the page into any field under 16px and never zooms back out */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }
 
 body {
