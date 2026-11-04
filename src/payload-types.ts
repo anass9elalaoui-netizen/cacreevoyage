@@ -344,7 +344,7 @@ export interface Tour {
    */
   programPDF?: (number | null) | Media;
   /**
-   * Jusqu'à 5 jours : tout le programme est visible sur la page. Au-delà : les jours défilent en carrousel.
+   * Jusqu'à 5 jours : tout le programme est visible sur la page. Au-delà : les jours sont regroupés par étape (champ « Étape »).
    */
   storyDays?:
     | {
@@ -352,6 +352,10 @@ export interface Tour {
          * Numéro du jour (1, 2, 3…)
          */
         dayNumber: number;
+        /**
+         * Circuits de plus de 5 jours : regroupe les jours sur la page, une étape à la fois. Exemple : Paje. Vide : groupes de 4 jours.
+         */
+        stage?: string | null;
         /**
          * Exemple : Samedi 21 novembre 2026
          */
@@ -890,6 +894,7 @@ export interface ToursSelect<T extends boolean = true> {
     | T
     | {
         dayNumber?: T;
+        stage?: T;
         title?: T;
         location?: T;
         activities?:

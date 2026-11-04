@@ -281,7 +281,7 @@ export const Tours: CollectionConfig = {
               label: 'Programme jour par jour',
               labels: { singular: 'Jour', plural: 'Jours' },
               admin: {
-                description: 'Jusqu\'à 5 jours : tout le programme est visible sur la page. Au-delà : les jours défilent en carrousel.',
+                description: 'Jusqu\'à 5 jours : tout le programme est visible sur la page. Au-delà : les jours sont regroupés par étape (champ « Étape »).',
               },
               fields: [
                 {
@@ -291,6 +291,15 @@ export const Tours: CollectionConfig = {
                   required: true,
                   admin: {
                     description: 'Numéro du jour (1, 2, 3…)',
+                  },
+                },
+                {
+                  name: 'stage',
+                  label: 'Étape',
+                  type: 'text',
+                  localized: true,
+                  admin: {
+                    description: 'Circuits de plus de 5 jours : regroupe les jours sur la page, une étape à la fois. Exemple : Paje. Vide : groupes de 4 jours.',
                   },
                 },
                 {

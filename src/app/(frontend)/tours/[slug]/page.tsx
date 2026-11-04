@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
 import ItineraryTimeline from '@/components/ItineraryTimeline'
-import StoryCarousel from '@/components/ui/StoryCarousel'
+import TourProgramme from '@/components/ui/TourProgramme'
 import Footer from '@/components/Footer'
 import TourPracticalInfo, { type PracticalItem } from '@/components/TourPracticalInfo'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
@@ -250,7 +250,7 @@ export default async function TourPage({ params, searchParams }: Args) {
           >
             {t.dayByDay}
           </h2>
-          {/* Only long programmes are a swipe */}
+          {/* Only long programmes are split into stages */}
           {tour.storyDays?.length > 5 ? (
             <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed">
               {t.swipe}
@@ -259,7 +259,7 @@ export default async function TourPage({ params, searchParams }: Args) {
         </div>
 
         {hasStoryDays ? (
-          <StoryCarousel itinerary={tour.storyDays as any[]} />
+          <TourProgramme itinerary={tour.storyDays as any[]} labels={{ previous: t.previousStage, next: t.nextStage }} />
         ) : hasLegacyBlocks ? (
           <div className="px-4 md:px-12">
             <ItineraryTimeline blocks={tour.itineraryBlocks} />
