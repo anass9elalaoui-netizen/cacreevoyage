@@ -2,7 +2,6 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import ItineraryTimeline from '@/components/ItineraryTimeline'
 import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
@@ -391,12 +390,6 @@ export default async function TourPage({ params, searchParams }: Args) {
             >
               {t.bookWhatsapp}
             </a>
-            <Link
-              href="/sur-mesure"
-              className="inline-block bg-white/80 dark:bg-white/10 border border-slate-200 dark:border-white/20 hover:bg-white/90 dark:hover:bg-white/20 text-slate-900 dark:text-white px-10 py-5 rounded-full font-medium text-lg transition-all shadow-md dark:shadow-none"
-            >
-              {t.customize}
-            </Link>
           </div>
         </div>
       </section>
