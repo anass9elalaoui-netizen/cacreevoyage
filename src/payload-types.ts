@@ -274,25 +274,15 @@ export interface Media {
  */
 export interface Tour {
   id: number;
-  /**
-   * ⚡ AUTO-FILL: Collez le code JSON généré par l'IA ici, puis cliquez sur Save. Tous les champs seront remplis automatiquement.
-   */
-  importJSON?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  title: string;
   slug?: string | null;
   /**
-   * 2-3 phrases pour les cartes et previews
+   * Statut de disponibilité du circuit
    */
-  shortDescription?: string | null;
-  duration: string;
+  tourStatus?: ('available' | 'coming_soon' | 'sold_out') | null;
+  /**
+   * Cochez cette case si le circuit est actuellement ouvert aux réservations. Si décoché, la carte de la destination redirigera uniquement vers la page d'inspiration.
+   */
+  isAvailable?: boolean | null;
   /**
    * Date de départ confirmée (laisser vide pour les voyages sur mesure)
    */
@@ -302,28 +292,43 @@ export interface Tour {
    */
   returnDate?: string | null;
   /**
-   * Saisons recommandées pour ce circuit
+   * Choisissez le pays/destination auquel ce circuit appartient.
    */
-  seasons?: ('spring' | 'summer' | 'autumn' | 'winter')[] | null;
-  /**
-   * Statut de disponibilité du circuit
-   */
-  tourStatus?: ('available' | 'coming_soon' | 'sold_out') | null;
+  destination?: (number | null) | Destination;
   /**
    * Thème principal du circuit
    */
   theme?: ('ocean' | 'desert' | 'mountain' | 'culture' | 'forest_nature') | null;
+  /**
+   * Saisons recommandées pour ce circuit
+   */
+  seasons?: ('spring' | 'summer' | 'autumn' | 'winter')[] | null;
+  isFeatured?: boolean | null;
+  /**
+   * Ordre d'affichage dans la section Featured
+   */
+  featuredOrder?: number | null;
+  title: string;
   scope: 'national' | 'international';
   /**
-   * Choisissez le pays/destination auquel ce circuit appartient.
+   * Affichée telle quelle partout sur le site. Exemple : 4 Jours / 2 Nuits
    */
-  destination?: (number | null) | Destination;
+  duration: string;
+  /**
+   * Une ou deux phrases sous le titre, en haut de la page du circuit.
+   */
   excerpt: string;
   /**
-   * Image de couverture pour le carrousel (affichée avant le survol vidéo).
+   * Le texte de présentation du circuit, sous le haut de page. Vide : la phrase d'accroche est utilisée.
+   */
+  shortDescription?: string | null;
+  /**
+   * La grande photo en haut de la page du circuit, et sur sa carte dans les listes.
    */
   thumbnail?: (number | null) | Media;
-  heroVideo?: (number | null) | Media;
+  /**
+   * Les 2 premières photos s'affichent à côté de la couverture sur ordinateur. Toutes se balaient en haut de page sur téléphone.
+   */
   gallery?:
     | {
         image?: (number | null) | Media;
@@ -331,93 +336,46 @@ export interface Tour {
       }[]
     | null;
   /**
+   * Remplace la photo de couverture en haut de page. Utiliser un fichier MP4 léger, compatible avec tous les navigateurs.
+   */
+  heroVideo?: (number | null) | Media;
+  /**
    * Uploader le programme en PDF (ex: Itinéraire détaillé).
    */
   programPDF?: (number | null) | Media;
   /**
-   * Informations tarifaires du circuit
+   * Jusqu'à 5 jours : tout le programme est visible sur la page. Au-delà : les jours défilent en carrousel.
    */
-  pricing?: {
-    /**
-     * Prix par personne en EUR
-     */
-    basePrice?: number | null;
-    currency?: ('EUR' | 'MAD' | 'USD') | null;
-    /**
-     * Ce qui est inclus dans le prix
-     */
-    priceIncludes?:
-      | {
-          item?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Ce qui n'est pas inclus
-     */
-    priceExcludes?:
-      | {
-          item?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Pourcentage d'acompte pour confirmer la réservation
-     */
-    depositPercentage?: number | null;
-  };
-  /**
-   * Détails logistiques du circuit
-   */
-  logistics?: {
-    /**
-     * Nombre de jours
-     */
-    durationDays?: number | null;
-    /**
-     * Nombre de nuits
-     */
-    durationNights?: number | null;
-    minGroupSize?: number | null;
-    maxGroupSize?: number | null;
-    difficulty?: ('Facile' | 'Modéré' | 'Exigeant' | 'Difficile') | null;
-    departureCity?: string | null;
-    languages?: ('Français' | 'English' | 'العربية' | 'Español')[] | null;
-  };
-  /**
-   * Dates de départ planifiées avec disponibilité
-   */
-  departureDates?:
+  storyDays?:
     | {
-        date: string;
-        spotsLeft?: number | null;
-        status?: ('Available' | 'Limited' | 'Full' | 'On Request') | null;
+        /**
+         * Numéro du jour (1, 2, 3…)
+         */
+        dayNumber: number;
+        /**
+         * Exemple : Samedi 21 novembre 2026
+         */
+        title: string;
+        /**
+         * Exemple : Errachidia → Merzouga
+         */
+        location: string;
+        /**
+         * Une ligne par activité.
+         */
+        activities: {
+          activity: string;
+          id?: string | null;
+        }[];
+        /**
+         * Photo ou vidéo de ce jour.
+         */
+        media?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
   /**
-   * Optimisation pour les moteurs de recherche
-   */
-  seo?: {
-    metaTitle?: string | null;
-    /**
-     * 150-160 caractères max
-     */
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    keywords?: string | null;
-  };
-  /**
-   * Cochez cette case si le circuit est actuellement ouvert aux réservations. Si décoché, la carte de la destination redirigera uniquement vers la page d'inspiration.
-   */
-  isAvailable?: boolean | null;
-  isFeatured?: boolean | null;
-  /**
-   * Ordre d'affichage dans la section Featured
-   */
-  featuredOrder?: number | null;
-  /**
-   * (Legacy) Anciens blocs d'itinéraire avec contenu riche. Préférer "Story Days" ci-dessous.
+   * (Ancien format) Utilisé seulement si le programme jour par jour est vide.
    */
   itineraryBlocks?:
     | {
@@ -441,36 +399,78 @@ export interface Tour {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Itinéraire jour par jour au format Travel Story vertical. Chaque jour est une carte plein écran 9:16.
-   */
-  storyDays?:
-    | {
-        /**
-         * Numéro du jour (ex: 1, 2, 3…)
-         */
-        dayNumber: number;
-        /**
-         * Titre du jour (ex: "Arrivée aux Dunes")
-         */
-        title: string;
-        /**
-         * Lieu principal (ex: "Errachidia -> Merzouga")
-         */
-        location: string;
-        /**
-         * Liste des activités du jour
-         */
-        activities: {
-          activity: string;
+  pricing?: {
+    /**
+     * Vide : le site affiche « Sur devis ».
+     */
+    basePrice?: number | null;
+    currency?: ('EUR' | 'MAD' | 'USD') | null;
+    /**
+     * La liste « Ce qui est inclus », sous le programme.
+     */
+    priceIncludes?:
+      | {
+          item?: string | null;
           id?: string | null;
-        }[];
-        /**
-         * Média vertical 9:16 (vidéo ou image) pour ce jour.
-         */
-        media?: (number | null) | Media;
+        }[]
+      | null;
+    priceExcludes?:
+      | {
+          item?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Vide : aucun acompte affiché. Exemple : 30
+     */
+    depositPercentage?: number | null;
+  };
+  /**
+   * Chaque information remplie s'affiche sur la page du circuit. Vide : elle disparaît.
+   */
+  logistics?: {
+    durationDays?: number | null;
+    durationNights?: number | null;
+    minGroupSize?: number | null;
+    maxGroupSize?: number | null;
+    difficulty?: ('Facile' | 'Modéré' | 'Exigeant' | 'Difficile') | null;
+    departureCity?: string | null;
+    languages?: ('Français' | 'English' | 'العربية' | 'Español')[] | null;
+  };
+  /**
+   * Uniquement si le circuit part plusieurs fois : ajoute un tableau des dates sur la page.
+   */
+  departureDates?:
+    | {
+        date: string;
+        spotsLeft?: number | null;
+        status?: ('Available' | 'Limited' | 'Full' | 'On Request') | null;
         id?: string | null;
       }[]
+    | null;
+  /**
+   * Optimisation pour les moteurs de recherche
+   */
+  seo?: {
+    metaTitle?: string | null;
+    /**
+     * 150-160 caractères max
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    keywords?: string | null;
+  };
+  /**
+   * ⚡ AUTO-FILL: Collez le code JSON généré par l'IA ici, puis cliquez sur Save. Tous les champs seront remplis automatiquement.
+   */
+  importJSON?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
     | null;
   updatedAt: string;
   createdAt: string;
@@ -862,28 +862,53 @@ export interface DestinationsSelect<T extends boolean = true> {
  * via the `definition` "tours_select".
  */
 export interface ToursSelect<T extends boolean = true> {
-  importJSON?: T;
-  title?: T;
   slug?: T;
-  shortDescription?: T;
-  duration?: T;
+  tourStatus?: T;
+  isAvailable?: T;
   departureDate?: T;
   returnDate?: T;
-  seasons?: T;
-  tourStatus?: T;
-  theme?: T;
-  scope?: T;
   destination?: T;
+  theme?: T;
+  seasons?: T;
+  isFeatured?: T;
+  featuredOrder?: T;
+  title?: T;
+  scope?: T;
+  duration?: T;
   excerpt?: T;
+  shortDescription?: T;
   thumbnail?: T;
-  heroVideo?: T;
   gallery?:
     | T
     | {
         image?: T;
         id?: T;
       };
+  heroVideo?: T;
   programPDF?: T;
+  storyDays?:
+    | T
+    | {
+        dayNumber?: T;
+        title?: T;
+        location?: T;
+        activities?:
+          | T
+          | {
+              activity?: T;
+              id?: T;
+            };
+        media?: T;
+        id?: T;
+      };
+  itineraryBlocks?:
+    | T
+    | {
+        dayTitle?: T;
+        dayImage?: T;
+        dayContent?: T;
+        id?: T;
+      };
   pricing?:
     | T
     | {
@@ -930,32 +955,7 @@ export interface ToursSelect<T extends boolean = true> {
         ogImage?: T;
         keywords?: T;
       };
-  isAvailable?: T;
-  isFeatured?: T;
-  featuredOrder?: T;
-  itineraryBlocks?:
-    | T
-    | {
-        dayTitle?: T;
-        dayImage?: T;
-        dayContent?: T;
-        id?: T;
-      };
-  storyDays?:
-    | T
-    | {
-        dayNumber?: T;
-        title?: T;
-        location?: T;
-        activities?:
-          | T
-          | {
-              activity?: T;
-              id?: T;
-            };
-        media?: T;
-        id?: T;
-      };
+  importJSON?: T;
   updatedAt?: T;
   createdAt?: T;
 }

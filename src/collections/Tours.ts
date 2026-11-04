@@ -36,19 +36,6 @@ export const Tours: CollectionConfig = {
   },
   fields: [
     {
-      name: 'importJSON',
-      type: 'json',
-      admin: {
-        description: '⚡ AUTO-FILL: Collez le code JSON généré par l\'IA ici, puis cliquez sur Save. Tous les champs seront remplis automatiquement.',
-      },
-    },
-    {
-      name: 'title',
-      type: 'text',
-      required: true,
-      localized: true,
-    },
-    {
       name: 'slug',
       type: 'text',
       admin: {
@@ -72,54 +59,8 @@ export const Tours: CollectionConfig = {
       },
     },
     {
-      name: 'shortDescription',
-      type: 'textarea',
-      localized: true,
-      admin: {
-        description: '2-3 phrases pour les cartes et previews',
-      },
-    },
-    {
-      name: 'duration',
-      type: 'text',
-      required: true,
-      localized: true,
-    },
-    {
-      name: 'departureDate',
-      type: 'date',
-      admin: {
-        position: 'sidebar',
-        description: 'Date de départ confirmée (laisser vide pour les voyages sur mesure)',
-        date: { pickerAppearance: 'dayOnly', displayFormat: 'dd/MM/yyyy' },
-      },
-    },
-    {
-      name: 'returnDate',
-      type: 'date',
-      admin: {
-        position: 'sidebar',
-        description: 'Date de retour confirmée',
-        date: { pickerAppearance: 'dayOnly', displayFormat: 'dd/MM/yyyy' },
-      },
-    },
-    {
-      name: 'seasons',
-      type: 'select',
-      hasMany: true,
-      options: [
-        { label: 'Printemps', value: 'spring' },
-        { label: 'Été', value: 'summer' },
-        { label: 'Automne', value: 'autumn' },
-        { label: 'Hiver', value: 'winter' },
-      ],
-      admin: {
-        description: 'Saisons recommandées pour ce circuit',
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'tourStatus',
+      label: 'Disponibilité',
       type: 'select',
       defaultValue: 'available',
       options: [
@@ -133,7 +74,51 @@ export const Tours: CollectionConfig = {
       },
     },
     {
+      name: 'isAvailable',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Circuit Disponible / Visible au public',
+      admin: {
+        position: 'sidebar',
+        description:
+          'Cochez cette case si le circuit est actuellement ouvert aux réservations. Si décoché, la carte de la destination redirigera uniquement vers la page d\'inspiration.',
+      },
+    },
+    {
+      name: 'departureDate',
+      label: 'Date de départ',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        description: 'Date de départ confirmée (laisser vide pour les voyages sur mesure)',
+        date: { pickerAppearance: 'dayOnly', displayFormat: 'dd/MM/yyyy' },
+      },
+    },
+    {
+      name: 'returnDate',
+      label: 'Date de retour',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        description: 'Date de retour confirmée',
+        date: { pickerAppearance: 'dayOnly', displayFormat: 'dd/MM/yyyy' },
+      },
+    },
+    {
+      name: 'destination',
+      label: 'Destination',
+      type: 'relationship',
+      relationTo: 'destinations',
+      required: false,
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Choisissez le pays/destination auquel ce circuit appartient.',
+      },
+    },
+    {
       name: 'theme',
+      label: 'Thème',
       type: 'select',
       options: [
         { label: 'Océan', value: 'ocean' },
@@ -148,189 +133,31 @@ export const Tours: CollectionConfig = {
       },
     },
     {
-      name: 'scope',
+      name: 'seasons',
+      label: 'Saisons',
       type: 'select',
-      required: true,
+      hasMany: true,
       options: [
-        { label: 'National', value: 'national' },
-        { label: 'International', value: 'international' },
+        { label: 'Printemps', value: 'spring' },
+        { label: 'Été', value: 'summer' },
+        { label: 'Automne', value: 'autumn' },
+        { label: 'Hiver', value: 'winter' },
       ],
-    },
-    {
-      name: 'destination',
-      type: 'relationship',
-      relationTo: 'destinations',
-      required: false,
-      hasMany: false,
       admin: {
+        description: 'Saisons recommandées pour ce circuit',
         position: 'sidebar',
-        description: 'Choisissez le pays/destination auquel ce circuit appartient.',
-      },
-    },
-    {
-      name: 'excerpt',
-      type: 'textarea',
-      required: true,
-      localized: true,
-    },
-    {
-      name: 'thumbnail',
-      type: 'upload',
-      relationTo: 'media',
-      required: false,
-      admin: {
-        description: 'Image de couverture pour le carrousel (affichée avant le survol vidéo).',
-      },
-    },
-    {
-      name: 'heroVideo',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'gallery',
-      type: 'array',
-      fields: [
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-        },
-      ],
-    },
-    {
-      name: 'programPDF',
-      type: 'upload',
-      relationTo: 'media',
-      required: false,
-      admin: {
-        description: 'Uploader le programme en PDF (ex: Itinéraire détaillé).',
-      },
-    },
-
-    /* ──────────────────────────────────────────────────────────
-       PRICING — Commercial fields for booking / display
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'pricing',
-      type: 'group',
-      admin: { description: 'Informations tarifaires du circuit' },
-      fields: [
-        {
-          name: 'basePrice',
-          type: 'number',
-          admin: { description: 'Prix par personne en EUR' },
-        },
-        {
-          name: 'currency',
-          type: 'select',
-          options: ['EUR', 'MAD', 'USD'],
-          defaultValue: 'EUR',
-        },
-        {
-          name: 'priceIncludes',
-          type: 'array',
-          fields: [{ name: 'item', type: 'text', localized: true }],
-          admin: { description: 'Ce qui est inclus dans le prix' },
-        },
-        {
-          name: 'priceExcludes',
-          type: 'array',
-          fields: [{ name: 'item', type: 'text', localized: true }],
-          admin: { description: '(Non affiché sur le site) Ce qui n\'est pas inclus' },
-        },
-        {
-          name: 'depositPercentage',
-          type: 'number',
-          defaultValue: 30,
-          admin: { description: 'Pourcentage d\'acompte pour confirmer la réservation' },
-        },
-      ],
-    },
-
-    /* ──────────────────────────────────────────────────────────
-       LOGISTICS — Operational details
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'logistics',
-      type: 'group',
-      admin: { description: 'Détails logistiques du circuit' },
-      fields: [
-        { name: 'durationDays', type: 'number', admin: { description: 'Nombre de jours' } },
-        { name: 'durationNights', type: 'number', admin: { description: 'Nombre de nuits' } },
-        { name: 'minGroupSize', type: 'number', defaultValue: 1 },
-        { name: 'maxGroupSize', type: 'number', defaultValue: 12 },
-        {
-          name: 'difficulty',
-          type: 'select',
-          options: ['Facile', 'Modéré', 'Exigeant', 'Difficile'],
-        },
-        { name: 'departureCity', type: 'text', defaultValue: 'Casablanca', localized: true },
-        {
-          name: 'languages',
-          type: 'select',
-          hasMany: true,
-          options: ['Français', 'English', 'العربية', 'Español'],
-        },
-      ],
-    },
-
-    /* ──────────────────────────────────────────────────────────
-       AVAILABILITY — Departure dates & spot tracking
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'departureDates',
-      type: 'array',
-      admin: { description: 'Dates de départ planifiées avec disponibilité' },
-      fields: [
-        { name: 'date', type: 'date', required: true },
-        { name: 'spotsLeft', type: 'number' },
-        {
-          name: 'status',
-          type: 'select',
-          options: ['Available', 'Limited', 'Full', 'On Request'],
-          defaultValue: 'Available',
-        },
-      ],
-    },
-
-    /* ──────────────────────────────────────────────────────────
-       SEO — Per-tour search engine optimization
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'seo',
-      type: 'group',
-      admin: { description: 'Optimisation pour les moteurs de recherche' },
-      fields: [
-        { name: 'metaTitle', type: 'text', localized: true },
-        { name: 'metaDescription', type: 'textarea', localized: true, admin: { description: '150-160 caractères max' } },
-        { name: 'ogImage', type: 'upload', relationTo: 'media' },
-        { name: 'keywords', type: 'text', localized: true },
-      ],
-    },
-
-    /* ──────────────────────────────────────────────────────────
-       FEATURED & COMMERCIAL FLAGS
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'isAvailable',
-      type: 'checkbox',
-      defaultValue: true,
-      label: 'Circuit Disponible / Visible au public',
-      admin: {
-        position: 'sidebar',
-        description:
-          'Cochez cette case si le circuit est actuellement ouvert aux réservations. Si décoché, la carte de la destination redirigera uniquement vers la page d\'inspiration.',
       },
     },
     {
       name: 'isFeatured',
+      label: 'Mettre en avant (badge Signature)',
       type: 'checkbox',
       defaultValue: false,
       admin: { position: 'sidebar' },
     },
     {
       name: 'featuredOrder',
+      label: 'Ordre de mise en avant',
       type: 'number',
       admin: {
         position: 'sidebar',
@@ -338,96 +165,338 @@ export const Tours: CollectionConfig = {
         description: 'Ordre d\'affichage dans la section Featured',
       },
     },
-
-    /* ──────────────────────────────────────────────────────────
-       LEGACY: Old itinerary blocks (kept for backward compat)
-    ─────────────────────────────────────────────────────────── */
+    // Tabs without a name only organise the admin screen: the data and the database stay the same
     {
-      name: 'itineraryBlocks',
-      type: 'array',
-      admin: {
-        description: '(Legacy) Anciens blocs d\'itinéraire avec contenu riche. Préférer "Story Days" ci-dessous.',
-      },
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'dayTitle',
-          type: 'text',
-          localized: true,
-        },
-        {
-          name: 'dayImage',
-          type: 'upload',
-          relationTo: 'media',
-        },
-        {
-          name: 'dayContent',
-          type: 'richText',
-          localized: true,
-        },
-      ],
-    },
-
-    /* ──────────────────────────────────────────────────────────
-       NEW: Travel Story Timeline — Vertical 9:16 Format
-    ─────────────────────────────────────────────────────────── */
-    {
-      name: 'storyDays',
-      type: 'array',
-      label: 'Story Days (Timeline 9:16)',
-      admin: {
-        description: 'Itinéraire jour par jour au format Travel Story vertical. Chaque jour est une carte plein écran 9:16.',
-      },
-      fields: [
-        {
-          name: 'dayNumber',
-          type: 'number',
-          required: true,
-          admin: {
-            description: 'Numéro du jour (ex: 1, 2, 3…)',
-          },
-        },
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-          localized: true,
-          admin: {
-            description: 'Titre du jour (ex: "Arrivée aux Dunes")',
-          },
-        },
-        {
-          name: 'location',
-          type: 'text',
-          required: true,
-          localized: true,
-          admin: {
-            description: 'Lieu principal (ex: "Errachidia -> Merzouga")',
-          },
-        },
-        {
-          name: 'activities',
-          type: 'array',
-          required: true,
-          admin: {
-            description: 'Liste des activités du jour',
-          },
+          label: 'Présentation',
+          description: 'Ce que le visiteur lit en premier.',
           fields: [
             {
-              name: 'activity',
+              name: 'title',
+              label: 'Titre du circuit',
               type: 'text',
               required: true,
               localized: true,
             },
+            {
+              name: 'scope',
+              label: 'Type de circuit',
+              type: 'select',
+              required: true,
+              options: [
+                { label: 'National', value: 'national' },
+                { label: 'International', value: 'international' },
+              ],
+            },
+            {
+              name: 'duration',
+              label: 'Durée',
+              type: 'text',
+              required: true,
+              localized: true,
+              admin: {
+                description: 'Affichée telle quelle partout sur le site. Exemple : 4 Jours / 2 Nuits',
+              },
+            },
+            {
+              name: 'excerpt',
+              label: 'Phrase d\'accroche',
+              type: 'textarea',
+              required: true,
+              localized: true,
+              admin: {
+                description: 'Une ou deux phrases sous le titre, en haut de la page du circuit.',
+              },
+            },
+            {
+              name: 'shortDescription',
+              type: 'textarea',
+              localized: true,
+              label: 'Description (section « À propos »)',
+              admin: {
+                description: 'Le texte de présentation du circuit, sous le haut de page. Vide : la phrase d\'accroche est utilisée.',
+              },
+            },
           ],
         },
         {
-          name: 'media',
-          type: 'upload',
-          relationTo: 'media',
-          required: false,
-          admin: {
-            description: 'Média vertical 9:16 (vidéo ou image) pour ce jour.',
-          },
+          label: 'Photos et vidéo',
+          fields: [
+            {
+              name: 'thumbnail',
+              label: 'Photo de couverture',
+              type: 'upload',
+              relationTo: 'media',
+              required: false,
+              admin: {
+                description: 'La grande photo en haut de la page du circuit, et sur sa carte dans les listes.',
+              },
+            },
+            {
+              name: 'gallery',
+              label: 'Galerie photos',
+              labels: { singular: 'Photo', plural: 'Photos' },
+              type: 'array',
+              admin: {
+                description: 'Les 2 premières photos s\'affichent à côté de la couverture sur ordinateur. Toutes se balaient en haut de page sur téléphone.',
+              },
+              fields: [
+                {
+                  name: 'image',
+                  label: 'Photo',
+                  type: 'upload',
+                  relationTo: 'media',
+                },
+              ],
+            },
+            {
+              name: 'heroVideo',
+              label: 'Vidéo du haut de page (optionnel)',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Remplace la photo de couverture en haut de page. Utiliser un fichier MP4 léger, compatible avec tous les navigateurs.',
+              },
+            },
+            {
+              name: 'programPDF',
+              label: 'Programme en PDF (optionnel)',
+              type: 'upload',
+              relationTo: 'media',
+              required: false,
+              admin: {
+                description: 'Uploader le programme en PDF (ex: Itinéraire détaillé).',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Programme',
+          fields: [
+            {
+              name: 'storyDays',
+              type: 'array',
+              label: 'Programme jour par jour',
+              labels: { singular: 'Jour', plural: 'Jours' },
+              admin: {
+                description: 'Jusqu\'à 5 jours : tout le programme est visible sur la page. Au-delà : les jours défilent en carrousel.',
+              },
+              fields: [
+                {
+                  name: 'dayNumber',
+                  label: 'Numéro du jour',
+                  type: 'number',
+                  required: true,
+                  admin: {
+                    description: 'Numéro du jour (1, 2, 3…)',
+                  },
+                },
+                {
+                  name: 'title',
+                  label: 'Titre du jour',
+                  type: 'text',
+                  required: true,
+                  localized: true,
+                  admin: {
+                    description: 'Exemple : Samedi 21 novembre 2026',
+                  },
+                },
+                {
+                  name: 'location',
+                  label: 'Lieu',
+                  type: 'text',
+                  required: true,
+                  localized: true,
+                  admin: {
+                    description: 'Exemple : Errachidia → Merzouga',
+                  },
+                },
+                {
+                  name: 'activities',
+                  label: 'Activités',
+                  labels: { singular: 'Activité', plural: 'Activités' },
+                  type: 'array',
+                  required: true,
+                  admin: {
+                    description: 'Une ligne par activité.',
+                  },
+                  fields: [
+                    {
+                      name: 'activity',
+                      label: 'Activité',
+                      type: 'text',
+                      required: true,
+                      localized: true,
+                    },
+                  ],
+                },
+                {
+                  name: 'media',
+                  label: 'Photo ou vidéo du jour',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: false,
+                  admin: {
+                    description: 'Photo ou vidéo de ce jour.',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'itineraryBlocks',
+              type: 'array',
+              admin: {
+                description: '(Ancien format) Utilisé seulement si le programme jour par jour est vide.',
+              },
+              fields: [
+                {
+                  name: 'dayTitle',
+                  label: 'Titre du jour',
+                  type: 'text',
+                  localized: true,
+                },
+                {
+                  name: 'dayImage',
+                  label: 'Photo du jour',
+                  type: 'upload',
+                  relationTo: 'media',
+                },
+                {
+                  name: 'dayContent',
+                  label: 'Contenu du jour',
+                  type: 'richText',
+                  localized: true,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Prix et inclus',
+          fields: [
+            {
+              name: 'pricing',
+              type: 'group',
+              label: 'Prix',
+              admin: { hideGutter: true },
+              fields: [
+                {
+                  name: 'basePrice',
+                  type: 'number',
+                  label: 'Prix par personne',
+                  admin: { description: 'Vide : le site affiche « Sur devis ».' },
+                },
+                {
+                  name: 'currency',
+                  label: 'Devise',
+                  type: 'select',
+                  options: ['EUR', 'MAD', 'USD'],
+                  defaultValue: 'EUR',
+                },
+                {
+                  name: 'priceIncludes',
+                  type: 'array',
+                  label: 'Ce qui est inclus',
+                  labels: { singular: 'Élément', plural: 'Éléments' },
+                  fields: [{ name: 'item', label: 'Élément', type: 'text', localized: true }],
+                  admin: { description: 'La liste « Ce qui est inclus », sous le programme.' },
+                },
+                {
+                  name: 'priceExcludes',
+                  type: 'array',
+                  fields: [{ name: 'item', type: 'text', localized: true }],
+                  admin: { hidden: true },
+                },
+                {
+                  name: 'depositPercentage',
+                  type: 'number',
+                  defaultValue: 30,
+                  label: 'Acompte (%)',
+                  admin: { description: 'Vide : aucun acompte affiché. Exemple : 30' },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Infos pratiques',
+          fields: [
+            {
+              name: 'logistics',
+              type: 'group',
+              label: 'Infos pratiques',
+              admin: { hideGutter: true, description: 'Chaque information remplie s\'affiche sur la page du circuit. Vide : elle disparaît.' },
+              fields: [
+                { name: 'durationDays', type: 'number', admin: { hidden: true } },
+                { name: 'durationNights', type: 'number', admin: { hidden: true } },
+                { name: 'minGroupSize', label: 'Groupe minimum', type: 'number', defaultValue: 1 },
+                { name: 'maxGroupSize', label: 'Groupe maximum', type: 'number', defaultValue: 12 },
+                {
+                  name: 'difficulty',
+                  label: 'Difficulté',
+                  type: 'select',
+                  options: ['Facile', 'Modéré', 'Exigeant', 'Difficile'],
+                },
+                { name: 'departureCity', label: 'Ville(s) de départ', type: 'text', defaultValue: 'Casablanca', localized: true },
+                {
+                  name: 'languages',
+                  label: 'Langues',
+                  type: 'select',
+                  hasMany: true,
+                  options: ['Français', 'English', 'العربية', 'Español'],
+                },
+              ],
+            },
+            {
+              name: 'departureDates',
+              type: 'array',
+              label: 'Plusieurs dates de départ (optionnel)',
+              labels: { singular: 'Date', plural: 'Dates' },
+              admin: { description: 'Uniquement si le circuit part plusieurs fois : ajoute un tableau des dates sur la page.' },
+              fields: [
+                { name: 'date', label: 'Date', type: 'date', required: true },
+                { name: 'spotsLeft', label: 'Places restantes', type: 'number' },
+                {
+                  name: 'status',
+                  label: 'Statut',
+                  type: 'select',
+                  options: ['Available', 'Limited', 'Full', 'On Request'],
+                  defaultValue: 'Available',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'SEO',
+          description: 'Comment le circuit apparaît sur Google. Optionnel.',
+          fields: [
+            {
+              name: 'seo',
+              type: 'group',
+              admin: { description: 'Optimisation pour les moteurs de recherche' },
+              fields: [
+                { name: 'metaTitle', label: 'Titre Google', type: 'text', localized: true },
+                { name: 'metaDescription', label: 'Description Google', type: 'textarea', localized: true, admin: { description: '150-160 caractères max' } },
+                { name: 'ogImage', label: 'Image de partage (réseaux sociaux)', type: 'upload', relationTo: 'media' },
+                { name: 'keywords', label: 'Mots-clés', type: 'text', localized: true },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Import',
+          fields: [
+            {
+              name: 'importJSON',
+              type: 'json',
+              admin: {
+                description: '⚡ AUTO-FILL: Collez le code JSON généré par l\'IA ici, puis cliquez sur Save. Tous les champs seront remplis automatiquement.',
+              },
+            },
+          ],
         },
       ],
     },

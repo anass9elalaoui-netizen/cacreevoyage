@@ -3,11 +3,11 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { Check, Clock, Gauge, MapPin, Sun, Users } from 'lucide-react'
+import { Check } from 'lucide-react'
 import ItineraryTimeline from '@/components/ItineraryTimeline'
 import StoryCarousel from '@/components/ui/StoryCarousel'
 import Footer from '@/components/Footer'
-import BookingSidebar from '@/components/BookingSidebar'
+import TourPracticalInfo, { type PracticalItem } from '@/components/TourPracticalInfo'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
 
 import { getDictionary, Locale } from '@/i18n/dictionaries'
@@ -113,15 +113,37 @@ export default async function TourPage({ params, searchParams }: Args) {
     ? `${tour.pricing.basePrice.toLocaleString('fr-FR')} ${tour.pricing.currency || '€'}`
     : null
   const depositText = tour.pricing?.basePrice && tour.pricing?.depositPercentage
-    ? `${bookingT.deposit} ${Math.round(tour.pricing.basePrice * (tour.pricing.depositPercentage / 100)).toLocaleString('fr-FR')} ${tour.pricing.currency || '€'} (${tour.pricing.depositPercentage}% ${bookingT.toConfirm})`
+    ? `${Math.round(tour.pricing.basePrice * (tour.pricing.depositPercentage / 100)).toLocaleString('fr-FR')} ${tour.pricing.currency || '€'} (${tour.pricing.depositPercentage}% ${bookingT.toConfirm})`
     : null
+
+  // Each row comes from one admin field and disappears when that field is empty
+  const seasonNames: Record<string, string> = locale === 'en'
+    ? { spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter' }
+    : { spring: 'Printemps', summer: 'Été', autumn: 'Automne', winter: 'Hiver' }
+  const practical: PracticalItem[] = [
+    { key: 'departure', label: bookingT.departure, value: tour.logistics?.departureCity },
+    { key: 'group', label: bookingT.maxGroup, value: tour.logistics?.maxGroupSize ? `${tour.logistics.maxGroupSize} pers.` : null },
+    { key: 'difficulty', label: bookingT.difficulty, value: tour.logistics?.difficulty },
+    { key: 'seasons', label: t.seasons, value: tour.seasons?.map((v: string) => seasonNames[v] || v).join(', ') },
+    { key: 'languages', label: bookingT.languages, value: tour.logistics?.languages?.join(', ') },
+    { key: 'deposit', label: bookingT.deposit.replace(/\s*:\s*$/, ''), value: depositText },
+  ].filter((item): item is PracticalItem => Boolean(item.value)) as PracticalItem[]
+
+  const statusInfo = tour.tourStatus === 'sold_out'
+    ? { label: bookingT.soldOut, cls: 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-700/50' }
+    : tour.tourStatus === 'coming_soon'
+      ? { label: bookingT.comingSoon, cls: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-700/50' }
+      : { label: bookingT.available, cls: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-700/50' }
+
   const bookingUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par le circuit "${tour.title}". Pouvez-vous me donner plus d'informations ?`)}`
 
   // Duration text
+  // The "Durée" field in the admin decides. The old day/night numbers only remain as a fallback.
   const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? 's' : ''}`
-  const durationText = tour.logistics?.durationDays && tour.logistics?.durationNights
-    ? `${plural(tour.logistics.durationDays, 'Jour')} / ${plural(tour.logistics.durationNights, 'Nuit')}`
-    : tour.duration || ''
+  const durationText = tour.duration
+    || (tour.logistics?.durationDays && tour.logistics?.durationNights
+      ? `${plural(tour.logistics.durationDays, 'Jour')} / ${plural(tour.logistics.durationNights, 'Nuit')}`
+      : '')
 
   // Photos added in the admin under "gallery"
   const galleryImages = (tour.gallery ?? []).flatMap((g: any) =>
@@ -139,9 +161,7 @@ export default async function TourPage({ params, searchParams }: Args) {
         scope={tour.scope === 'national' ? 'Maroc' : 'International'}
         duration={durationText}
         status={tour.tourStatus === 'sold_out' ? bookingT.soldOut : tour.tourStatus === 'coming_soon' ? bookingT.comingSoon : null}
-        departureCity={tour.logistics?.departureCity}
-        departureLabel={t.departure}
-        deposit={depositText}
+        practical={practical}
         imageUrl={thumbnailUrl}
         videoUrl={heroVideoUrl}
         otherImages={galleryImages.filter((img: { url: string }) => img.url !== thumbnailUrl)}
@@ -167,50 +187,9 @@ export default async function TourPage({ params, searchParams }: Args) {
                 {t.about}
               </h2>
 
-              {/* Meta badges */}
-              <div className="flex flex-wrap gap-3 lg:mb-8 [&>span:not(.hidden)]:mb-3 lg:[&>span]:mb-0">
-                {durationText && (
-                  <span className="hidden lg:inline-block px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    <Clock className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{durationText}
-                  </span>
-                )}
-                {tour.logistics?.maxGroupSize && (
-                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    <Users className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />Max {tour.logistics.maxGroupSize} pers.
-                  </span>
-                )}
-                {tour.logistics?.difficulty && (
-                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    <Gauge className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{tour.logistics.difficulty}
-                  </span>
-                )}
-                {tour.logistics?.departureCity && (
-                  <span className="hidden lg:inline-block px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    <MapPin className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{t.departure} {tour.logistics.departureCity}
-                  </span>
-                )}
-                {tour.seasons && tour.seasons.length > 0 && (
-                  <span className="px-4 py-2 rounded-full bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-700 dark:text-white/80 shadow-sm dark:shadow-none">
-                    <Sun className="mr-2 inline h-4 w-4 align-[-3px] text-brand-blue" strokeWidth={2} aria-hidden="true" />{tour.seasons.join(', ')}
-                  </span>
-                )}
-              </div>
-
               <p className="text-slate-600 dark:text-brand-silver text-base leading-relaxed font-normal">
                 {tour.shortDescription || tour.excerpt}
               </p>
-
-              {/* Animated Scroll Indicator */}
-              <div className="mt-10 hidden lg:flex flex-col items-start opacity-80 hover:opacity-100 transition-opacity">
-                <a href="#itinerary" className="flex items-center gap-4 text-brand-blue group cursor-pointer">
-                  <span className="text-xs uppercase tracking-widest font-semibold">Découvrir l'itinéraire</span>
-                  <div className="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
-                    <svg className="w-5 h-5 animate-bounce mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
-                  </div>
-                </a>
-              </div>
             </section>
 
             {/* Departure dates table */}
@@ -251,17 +230,7 @@ export default async function TourPage({ params, searchParams }: Args) {
 
           {/* Right: Booking Sidebar (1/3) */}
           <div className="hidden lg:block lg:col-span-1">
-            <BookingSidebar
-              tourId={String(tour.id)}
-              tourTitle={tour.title}
-              pricing={tour.pricing}
-              logistics={tour.logistics}
-              duration={durationText}
-              tourStatus={tour.tourStatus}
-              locale={locale}
-              programPDF={typeof tour.programPDF === 'object' ? tour.programPDF : undefined}
-              whatsappNumber={siteSettings.whatsappNumber}
-            />
+            <TourPracticalInfo title={t.practicalInfo} status={statusInfo.label} statusClass={statusInfo.cls} items={practical} />
           </div>
         </div>
       </div>

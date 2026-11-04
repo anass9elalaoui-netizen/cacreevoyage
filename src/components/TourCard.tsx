@@ -109,9 +109,10 @@ export default function TourCard({
   const imageUrl = thumbnail?.url || ''
 
   const durationText =
-    logistics?.durationDays && logistics?.durationNights
+    duration ||
+    (logistics?.durationDays && logistics?.durationNights
       ? `${logistics.durationDays}J / ${logistics.durationNights}N`
-      : duration || ''
+      : '')
 
   const priceText = pricing?.basePrice
     ? `${pricing.basePrice.toLocaleString('fr-FR')} ${pricing.currency || '€'}`

@@ -90,6 +90,7 @@ export default async function ToursPage(props: { searchParams: Promise<{ [key: s
                     title={tour.title}
                     slug={tour.slug || tour.id}
                     shortDescription={tour.shortDescription || tour.tagline}
+                    duration={tour.duration}
                     pricing={tour.pricing}
                     thumbnail={tour.thumbnail}
                     scope={tour.scope || 'international'}

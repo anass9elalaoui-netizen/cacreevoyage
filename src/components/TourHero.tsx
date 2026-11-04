@@ -1,7 +1,8 @@
 import Image from 'next/image'
-import { ArrowDown, CalendarDays, Clock, MapPin, MessageCircle, Wallet } from 'lucide-react'
+import { ArrowDown, CalendarDays, Clock, MessageCircle } from 'lucide-react'
 import LazyVideo from '@/components/LazyVideo'
 import TourMobileGallery from '@/components/TourMobileGallery'
+import { PRACTICAL_ICONS, type PracticalItem } from '@/components/TourPracticalInfo'
 
 const RISE = 'motion-safe:[animation:ccv-rise_.7s_cubic-bezier(.16,1,.3,1)_both]'
 /** Same value on both layouts: the browser preloads a single image for the first photo. */
@@ -14,10 +15,8 @@ interface TourHeroProps {
   duration?: string | null
   /** Only when it is not simply available: "Complet", "Bientôt" */
   status?: string | null
-  departureCity?: string | null
-  departureLabel: string
-  /** e.g. "Acompte: 630 MAD (30% pour confirmer)" */
-  deposit?: string | null
+  /** Phones: listed in the sheet. Desktop has them in the block beside "À propos". */
+  practical: PracticalItem[]
   imageUrl?: string | null
   videoUrl?: string | null
   /** Other photos of the tour: all of them swipeable on phones, the first two beside the main one on desktop */
@@ -39,9 +38,7 @@ export default function TourHero({
   scope,
   duration,
   status,
-  departureCity,
-  departureLabel,
-  deposit,
+  practical,
   imageUrl,
   videoUrl,
   otherImages,
@@ -56,8 +53,7 @@ export default function TourHero({
   const facts = [
     dates ? { icon: CalendarDays, text: dates } : null,
     duration ? { icon: Clock, text: duration } : null,
-    departureCity ? { icon: MapPin, text: `${departureLabel} ${departureCity}` } : null,
-    deposit ? { icon: Wallet, text: deposit } : null,
+    ...practical.map((item) => ({ icon: PRACTICAL_ICONS[item.key], text: `${item.label} : ${item.value}` })),
   ].filter(Boolean) as { icon: typeof Clock; text: string }[]
 
   return (
