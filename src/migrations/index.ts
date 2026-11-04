@@ -3,6 +3,7 @@ import * as migration_20261026_162739_testimonials_poster_trip_year from './2026
 import * as migration_20261103_185406_testimonials_video_light_preview from './20261103_185406_testimonials_video_light_preview';
 import * as migration_20261103_230709_testimonials_country_code from './20261103_230709_testimonials_country_code';
 import * as migration_20261104_020710_tour_day_stage from './20261104_020710_tour_day_stage';
+import * as migration_20261104_165830_hero_video_mobile from './20261104_165830_hero_video_mobile';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20261104_020710_tour_day_stage.up,
     down: migration_20261104_020710_tour_day_stage.down,
-    name: '20261104_020710_tour_day_stage'
+    name: '20261104_020710_tour_day_stage',
+  },
+  {
+    up: migration_20261104_165830_hero_video_mobile.up,
+    down: migration_20261104_165830_hero_video_mobile.down,
+    name: '20261104_165830_hero_video_mobile'
   },
 ];

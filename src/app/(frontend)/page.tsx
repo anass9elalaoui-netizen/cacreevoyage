@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getSiteSettings, cleanWhatsAppNumber } from '@/lib/getSiteSettings'
@@ -18,6 +19,22 @@ import { PartnersSection } from '@/components/sections/partners-section'
 import { InstagramEmbed } from '@/components/sections/InstagramEmbed'
 import HomepageActivities from '@/components/HomepageActivities'
 import { getDictionary, Locale } from '@/i18n/dictionaries'
+
+/** Google title and description of the home page: Site Settings > SEO par Défaut */
+export async function generateMetadata(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
+  const searchParams = await props.searchParams
+  const locale = (searchParams.locale as string) || 'fr'
+  const seo = (await getSiteSettings(locale)).seoDefaults
+  const title = seo?.defaultTitle || getDictionary(locale).home.seoTitle
+  const description = seo?.defaultDescription || getDictionary(locale).home.seoDescription
+  const image = typeof seo?.defaultOgImage === 'object' ? seo?.defaultOgImage?.url : undefined
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: '/' },
+    openGraph: { title, description, type: 'website', ...(image ? { images: [image] } : {}) },
+  }
+}
 
 export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const searchParams = await props.searchParams;
@@ -126,6 +143,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
           title: p.title,
           subtitle: p.subtitle || undefined,
           video,
+          videoMobile: typeof p.backgroundVideoMobile === 'object' ? p.backgroundVideoMobile?.url : undefined,
           poster: typeof p.posterImage === 'object' ? p.posterImage?.url : undefined,
           link,
         }
@@ -203,7 +221,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION — Cinematic canvas scroll portal
       ─────────────────────────────────────────────────────────── */}
-      <HeroGallery panels={heroPanels} />
+      <HeroGallery panels={heroPanels} headline={siteSettings.homepageHero?.headline || t.heroHeadline} discoverLabel={t.heroDiscover} />
 
       {/* ──────────────────────────────────────────────────────────
           FEATURED TOURS GRID — "Nos Voyages d'Exception"

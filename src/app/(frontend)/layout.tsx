@@ -37,10 +37,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: 'Ça Crée Voyage — Voyages Sur Mesure',
+    default: 'Ça Crée Voyage | Voyages organisés au départ du Maroc',
     template: '%s | Ça Crée Voyage',
   },
-  description: 'Circuits et voyages sur mesure. Laissez-vous inspirer par nos destinations d\'exception.',
+  description: 'Découvrez nos voyages organisés au départ du Maroc : dates, programmes et réservation sur WhatsApp.',
   icons: { icon: '/logo.jpeg', apple: '/logo.jpeg' },
 }
 

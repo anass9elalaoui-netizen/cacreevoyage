@@ -10,6 +10,10 @@ export const dictionaries = {
       national: '🇲🇦 Maroc',
     },
     home: {
+      seoTitle: 'Ça Crée Voyage | Voyages organisés au départ du Maroc',
+      seoDescription: 'Bali, Zanzibar, Philippines, Brésil, Merzouga : découvrez nos voyages organisés au départ du Maroc. Dates, programmes et réservation sur WhatsApp.',
+      heroHeadline: 'Voyages organisés au départ du Maroc',
+      heroDiscover: 'Découvrir',
       philosophySubtitle: 'Notre Philosophie',
       philosophyTitle: 'Chaque voyage est une œuvre unique',
       philosophyText: 'Chez Ça Crée Voyage, nous ne proposons pas de voyages standard. Chaque itinéraire est conçu sur-mesure, du premier sourire à la dernière étoile, pour créer des souvenirs qui vous ressemblent.',
@@ -123,6 +127,10 @@ export const dictionaries = {
       national: '🇲🇦 Morocco',
     },
     home: {
+      seoTitle: 'Ça Crée Voyage | Group trips departing from Morocco',
+      seoDescription: 'Bali, Zanzibar, the Philippines, Brazil, Merzouga: discover our group trips departing from Morocco. Dates, programmes and booking on WhatsApp.',
+      heroHeadline: 'Group trips departing from Morocco',
+      heroDiscover: 'Discover',
       philosophySubtitle: 'Our Philosophy',
       philosophyTitle: 'Every journey is a unique masterpiece',
       philosophyText: 'At Ça Crée Voyage, we do not offer standard trips. Each itinerary is tailor-made, from the first smile to the last star, to create memories that reflect who you are.',

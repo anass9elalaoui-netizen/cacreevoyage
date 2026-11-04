@@ -1148,12 +1148,21 @@ export interface SiteSetting {
   tiktokUrl?: string | null;
   youtubeUrl?: string | null;
   homepageHero?: {
+    /**
+     * Le titre principal lu par Google et affiché en haut du hero. Une phrase courte avec les mots que vos clients recherchent.
+     */
     headline?: string | null;
     subheadline?: string | null;
     ctaLabel?: string | null;
   };
   seoDefaults?: {
+    /**
+     * 60 caractères maximum.
+     */
     defaultTitle?: string | null;
+    /**
+     * 150 à 160 caractères.
+     */
     defaultDescription?: string | null;
     defaultOgImage?: (number | null) | Media;
   };
@@ -1223,7 +1232,7 @@ export interface PaymentSetting {
   createdAt?: string | null;
 }
 /**
- * Configuration des 4 panneaux vidéo de la page d'accueil
+ * Les 4 panneaux vidéo en haut de la page d'accueil. Le grand titre et le titre Google se règlent dans Site Settings.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "hero-gallery".
@@ -1236,11 +1245,11 @@ export interface HeroGallery {
   panels?:
     | {
         /**
-         * Nom de la destination affiché sur le panneau
+         * Nom de la destination. Court : il s'adapte à la taille de l'écran.
          */
         title: string;
         /**
-         * Texte secondaire (ex: "Archipel Paradisiaque")
+         * Quelques mots au-dessus du titre (ex : Lagons et îles sauvages).
          */
         subtitle?: string | null;
         /**
@@ -1256,13 +1265,17 @@ export interface HeroGallery {
          */
         tour?: (number | null) | Tour;
         /**
-         * Image statique affichée avant le chargement de la vidéo
+         * Première image de la vidéo : affichée tout de suite, et sur les panneaux fermés.
          */
         posterImage: number | Media;
         /**
-         * Vidéo MP4/WebM en arrière-plan (max 20MB)
+         * MP4 H.264 sans son, 12 à 15 secondes, 720 px de large, moins de 5 Mo. Les fichiers .MOV de téléphone ne se lisent pas partout.
          */
         backgroundVideo: number | Media;
+        /**
+         * Optionnel. La même vidéo en 480 px de large, moins de 2 Mo. Vide : la vidéo ordinateur est utilisée.
+         */
+        backgroundVideoMobile?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -1556,6 +1569,7 @@ export interface HeroGallerySelect<T extends boolean = true> {
         tour?: T;
         posterImage?: T;
         backgroundVideo?: T;
+        backgroundVideoMobile?: T;
         id?: T;
       };
   updatedAt?: T;

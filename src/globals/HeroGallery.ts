@@ -5,7 +5,7 @@ export const HeroGallery: GlobalConfig = {
   slug: 'hero-gallery',
   label: 'Hero Gallery',
   admin: {
-    description: 'Configuration des 4 panneaux vidéo de la page d\'accueil',
+    description: 'Les 4 panneaux vidéo en haut de la page d\'accueil. Le grand titre et le titre Google se règlent dans Site Settings.',
   },
   access: {
     read: () => true,
@@ -32,7 +32,7 @@ export const HeroGallery: GlobalConfig = {
           label: 'Titre',
           localized: true,
           admin: {
-            description: 'Nom de la destination affiché sur le panneau',
+            description: 'Nom de la destination. Court : il s\'adapte à la taille de l\'écran.',
           },
         },
         {
@@ -41,7 +41,7 @@ export const HeroGallery: GlobalConfig = {
           label: 'Sous-titre',
           localized: true,
           admin: {
-            description: 'Texte secondaire (ex: "Archipel Paradisiaque")',
+            description: 'Quelques mots au-dessus du titre (ex : Lagons et îles sauvages).',
           },
         },
         {
@@ -85,7 +85,7 @@ export const HeroGallery: GlobalConfig = {
           required: true,
           label: 'Image Poster',
           admin: {
-            description: 'Image statique affichée avant le chargement de la vidéo',
+            description: 'Première image de la vidéo : affichée tout de suite, et sur les panneaux fermés.',
           },
         },
         {
@@ -93,9 +93,9 @@ export const HeroGallery: GlobalConfig = {
           type: 'upload',
           relationTo: 'media',
           required: true,
-          label: 'Vidéo de fond',
+          label: 'Vidéo de fond (ordinateur)',
           admin: {
-            description: 'Vidéo MP4/WebM en arrière-plan (max 20MB)',
+            description: 'MP4 H.264 sans son, 12 à 15 secondes, 720 px de large, moins de 5 Mo. Les fichiers .MOV de téléphone ne se lisent pas partout.',
           },
           validate: (value: unknown) => {
             if (value && typeof value === 'object' && 'filesize' in value) {
@@ -105,6 +105,15 @@ export const HeroGallery: GlobalConfig = {
               }
             }
             return true
+          },
+        },
+        {
+          name: 'backgroundVideoMobile',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Vidéo de fond (téléphone)',
+          admin: {
+            description: 'Optionnel. La même vidéo en 480 px de large, moins de 2 Mo. Vide : la vidéo ordinateur est utilisée.',
           },
         },
       ],

@@ -122,6 +122,8 @@ export const SiteSettings: GlobalConfig = {
       fields: [
         {
           name: 'headline',
+          label: 'Grand titre de la page d\'accueil (H1)',
+          admin: { description: 'Le titre principal lu par Google et affiché en haut du hero. Une phrase courte avec les mots que vos clients recherchent.' },
           type: 'text',
           defaultValue: "Voyages d'Exception, Créés Pour Vous",
           localized: true,
@@ -151,12 +153,16 @@ export const SiteSettings: GlobalConfig = {
       fields: [
         {
           name: 'defaultTitle',
+          label: 'Titre Google de la page d\'accueil',
+          admin: { description: '60 caractères maximum.' },
           type: 'text',
           defaultValue: 'Ça Crée Voyage — Voyages de Luxe Sur-Mesure',
           localized: true,
         },
         {
           name: 'defaultDescription',
+          label: 'Description Google de la page d\'accueil',
+          admin: { description: '150 à 160 caractères.' },
           type: 'textarea',
           defaultValue: "Circuits et voyages sur mesure. Laissez-vous inspirer par nos destinations d'exception.",
           localized: true,
