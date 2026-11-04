@@ -151,7 +151,7 @@ export default async function TourPage({ params, searchParams }: Args) {
   )
 
   return (
-    <main className="relative w-full min-h-screen pb-20 lg:pb-0 bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-hidden">
+    <main className="relative w-full min-h-screen pb-20 lg:pb-0 bg-slate-50 dark:bg-[#0B132B] transition-colors duration-700 overflow-x-clip">
       {/* ──────────────────────────────────────────────────────────
           HERO SECTION
       ─────────────────────────────────────────────────────────── */}
@@ -252,8 +252,9 @@ export default async function TourPage({ params, searchParams }: Args) {
           </h2>
           {/* Only long programmes are split into stages */}
           {tour.storyDays?.length > 5 ? (
-            <p className="text-slate-600 dark:text-white/50 font-light text-xl max-w-2xl mx-auto leading-relaxed">
-              {t.swipe}
+            <p className="text-slate-600 dark:text-white/50 font-light text-base lg:text-xl max-w-2xl mx-auto leading-relaxed">
+              <span className="lg:hidden">{t.swipeMobile}</span>
+              <span className="hidden lg:inline">{t.swipe}</span>
             </p>
           ) : null}
         </div>
